@@ -11,12 +11,14 @@
         android:ems="10"
         android:textSize="40sp"
         android:hint="@string/prompt_email"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:textColorHint="@color/colorWhite"
         android:inputType="textEmailAddress"
         android:layout_centerInParent="true"
         android:theme="@style/MyEditTextTheme">
     </EditText>
-    <requestFocus android:id="@+id/requestFocus" />
 
     <EditText
         android:id="@+id/LogPass"
@@ -25,6 +27,9 @@
         android:ems="10"
         android:textSize="40sp"
         android:hint="@string/prompt_password"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:textColorHint="@color/colorWhite"
         android:inputType="textPassword"
         android:layout_below="@+id/LogEmail"
@@ -52,7 +57,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:text="@string/btnRegister"
-        android:textColor="#edac00"
+        android:textColor="#fffb00"
         android:textSize="40sp"
         android:layout_alignParentBottom="true" />
 

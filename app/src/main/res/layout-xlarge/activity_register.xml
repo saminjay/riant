@@ -12,12 +12,14 @@
         android:hint="@string/Username"
         android:textColorHint="@color/colorWhite"
         android:textSize="40sp"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:theme="@style/MyEditTextTheme"
         android:layout_above="@+id/RegEmail"
         android:layout_alignLeft="@+id/RegEmail"
         android:layout_alignStart="@+id/RegEmail"
         android:layout_marginBottom="64dp" />
-    <requestFocus />
     <EditText
         android:id="@+id/RegEmail"
         android:layout_width="wrap_content"
@@ -27,6 +29,8 @@
         android:textColorHint="@color/colorWhite"
         android:inputType="textEmailAddress"
         android:textSize="40sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_centerInParent="true"
         android:theme="@style/MyEditTextTheme">
     </EditText>
@@ -39,6 +43,8 @@
         android:ems="10"
         android:inputType="phone"
         android:textSize="40sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_marginTop="64dp"
         android:layout_below="@+id/RegEmail"
         android:layout_alignStart="@+id/RegPass"
@@ -53,6 +59,8 @@
         android:ems="10"
         android:inputType="textPassword"
         android:textSize="40sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_below="@+id/RegPhone"
         android:layout_alignStart="@+id/RegPass2"
         android:layout_alignLeft="@+id/RegPass2"
@@ -67,6 +75,8 @@
         android:ems="10"
         android:inputType="textPassword"
         android:textSize="40sp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:layout_below="@+id/RegPass"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="64dp"

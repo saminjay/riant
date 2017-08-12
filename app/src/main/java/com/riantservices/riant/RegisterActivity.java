@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,10 +21,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
+import static com.riantservices.riant.R.color.colorBlack;
+import static com.riantservices.riant.R.color.colorTransparent;
+import static com.riantservices.riant.R.color.colorWhite;
+
 public class RegisterActivity extends Activity implements OnClickListener {
     EditText UserName, Email, Phone, Pass1, Pass2;
     String strName, strEmail, strPhone,strPass, strPass2;
-
     @Override
     public void onClick(View view) {
         switch(view.getId()){
@@ -75,8 +79,29 @@ public class RegisterActivity extends Activity implements OnClickListener {
         Phone = (EditText)findViewById(R.id.RegPhone);
         Pass1 = (EditText)findViewById(R.id.RegPass);
         Pass2 = (EditText)findViewById(R.id.RegPass2);
+        View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    TextView textView = (TextView) v;
+                    textView.setBackgroundColor(getResources().getColor(colorWhite));
+                    textView.setHintTextColor(getResources().getColor(colorBlack));
+                    textView.setTextColor(getResources().getColor(colorBlack));
+                }
+                else{
+                    TextView textView = (TextView) v;
+                    textView.setBackgroundColor(getResources().getColor(colorTransparent));
+                    textView.setHintTextColor(getResources().getColor(colorWhite));
+                    textView.setTextColor(getResources().getColor(colorWhite));
+                }
+            }
+        };
+        UserName.setOnFocusChangeListener(onFocusChangeListener);
+        Email.setOnFocusChangeListener(onFocusChangeListener);
+        Phone.setOnFocusChangeListener(onFocusChangeListener);
+        Pass1.setOnFocusChangeListener(onFocusChangeListener);
+        Pass2.setOnFocusChangeListener(onFocusChangeListener);
     }
-
     public void alertDialog(String Message){
         new AlertDialog.Builder(this)
                 .setTitle("Riant Message")

@@ -26,12 +26,10 @@ public class Splash extends AppCompatActivity {
         if (session.isLoggedIn()) {
             Intent goMain = new Intent(this, MainActivity.class);
             startActivity(goMain);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         }
         else {
             Intent goLogin = new Intent(this, LoginActivity.class);
             startActivity(goLogin);
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         }
     }
 

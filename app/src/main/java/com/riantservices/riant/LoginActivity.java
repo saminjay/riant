@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +24,10 @@ import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.riantservices.riant.R.color.colorBlack;
+import static com.riantservices.riant.R.color.colorTransparent;
+import static com.riantservices.riant.R.color.colorWhite;
 
 public class LoginActivity extends Activity implements OnClickListener  {
 
@@ -42,6 +47,25 @@ public class LoginActivity extends Activity implements OnClickListener  {
         }
         EtLogEmail = (EditText) findViewById(R.id.LogEmail);
         EtLogPass = (EditText) findViewById(R.id.LogPass);
+        View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus){
+                    TextView textView = (TextView) v;
+                    textView.setBackgroundColor(getResources().getColor(colorWhite));
+                    textView.setHintTextColor(getResources().getColor(colorBlack));
+                    textView.setTextColor(getResources().getColor(colorBlack));
+                }
+                else{
+                    TextView textView = (TextView) v;
+                    textView.setBackgroundColor(getResources().getColor(colorTransparent));
+                    textView.setHintTextColor(getResources().getColor(colorWhite));
+                    textView.setTextColor(getResources().getColor(colorWhite));
+                }
+            }
+        };
+        EtLogEmail.setOnFocusChangeListener(onFocusChangeListener);
+        EtLogPass.setOnFocusChangeListener(onFocusChangeListener);
         btnSignin = (Button) findViewById(R.id.btnSignin);
         btnRegister = (Button) findViewById(R.id.btnRegister);
         btnSignin.setOnClickListener(this);

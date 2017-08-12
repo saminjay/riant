@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tool="http://schemas.android.com/tools"
@@ -101,10 +100,10 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/account"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="45dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/trips" />
+            android:src="@drawable/trips" />
 
         <ImageButton
             android:id="@+id/notifictions"
@@ -114,10 +113,10 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/trips"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="45dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/notification" />
+            android:src="@drawable/notification" />
 
         <ImageButton
             android:id="@+id/settings"
@@ -127,10 +126,10 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/notifictions"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="45dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/settings" />
+            android:src="@drawable/settings" />
 
         <ImageButton
             android:id="@+id/help"
@@ -140,10 +139,10 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/settings"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="45dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/help" />
+            android:src="@drawable/help" />
 
     </RelativeLayout>
 

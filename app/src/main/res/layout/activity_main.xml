@@ -1,5 +1,4 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tool="http://schemas.android.com/tools"
@@ -98,34 +97,10 @@
             android:layout_marginTop="46dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/trips"
+            android:src="@drawable/trips"
             android:layout_below="@+id/account"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
-
-        <ImageButton
-            android:id="@+id/settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/notifictions"
-            android:layout_marginTop="56dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/settings" />
-
-        <ImageButton
-            android:id="@+id/help"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/settings"
-            android:layout_marginTop="58dp"
-            android:background="@android:color/transparent"
-            android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/help" />
 
         <ImageButton
             android:id="@+id/notifictions"
@@ -137,7 +112,32 @@
             android:layout_marginTop="44dp"
             android:background="@android:color/transparent"
             android:contentDescription="@string/app_name"
-            app:srcCompat="@drawable/notification" />
+            android:src="@drawable/notification" />
+
+        <ImageButton
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/notifictions"
+            android:layout_marginTop="56dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/settings" />
+
+        <ImageButton
+            android:id="@+id/help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/settings"
+            android:layout_marginTop="58dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/help" />
+
     </RelativeLayout>
 
     <RelativeLayout

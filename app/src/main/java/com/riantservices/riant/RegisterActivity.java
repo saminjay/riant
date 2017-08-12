@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -25,51 +26,10 @@ import static com.riantservices.riant.R.color.colorBlack;
 import static com.riantservices.riant.R.color.colorTransparent;
 import static com.riantservices.riant.R.color.colorWhite;
 
-public class RegisterActivity extends Activity implements OnClickListener {
+public class RegisterActivity extends Activity{
     EditText UserName, Email, Phone, Pass1, Pass2;
+    Button BtnRegister;
     String strName, strEmail, strPhone,strPass, strPass2;
-    @Override
-    public void onClick(View view) {
-        switch(view.getId()){
-            case R.id.btnRegister:
-                strName = UserName.getText().toString();
-                strEmail = Email.getText().toString();
-                strPhone = Phone.getText().toString();
-                strPass = Pass1.getText().toString();
-                strPass2 = Pass2.getText().toString();
-                if (strName.matches("")) {
-                    alertDialog("Username is required");
-                    break;
-                }else if(strEmail.matches("")) {
-                    alertDialog("Email is required");
-                    break;
-                }else if(strPhone.matches("")) {
-                    alertDialog("Phone is required");
-                    break;
-                }else if(strPass.matches("")) {
-                    alertDialog("Pasword is required");
-                    break;
-                }
-                else if(!isValidEmailAddress(strEmail)) {
-                    alertDialog("Introduce a valid email format");
-                    break;
-                }
-                else if(!strPass.equals(strPass2)) {
-                    alertDialog("Password not match");
-                    break;
-                }
-                else{
-                    try{
-                        Register(strName, strEmail, strPhone, strPass);
-                    }
-                    catch (UnsupportedEncodingException e) {
-                        alertDialog("Unsupported encoding");}
-                }
-                break;
-        }
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +39,39 @@ public class RegisterActivity extends Activity implements OnClickListener {
         Phone = (EditText)findViewById(R.id.RegPhone);
         Pass1 = (EditText)findViewById(R.id.RegPass);
         Pass2 = (EditText)findViewById(R.id.RegPass2);
+        BtnRegister = (Button)findViewById(R.id.BtnRegister);
+        BtnRegister.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                strName = UserName.getText().toString();
+                strEmail = Email.getText().toString();
+                strPhone = Phone.getText().toString();
+                strPass = Pass1.getText().toString();
+                strPass2 = Pass2.getText().toString();
+                if (strName.matches("")) {
+                    alertDialog("Username is required");
+                }else if(strEmail.matches("")) {
+                    alertDialog("Email is required");
+                }else if(strPhone.matches("")) {
+                    alertDialog("Phone is required");
+                }else if(strPass.matches("")) {
+                    alertDialog("Pasword is required");
+                }
+                else if(!isValidEmailAddress(strEmail)) {
+                    alertDialog("Introduce a valid email format");
+                }
+                else if(!strPass.equals(strPass2)) {
+                    alertDialog("Password not match");
+                }
+                else{
+                    try{
+                        Register(strName, strEmail, strPhone, strPass);
+                    }
+                    catch (UnsupportedEncodingException e) {
+                        alertDialog("Unsupported encoding");}
+                }
+            }
+        });
         View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -101,6 +94,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
         Phone.setOnFocusChangeListener(onFocusChangeListener);
         Pass1.setOnFocusChangeListener(onFocusChangeListener);
         Pass2.setOnFocusChangeListener(onFocusChangeListener);
+
     }
     public void alertDialog(String Message){
         new AlertDialog.Builder(this)
@@ -110,8 +104,7 @@ public class RegisterActivity extends Activity implements OnClickListener {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+                .setIcon(android.R.drawable.ic_dialog_alert).show();
 
     }
 

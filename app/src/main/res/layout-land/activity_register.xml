@@ -83,7 +83,7 @@
         android:layout_alignStart="@+id/RegPass"
         android:layout_marginTop="12dp"/>
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/BtnRegister"
         android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:textColor="#fff"

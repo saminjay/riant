@@ -82,7 +82,7 @@
         android:layout_marginTop="40dp"
         android:theme="@style/MyEditTextTheme" />
     <Button
-        android:id="@+id/btnRegister"
+        android:id="@+id/BtnRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="#fff"

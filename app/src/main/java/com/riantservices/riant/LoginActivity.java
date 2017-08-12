@@ -165,7 +165,6 @@ public class LoginActivity extends Activity implements OnClickListener  {
 
             SessionManager session = new SessionManager(getApplicationContext());
             session.createLoginSession(User_name, User_email,Role_Id);
-
             Intent mainActivity = new Intent(this, MainActivity.class);
             startActivity(mainActivity);
             overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_left);

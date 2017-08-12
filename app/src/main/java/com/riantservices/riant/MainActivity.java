@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +28,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -42,7 +45,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import static java.lang.Thread.sleep;
 
-public class MainActivity extends FragmentActivity implements OnClickListener,OnMapReadyCallback {
+public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap googleMap;
     Marker UserMarker;
@@ -61,21 +64,19 @@ public class MainActivity extends FragmentActivity implements OnClickListener,On
         session = new SessionManager(getApplicationContext());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.bar:
+        ImageButton bar=(ImageButton)findViewById(R.id.bar);
+        bar.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 if (view1.getVisibility()==View.INVISIBLE) {
-                  Animation getIn = generateMoveLeftAnimation(view1);
-                  getIn.start();
+                    Animation getIn = generateMoveLeftAnimation(view1);
+                    getIn.start();
                 } else {
-                  Animation getOut = generateMoveRightAnimation(view1);
-                  getOut.start();
+                    Animation getOut = generateMoveRightAnimation(view1);
+                    getOut.start();
                 }
-                break;
-        }
+            }
+        });
     }
 
     @Override

@@ -1,0 +1,294 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:animateLayoutChanges="true"
+    android:id="@+id/com"
+    tool:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/title"
+        android:adjustViewBounds="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageButton
+        android:id="@+id/bar"
+        android:background="@color/colorBlack"
+        android:layout_width="24dp"
+        android:layout_height="18dp"
+        android:scaleType="fitXY"
+        android:contentDescription="@string/app_name"
+        android:src="@drawable/bar"
+        android:layout_above="@+id/map"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginBottom="9dp" />
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/imageView"
+        android:id="@+id/map"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        tools:context=".MapsActivity"
+        android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorTransparentBlack"
+        android:layout_below="@+id/imageView"
+        android:layout_marginTop="16dp"/>
+
+    <RelativeLayout
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignEnd="@+id/account"
+            android:layout_alignRight="@+id/account"
+            android:background="@color/colorBlack"
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_menu" />
+
+        <ImageButton
+            android:id="@+id/account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/account"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:id="@+id/trips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/trips"
+            android:layout_below="@+id/account"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:id="@+id/notifictions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/notification"
+            android:layout_below="@+id/trips"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:id="@+id/settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/settings"
+            android:layout_below="@+id/notifictions"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:id="@+id/help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            app:srcCompat="@drawable/help"
+            android:layout_below="@+id/settings"
+            android:layout_marginTop="12dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:visibility="gone"
+        android:id="@+id/extended"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageView">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/e_bg"
+            android:contentDescription="@string/app_name"
+            android:id="@+id/imageView5"
+            android:background="@android:color/black"
+            android:scaleType="fitXY"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/account1"
+            android:layout_alignEnd="@+id/account1"/>
+
+        <ImageButton
+            android:id="@+id/account1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/account"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="4dp"
+            android:layout_toRightOf="@+id/textNotifications1"
+            android:layout_toEndOf="@+id/textNotifications1"
+            android:layout_marginLeft="18dp"
+            android:layout_marginStart="18dp" />
+
+        <TextView
+            android:id="@+id/textAccount1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/accounts"
+            android:textSize="16sp"
+            android:layout_alignTop="@+id/account1"
+            android:layout_alignLeft="@+id/textTrips1"
+            android:layout_alignStart="@+id/textTrips1"
+            android:layout_alignBottom="@+id/account1" />
+
+        <ImageButton
+            android:id="@+id/trips1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:background="@android:color/transparent"
+            android:src="@drawable/trips"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/account1"
+            android:layout_alignLeft="@+id/account1"
+            android:layout_alignStart="@+id/account1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/trips"
+            android:id="@+id/textTrips1"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_alignTop="@+id/trips1"
+            android:layout_alignLeft="@+id/textNotifications1"
+            android:layout_alignStart="@+id/textNotifications1"
+            android:layout_alignBottom="@+id/trips1" />
+
+        <ImageButton
+            android:id="@+id/settings1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:background="@android:color/transparent"
+            android:src="@drawable/settings"
+            android:layout_below="@+id/textNotifications1"
+            android:layout_alignLeft="@+id/notifictions1"
+            android:layout_alignStart="@+id/notifictions1"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:id="@+id/textSettings1"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_alignTop="@+id/settings1"
+            android:layout_alignLeft="@+id/textNotifications1"
+            android:layout_alignStart="@+id/textNotifications1"
+            android:layout_alignBottom="@+id/settings1" />
+
+        <ImageButton
+            android:id="@+id/help1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:background="@android:color/transparent"
+            android:src="@drawable/help"
+            android:layout_below="@id/settings1"
+            android:layout_alignLeft="@+id/settings1"
+            android:layout_alignStart="@+id/settings1"
+            android:layout_marginTop="12dp"/>
+
+        <TextView
+            android:id="@+id/textHelp1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/help"
+            android:textSize="16sp"
+            android:layout_alignTop="@+id/help1"
+            android:layout_alignLeft="@+id/textSettings1"
+            android:layout_alignStart="@+id/textSettings1"
+            android:layout_alignBottom="@+id/help1" />
+
+        <ImageButton
+            android:id="@+id/notifictions1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/app_name"
+            android:background="@android:color/transparent"
+            android:src="@drawable/notification"
+            android:layout_below="@+id/trips1"
+            android:layout_alignLeft="@+id/trips1"
+            android:layout_alignStart="@+id/trips1"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notifications"
+            android:id="@+id/textNotifications1"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_alignTop="@+id/notifictions1"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="7dp"
+            android:layout_marginStart="7dp"
+            android:layout_alignBottom="@+id/notifictions1" />
+    </RelativeLayout>
+
+</RelativeLayout>

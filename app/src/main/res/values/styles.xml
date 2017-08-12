@@ -1,0 +1,13 @@
+<resources>
+    <style name="AppTheme.Dark" parent="Base.Theme.AppCompat">
+        <item name="android:editTextStyle">@style/MyEditTextTheme</item>
+    </style>
+    <style name="MyEditTextTheme">
+        <item name="colorControlActivated">@color/colorLight</item>
+        <item name="colorControlHighlight">@color/colorLight</item>
+    </style>
+    <style name="MySearchViewTheme">
+        <item name="colorControlActivated">@color/colorLight</item>
+        <item name="colorControlHighlight">@color/colorLight</item>
+    </style>
+</resources>

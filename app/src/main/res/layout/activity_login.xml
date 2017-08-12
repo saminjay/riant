@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sign_in_bg">
+
+    <EditText
+        android:id="@+id/LogEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="20sp"
+        android:hint="@string/prompt_email"
+        android:textColorHint="@color/colorWhite"
+        android:inputType="textEmailAddress"
+        android:layout_centerInParent="true"
+        android:theme="@style/MyEditTextTheme">
+    </EditText>
+    <requestFocus android:id="@+id/requestFocus" />
+
+    <EditText
+        android:id="@+id/LogPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:textSize="20sp"
+        android:hint="@string/prompt_password"
+        android:textColorHint="@color/colorWhite"
+        android:inputType="textPassword"
+        android:layout_below="@+id/LogEmail"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:theme="@style/MyEditTextTheme"/>
+
+    <Button
+        android:id="@+id/btnSignin"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
+        android:text="@string/sign_in"
+        android:textSize="16sp"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/colorPrimaryDark"
+        android:layout_above="@+id/btnRegister"
+        android:layout_marginBottom="20dp"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="fill_parent"
+        android:layout_height="32dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/btnRegister"
+        android:textColor="#edac00"
+        android:textSize="20sp"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

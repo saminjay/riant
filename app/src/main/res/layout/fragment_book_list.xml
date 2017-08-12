@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bookingList"
+    android:name="com.riantservices.riant.BookFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.riantservices.riant.BookFragment"
+    app:layoutManager="LinearLayoutManager" />

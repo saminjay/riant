@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sign_in_bg" >
+
+    <EditText
+        android:id="@+id/RegUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/Username"
+        android:textColorHint="@color/colorWhite"
+        android:textSize="32sp"
+        android:theme="@style/MyEditTextTheme"
+        android:layout_above="@+id/RegEmail"
+        android:layout_alignLeft="@+id/RegEmail"
+        android:layout_alignStart="@+id/RegEmail"
+        android:layout_marginBottom="40dp" />
+    <requestFocus />
+    <EditText
+        android:id="@+id/RegEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/prompt_email"
+        android:textColorHint="@color/colorWhite"
+        android:inputType="textEmailAddress"
+        android:textSize="32sp"
+        android:layout_centerInParent="true"
+        android:theme="@style/MyEditTextTheme">
+    </EditText>
+    <EditText
+        android:id="@+id/RegPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/Phone"
+        android:textColorHint="@color/colorWhite"
+        android:ems="10"
+        android:inputType="phone"
+        android:textSize="32sp"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/RegEmail"
+        android:layout_alignStart="@+id/RegPass"
+        android:layout_alignLeft="@+id/RegPass"
+        android:theme="@style/MyEditTextTheme"/>
+    <EditText
+        android:id="@+id/RegPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/prompt_password"
+        android:textColorHint="@color/colorWhite"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textSize="32sp"
+        android:layout_below="@+id/RegPhone"
+        android:layout_alignStart="@+id/RegPass2"
+        android:layout_alignLeft="@+id/RegPass2"
+        android:layout_marginTop="40dp"
+        android:theme="@style/MyEditTextTheme" />
+    <EditText
+        android:id="@+id/RegPass2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/RePassword"
+        android:textColorHint="@color/colorWhite"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textSize="32sp"
+        android:layout_below="@+id/RegPass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:theme="@style/MyEditTextTheme" />
+    <Button
+        android:id="@+id/btnRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#fff"
+        android:background="@color/colorPrimary"
+        android:text="@string/btnRegister"
+        android:textSize="32sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:theme="@style/MyEditTextTheme" />
+</RelativeLayout>

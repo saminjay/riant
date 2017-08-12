@@ -59,7 +59,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
         view1 = (RelativeLayout) findViewById(R.id.menu);
         view2 = (RelativeLayout) findViewById(R.id.extended);
-        view1.setVisibility(View.GONE);
+        view1.setVisibility(View.VISIBLE);
         view2.setVisibility(View.GONE);
         session = new SessionManager(getApplicationContext());
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -68,12 +68,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         bar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (view1.getVisibility()==View.INVISIBLE) {
-                    Animation getIn = generateMoveLeftAnimation(view1);
-                    getIn.start();
+                if (view2.getVisibility()==View.INVISIBLE) {
+                    view2.setVisibility(View.VISIBLE);
                 } else {
-                    Animation getOut = generateMoveRightAnimation(view1);
-                    getOut.start();
+                    view2.setVisibility(View.INVISIBLE);
                 }
             }
         });
@@ -223,53 +221,4 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     //private void sos() {}
 
-    private Animation generateMoveRightAnimation(final View view) {
-        final Animation animation = new TranslateAnimation(Animation.ABSOLUTE, -view.getWidth(), Animation.ABSOLUTE, 0,
-                Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0);
-        animation.setDuration(300);
-
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                view.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // change the coordinates of the view object itself so that on click listener reacts to new position
-                //view.layout(view.getLeft()+view.getWidth(), view.getTop(), view.getRight()+view.getWidth(), view.getBottom());
-                view.clearAnimation();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        return animation;
-    }
-
-    private Animation generateMoveLeftAnimation(final View view) {
-        final Animation animation = new TranslateAnimation(Animation.ABSOLUTE, 0, Animation.ABSOLUTE, -view.getWidth(),
-                Animation.ABSOLUTE, 0, Animation.ABSOLUTE, 0);
-        animation.setDuration(300);
-
-        animation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                // change the coordinates of the view object itself so that on click listener reacts to new position
-                //view.layout(view.getLeft()-view.getWidth(), view.getTop(), view.getRight()-view.getWidth(), view.getBottom());
-                view.clearAnimation();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) { view.setVisibility(View.INVISIBLE);}
-        });
-        return animation;
-    }
 }

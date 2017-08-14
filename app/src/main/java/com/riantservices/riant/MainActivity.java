@@ -16,8 +16,8 @@ import org.json.JSONObject;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -26,11 +26,9 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -62,6 +60,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         view1.setVisibility(View.VISIBLE);
         view2.setVisibility(View.GONE);
         session = new SessionManager(getApplicationContext());
+        ImageButton[] icons=new ImageButton[10];
+        TextView[] iconText=new TextView[5];
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         ImageButton bar=(ImageButton)findViewById(R.id.bar);
@@ -75,6 +75,52 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         });
+        OnClickListener iconClickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch(v.getId()){
+                    case R.id.account:
+                    case R.id.account1:
+                    case R.id.textAccount1:
+                        alertDialog("Account is clicked"); break;
+                    case R.id.trips:
+                    case R.id.trips1:
+                    case R.id.textTrips1:
+                        Intent goTrips = new Intent(getApplicationContext(),TripsActivity.class);
+                        startActivity(goTrips);
+                        break;
+                    case R.id.notifictions:
+                    case R.id.notifictions1:
+                    case R.id.textNotifications1:
+                        alertDialog("Notifications is clisked"); break;
+                    case R.id.settings:
+                    case R.id.settings1:
+                    case R.id.textSettings1:
+                        alertDialog("Settings is clicked"); break;
+                    case R.id.help:
+                    case R.id.help1:
+                    case R.id.textHelp1:
+                        alertDialog("Help is clicked"); break;
+                }
+            }
+        };
+        icons[0]=(ImageButton)findViewById(R.id.account);
+        icons[1]=(ImageButton)findViewById(R.id.account1);
+        icons[2]=(ImageButton)findViewById(R.id.trips);
+        icons[3]=(ImageButton)findViewById(R.id.trips1);
+        icons[4]=(ImageButton)findViewById(R.id.settings);
+        icons[5]=(ImageButton)findViewById(R.id.settings1);
+        icons[6]=(ImageButton)findViewById(R.id.notifictions);
+        icons[7]=(ImageButton)findViewById(R.id.notifictions1);
+        icons[8]=(ImageButton)findViewById(R.id.help);
+        icons[9]=(ImageButton)findViewById(R.id.help1);
+        for(int i=0;i<10;i++)icons[i].setOnClickListener(iconClickListener);
+        iconText[0]=(TextView)findViewById(R.id.textAccount1);
+        iconText[1]=(TextView)findViewById(R.id.textTrips1);
+        iconText[2]=(TextView)findViewById(R.id.textNotifications1);
+        iconText[3]=(TextView)findViewById(R.id.textSettings1);
+        iconText[4]=(TextView)findViewById(R.id.textHelp1);
+        for(int i=0;i<5;i++)iconText[i].setOnClickListener(iconClickListener);
     }
 
     @Override

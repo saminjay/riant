@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -64,6 +65,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         TextView[] iconText=new TextView[5];
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        SearchView searchView=(SearchView)findViewById(R.id.searchView);
+        searchView.setIconified(false);
+        searchView.clearFocus();
         ImageButton bar=(ImageButton)findViewById(R.id.bar);
         bar.setOnClickListener(new OnClickListener() {
             @Override

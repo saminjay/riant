@@ -23,7 +23,7 @@ public class Splash extends AppCompatActivity {
     }
 
     public void start(){
-        if (session.isLoggedIn()) {
+        if (!session.isLoggedIn()) {
             Intent goMain = new Intent(this, MainActivity.class);
             startActivity(goMain);
         }

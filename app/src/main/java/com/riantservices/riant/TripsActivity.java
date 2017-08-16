@@ -1,8 +1,5 @@
 package com.riantservices.riant;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.design.widget.TabLayout;
@@ -12,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toolbar;
 
 public class TripsActivity extends AppCompatActivity{
 
@@ -43,11 +39,10 @@ public class TripsActivity extends AppCompatActivity{
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        android.support.v7.widget.Toolbar toolbar=(android.support.v7.widget.Toolbar)findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
         TabLayout tabLayout=(TabLayout)findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+        getSupportActionBar().hide();
     }
 
 

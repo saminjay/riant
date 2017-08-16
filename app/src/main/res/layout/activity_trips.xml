@@ -6,11 +6,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/trip_head"
-        android:adjustViewBounds="true"/>
-    <Toolbar
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/app_name"/>
+
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"/>
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tabs"/>
+
 <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"

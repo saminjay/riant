@@ -18,6 +18,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +26,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -65,9 +67,38 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         TextView[] iconText=new TextView[5];
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        SearchView searchView=(SearchView)findViewById(R.id.searchView);
-        searchView.setIconified(false);
-        searchView.clearFocus();
+        final SearchView searchView=(SearchView)findViewById(R.id.searchView);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
+
+        final int longClickDuration = 5000; //for long click to trigger after 5 seconds
+
+        ImageButton sos=(ImageButton)findViewById(R.id.sos);
+        sos.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                long then=0;
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                     then = (long) System.currentTimeMillis();
+                }
+                else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if ((System.currentTimeMillis() - then) > longClickDuration) {
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:100"));
+                        if(ContextCompat.checkSelfPermission( getApplicationContext(), Manifest.permission.CALL_PHONE ) == PackageManager.PERMISSION_GRANTED)
+                           {alertDialog("SOS activated. Calling 100.");startActivity(intent);}
+                        else
+                            alertDialog("SOS failed");
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
         ImageButton bar=(ImageButton)findViewById(R.id.bar);
         bar.setOnClickListener(new OnClickListener() {
             @Override

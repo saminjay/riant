@@ -20,6 +20,7 @@ public class Splash extends AppCompatActivity {
                 start();
             }
         }, 2000);
+        getSupportActionBar().hide();
     }
 
     public void start(){

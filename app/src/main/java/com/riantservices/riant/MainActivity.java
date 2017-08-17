@@ -15,12 +15,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -76,25 +79,31 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
         final int longClickDuration = 5000; //for long click to trigger after 5 seconds
-
         ImageButton sos=(ImageButton)findViewById(R.id.sos);
+
         sos.setOnTouchListener(new View.OnTouchListener() {
+            boolean isLongPress = false;
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                long then=0;
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                     then = (long) System.currentTimeMillis();
-                }
-                else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    if ((System.currentTimeMillis() - then) > longClickDuration) {
-                        Intent intent = new Intent(Intent.ACTION_CALL);
-                        intent.setData(Uri.parse("tel:100"));
-                        if(ContextCompat.checkSelfPermission( getApplicationContext(), Manifest.permission.CALL_PHONE ) == PackageManager.PERMISSION_GRANTED)
-                           {alertDialog("SOS activated. Calling 100.");startActivity(intent);}
-                        else
-                            alertDialog("SOS failed");
-                        return false;
-                    }
+                    isLongPress = true;
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isLongPress) {
+                                Vibrator vibrator = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+                                vibrator.vibrate(200);
+                                Intent intent = new Intent(Intent.ACTION_CALL);
+                                intent.setData(Uri.parse("tel:100"));
+                                if(ContextCompat.checkSelfPermission( getApplicationContext(), Manifest.permission.CALL_PHONE ) == PackageManager.PERMISSION_GRANTED)
+                                {alertDialog("SOS activated. Calling 100.");startActivity(intent);}
+                                else alertDialog("SOS failed");
+                            }
+                        }
+                    }, longClickDuration);
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    isLongPress = false;
                 }
                 return true;
             }
@@ -299,7 +308,4 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
     }
-
-    //private void sos() {}
-
 }

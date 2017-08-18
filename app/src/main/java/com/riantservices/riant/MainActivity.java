@@ -47,12 +47,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     GoogleMap googleMap;
-    Marker UserMarker;
     private String response;
     SessionManager session;
     RelativeLayout view1,view2;
@@ -183,6 +183,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.addMarker(new MarkerOptions().position(CURRENT_LOCATION).title("Current Location"));
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION, 15);
         googleMap.animateCamera(update);
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        googleMap.getUiSettings().setZoomControlsEnabled(false);
         String perm[] = {Manifest.permission.ACCESS_FINE_LOCATION};
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -239,7 +241,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         response = slurp(conn.getInputStream());
                         respond(response);
                     } catch (Exception ex) {
-                        alertDialog("Error in Connection. Please try later.");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                alertDialog("Error in Connection. Please try later.");
+                            }
+                        });
                     }
                 }
             };
@@ -254,8 +261,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         new AlertDialog.Builder(this).setTitle("Riant Alert").setMessage(Message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
+                    public void onClick(DialogInterface dialog, int which) {}
                 }).setIcon(android.R.drawable.ic_dialog_alert).show();
     }
 

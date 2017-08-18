@@ -180,7 +180,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         Lat = gps.getLatitude();
         Lon = gps.getLongitude();
         LatLng CURRENT_LOCATION = new LatLng(Lat, Lon);
-        UserMarker.setPosition(CURRENT_LOCATION);
+        googleMap.addMarker(new MarkerOptions().position(CURRENT_LOCATION).title("Current Location"));
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION, 15);
         googleMap.animateCamera(update);
         String perm[] = {Manifest.permission.ACCESS_FINE_LOCATION};

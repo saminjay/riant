@@ -50,7 +50,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCVvT-kpR2b9ddxXHPoEAGOsvHyhFSgz38" />
+            android:value="AIzaSyB-DNPksA_Ki_fLHPHSrca5ekKRyEZTIIg" />
 
         <activity
             android:name=".Splash"

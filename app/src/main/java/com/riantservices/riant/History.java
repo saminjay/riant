@@ -88,6 +88,7 @@ public class History extends Fragment {
     private void fetchHistoryData() {
         //HistoryElements HistoryElements = new HistoryElements();
         //HistoryList.add(HistoryElements);
+        //
         mAdapter.notifyDataSetChanged();
     }
 }

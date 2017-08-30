@@ -11,26 +11,35 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
+    <com.google.android.gms.maps.MapView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/destination"
+        android:layout_below="@id/pickup_addr"
+        android:text="Destination Address"
         android:textColor="@color/colorWhite"
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/genre"
-        android:layout_below="@id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/year"
+        android:id="@+id/dateTime"
+        android:layout_marginTop="5dp"
         android:textColor="@color/colorWhite"
         android:layout_width="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_height="wrap_content" />
+        android:text="On date at time"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/destination"/>
+
+    <TextView
+        android:id="@+id/amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Rs.0000"
+        android:layout_alignBaseline="@id/dateTime"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>

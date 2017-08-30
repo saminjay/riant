@@ -14,34 +14,66 @@ import java.util.ArrayList;
 import java.util.List;
 
 class BookElements{
-    private String title,genre,year;
-    public BookElements(String title, String genre, String year) {
-        this.title = title;
-        this.genre = genre;
-        this.year = year;
+    private String pickup, destination, dateTime, distance, driver, contact, fare;
+    public BookElements(String pickup, String destination, String dateTime, String distance, String driver, String contact, String fare) {
+        this.pickup=pickup;
+        this.destination=destination;
+        this.dateTime=dateTime;
+        this.distance=distance;
+        this.driver=driver;
+        this.contact=contact;
+        this.fare=fare;
     }
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String name) {
-        this.title = name;
-    }
-
-    public String getYear() {
-        return year;
+    public String getPickup() {
+        return pickup;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public void setPickup(String pickup) {
+        this.pickup = pickup;
     }
 
-    public String getGenre() {
-        return genre;
+    public String getDestination() {
+        return destination;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String contact) { this.contact = contact;}
+
+    public String getFare() { return fare;}
+
+    public void setFare(String fare) {
+        this.fare = fare;
     }
 }
 
@@ -66,7 +98,7 @@ public class Book extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 BookElements bookElements = BookList.get(position);
-                Toast.makeText(getActivity(), bookElements.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), bookElements.getPickup()+ " to "+bookElements.getDestination(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -78,53 +110,8 @@ public class Book extends Fragment {
         return rootView;
     }
     private void fetchBookData() {
-        BookElements bookElements = new BookElements("Mad Max: Fury Road", "Action & Adventure", "2015");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Inside Out", "Animation, Kids & Family", "2015");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Star Wars: Episode VII - The Force Awakens", "Action", "2015");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Shaun the Sheep", "Animation", "2015");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("The Martian", "Science Fiction & Fantasy", "2015");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Mission: Impossible Rogue Nation", "Action", "2015");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Up", "Animation", "2009");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Star Trek", "Science Fiction", "2009");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("The LEGO bookElements", "Animation", "2014");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Iron Man", "Action & Adventure", "2008");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Aliens", "Science Fiction", "1986");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Chicken Run", "Animation", "2000");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Back to the Future", "Science Fiction", "1985");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Raiders of the Lost Ark", "Action & Adventure", "1981");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Goldfinger", "Action & Adventure", "1965");
-        BookList.add(bookElements);
-
-        bookElements = new BookElements("Guardians of the Galaxy", "Science Fiction & Fantasy", "2014");
-        BookList.add(bookElements);
+        //BookElements bookElements = new BookElements();
+        //BookList.add(bookElements);
 
         mAdapter.notifyDataSetChanged();
     }

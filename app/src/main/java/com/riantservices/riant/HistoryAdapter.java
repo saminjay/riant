@@ -7,19 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
     private List<HistoryElements> HistoryList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, year, genre;
+        public TextView destination, dateTime, amount;
+        private LatLng location;
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            genre = (TextView) view.findViewById(R.id.genre);
-            year = (TextView) view.findViewById(R.id.year);
+            destination = (TextView) view.findViewById(R.id.destination);
+            dateTime = (TextView) view.findViewById(R.id.dateTime);
+            amount = (TextView) view.findViewById(R.id.amount);
+            location=new LatLng(0,0);
         }
     }
 
@@ -39,9 +43,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         HistoryElements HistoryElements = HistoryList.get(position);
-        holder.title.setText(HistoryElements.getTitle());
-        holder.genre.setText(HistoryElements.getGenre());
-        holder.year.setText(HistoryElements.getYear());
+        holder.location=HistoryElements.getLatLng();
+        //make map from getLatLng
+        holder.destination.setText("Destination: "+HistoryElements.getDestination());
+        holder.dateTime.setText(HistoryElements.getDateTime());
+        holder.amount.setText("Rs. "+HistoryElements.getAmount());
     }
 
     @Override

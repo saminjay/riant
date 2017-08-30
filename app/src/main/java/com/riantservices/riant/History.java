@@ -10,39 +10,47 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 
 class HistoryElements{
-    private String title,genre,year;
-    public HistoryElements(String title, String genre, String year) {
-        this.title = title;
-        this.genre = genre;
-        this.year = year;
+    private String destination,dateTime,amount;
+    private LatLng latLng;
+    public HistoryElements(String destination, String dateTime, String amount,double lat,double lng) {
+        this.destination = destination;
+        this.dateTime = dateTime;
+        this.amount = amount;
+        latLng=new LatLng(lat,lng);
     }
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String name) {
-        this.title = name;
+    public String getDestination() {
+        return destination;
     }
 
-    public String getYear() {
-        return year;
+    public void setDestination(String destination) {
+        this.destination = destination;
     }
 
-    public void setYear(String year) {
-        this.year = year;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public String getGenre() {
-        return genre;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public String getAmount() {
+        return amount;
     }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
+    public LatLng getLatLng(){ return latLng;}
+
+    public  void setLatLng(LatLng latLng){ this.latLng=latLng;}
 }
 
 public class History extends Fragment {
@@ -66,7 +74,7 @@ public class History extends Fragment {
             @Override
             public void onClick(View view, int position) {
                 HistoryElements HistoryElements = HistoryList.get(position);
-                Toast.makeText(getActivity(), HistoryElements.getTitle() + " is selected!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), HistoryElements.getDestination(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -78,54 +86,8 @@ public class History extends Fragment {
         return rootView;
     }
     private void fetchHistoryData() {
-        HistoryElements HistoryElements = new HistoryElements("Mad Max: Fury Road", "Action & Adventure", "2015");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Inside Out", "Animation, Kids & Family", "2015");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Star Wars: Episode VII - The Force Awakens", "Action", "2015");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Shaun the Sheep", "Animation", "2015");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("The Martian", "Science Fiction & Fantasy", "2015");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Mission: Impossible Rogue Nation", "Action", "2015");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Up", "Animation", "2009");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Star Trek", "Science Fiction", "2009");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("The LEGO HistoryElements", "Animation", "2014");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Iron Man", "Action & Adventure", "2008");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Aliens", "Science Fiction", "1986");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Chicken Run", "Animation", "2000");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Back to the Future", "Science Fiction", "1985");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Raiders of the Lost Ark", "Action & Adventure", "1981");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Goldfinger", "Action & Adventure", "1965");
-        HistoryList.add(HistoryElements);
-
-        HistoryElements = new HistoryElements("Guardians of the Galaxy", "Science Fiction & Fantasy", "2014");
-        HistoryList.add(HistoryElements);
-
+        //HistoryElements HistoryElements = new HistoryElements();
+        //HistoryList.add(HistoryElements);
         mAdapter.notifyDataSetChanged();
     }
 }

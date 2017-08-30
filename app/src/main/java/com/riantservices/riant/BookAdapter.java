@@ -13,13 +13,17 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
     private List<BookElements> bookList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView title, year, genre;
+        public TextView pickup, destination, dateTime, distance, driver, contact, fare;
 
         public MyViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            genre = (TextView) view.findViewById(R.id.genre);
-            year = (TextView) view.findViewById(R.id.year);
+            pickup = (TextView) view.findViewById(R.id.pickup_addr);
+            destination = (TextView) view.findViewById(R.id.destination);
+            dateTime = (TextView) view.findViewById(R.id.dateTime);
+            distance = (TextView) view.findViewById(R.id.distance);
+            driver = (TextView) view.findViewById(R.id.driver);
+            contact = (TextView) view.findViewById(R.id.contact);
+            fare = (TextView) view.findViewById(R.id.fare);
         }
     }
 
@@ -39,9 +43,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         BookElements bookElements = bookList.get(position);
-        holder.title.setText(bookElements.getTitle());
-        holder.genre.setText(bookElements.getGenre());
-        holder.year.setText(bookElements.getYear());
+        holder.pickup.setText("Pickup Address: "+bookElements.getPickup());
+        holder.destination.setText("Destination Address: "+bookElements.getDestination());
+        holder.fare.setText("Estimated Fare: "+bookElements.getFare());
+        holder.contact.setText("Contact: "+bookElements.getContact());
+        holder.driver.setText("Driver's Name:"+bookElements.getDriver());
+        holder.dateTime.setText(bookElements.getDateTime());
+        holder.distance.setText("Distance: "+bookElements.getDistance());
     }
 
     @Override

@@ -1,7 +1,9 @@
 package com.riantservices.riant;
 
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,9 +122,63 @@ public class Book extends Fragment {
         return rootView;
     }
     private void fetchBookData() {
-        //BookElements bookElements = new BookElements();
-        //BookList.add(bookElements);
-
+        SessionManager session = new SessionManager(getActivity());
+        session.getEmail();
+        try {
+            String data = URLEncoder.encode("email", "UTF-8")
+                    + "=" + URLEncoder.encode(session.getEmail(), "UTF-8");
+            try {
+                String response;
+                URL url= new URL("http://riantservices.com/App_Data/Login.php");
+                URLConnection conn = url.openConnection();
+                conn.setDoOutput(true);
+                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+                wr.write( data );
+                wr.flush();
+                response = slurp(conn.getInputStream());
+                respond(response);
+            }
+            catch(Exception ex) {
+                alertDialog("Error in Connection. Please try later.");
+            }
+        }
+        catch (UnsupportedEncodingException e){}
         mAdapter.notifyDataSetChanged();
+    }
+    public static String slurp(final InputStream is) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder out = new StringBuilder();
+        String newLine = System.getProperty("line.separator");
+        String line;
+        while ((line = reader.readLine()) != null) {
+            out.append(line);
+            out.append(newLine);
+        }
+        return out.toString();
+    }
+
+    public void respond(String response)throws IOException{
+        BufferedReader reader = new BufferedReader(new StringReader(response));
+        int n = Integer.parseInt(reader.readLine());
+        for(int i=0;i<n;i++){
+            String pickup = reader.readLine();
+            String destination = reader.readLine();
+            String dateTime = reader.readLine();
+            String distance = reader.readLine();
+            String driver = reader.readLine();
+            String contact = reader.readLine();
+            String fare = reader.readLine();
+            BookElements BookElements = new BookElements(pickup,destination,dateTime,distance,driver,contact,fare);
+            BookList.add(BookElements);
+        }
+    }
+
+    public void alertDialog(String Message) {
+
+        new AlertDialog.Builder(getActivity()).setTitle("Riant Alert").setMessage(Message)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setIcon(android.R.drawable.ic_dialog_alert).show();
     }
 }

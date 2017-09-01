@@ -11,14 +11,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
+class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
     private List<HistoryElements> HistoryList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView destination, dateTime, amount;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView destination, dateTime, amount;
         private LatLng location;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             destination = (TextView) view.findViewById(R.id.destination);
             dateTime = (TextView) view.findViewById(R.id.dateTime);
@@ -28,7 +28,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHo
     }
 
 
-    public HistoryAdapter(List<HistoryElements> HistoryList) {
+    HistoryAdapter(List<HistoryElements> HistoryList) {
         this.HistoryList = HistoryList;
     }
 

@@ -50,7 +50,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB-DNPksA_Ki_fLHPHSrca5ekKRyEZTIIg"/>
+            android:value="AIzaSyB-DNPksA_Ki_fLHPHSrca5ekKRyEZTIIg" />
 
         <activity
             android:name=".Splash"
@@ -64,7 +64,8 @@
         </activity>
         <activity
             android:name=".TripsActivity"
-            android:label="@string/title_activity_trips"/>
+            android:label="@string/title_activity_trips" />
+        <activity android:name=".AirportBookActivity"></activity>
     </application>
 
 </manifest>

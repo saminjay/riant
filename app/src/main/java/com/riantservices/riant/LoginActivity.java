@@ -39,14 +39,14 @@ public class LoginActivity extends Activity implements OnClickListener  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Intent intent = getIntent();
+        EtLogEmail = (EditText) findViewById(R.id.LogEmail);
+        EtLogPass = (EditText) findViewById(R.id.LogPass);
         if(intent.hasExtra("Email")) {
             String Email_User_From_register = intent.getStringExtra("Email");
             String PassUser_From_register = intent.getStringExtra("Pass");
             EtLogEmail.setText(Email_User_From_register);
             EtLogPass.setText(PassUser_From_register);
         }
-        EtLogEmail = (EditText) findViewById(R.id.LogEmail);
-        EtLogPass = (EditText) findViewById(R.id.LogPass);
         View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

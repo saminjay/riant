@@ -29,7 +29,7 @@ import static com.riantservices.riant.R.color.colorLight;
 import static com.riantservices.riant.R.color.colorTransparent;
 import static com.riantservices.riant.R.color.colorWhite;
 
-public class AirportBookActivity extends AppCompatActivity implements View.OnClickListener{
+public class LocalBookActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText Pickup,Destination,FriendContact;
     private RadioButton radio2,radio3,radio4,radio5,radio6;
     private String strEmail,strBookFor,strTrip,strAC,strPickup, strDestination,strNumber;
@@ -39,7 +39,7 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strBookFor="";strTrip="";strAC="";strPickup="";strDestination="";strNumber="";
-        setContentView(R.layout.activity_airport_book);
+        setContentView(R.layout.activity_local_book);
         Button button=(Button)findViewById(R.id.button);
         Button button1=(Button)findViewById(R.id.button1);
         button.setOnClickListener(this);

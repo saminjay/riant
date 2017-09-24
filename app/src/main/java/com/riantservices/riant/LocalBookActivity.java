@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -31,9 +32,11 @@ import static com.riantservices.riant.R.color.colorWhite;
 
 public class LocalBookActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText Pickup,Destination,FriendContact;
-    private RadioButton radio2,radio3,radio4,radio5,radio6;
+    private RadioButton radio2;
     private String strEmail,strBookFor,strTrip,strAC,strPickup, strDestination,strNumber;
     SessionManager session;
+    ImageButton oneway,roundtrip;
+    Button AC,NonAC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,23 +45,25 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_local_book);
         Button button=(Button)findViewById(R.id.button);
         Button button1=(Button)findViewById(R.id.button1);
+        oneway=(ImageButton)findViewById(R.id.oneway);
+        roundtrip=(ImageButton)findViewById(R.id.roundtrip);
+        AC =(Button)findViewById(R.id.AC);
+        NonAC=(Button)findViewById(R.id.NonAC);
         button.setOnClickListener(this);
         button1.setOnClickListener(this);
+        oneway.setOnClickListener(this);
+        roundtrip.setOnClickListener(this);
+        AC.setOnClickListener(this);
+        NonAC.setOnClickListener(this);
         getSupportActionBar().hide();
         session=new SessionManager(getApplicationContext());
         strEmail=session.getEmail();
-        RadioGroup radio,radioA,radioB;
+        RadioGroup radio;
         Pickup=(EditText)findViewById(R.id.edit1);
         Destination=(EditText)findViewById(R.id.edit2);
         FriendContact=(EditText)findViewById(R.id.edit3);
         radio=(RadioGroup)findViewById(R.id.radio);
-        radioA=(RadioGroup)findViewById(R.id.radioA);
-        radioB=(RadioGroup)findViewById(R.id.radioB);
         radio2=(RadioButton)findViewById(R.id.radio2);
-        radio3=(RadioButton)findViewById(R.id.radio3);
-        radio4=(RadioButton)findViewById(R.id.radio4);
-        radio5=(RadioButton)findViewById(R.id.radio5);
-        radio6=(RadioButton)findViewById(R.id.radio6);
         FriendContact.setVisibility(View.INVISIBLE);
         Intent intent = getIntent();
         if(intent.hasExtra("Email")) {
@@ -67,7 +72,7 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
             Pickup.setText(Pickup_Location);
             Destination.setText(Destination_Location);
         }
-        radio.clearCheck(); radioA.clearCheck(); radioB.clearCheck();
+        radio.clearCheck();
 
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -76,50 +81,13 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
                     case R.id.radio1:
                         strBookFor="";
                         strBookFor="For Yourself";
+                        FriendContact.setVisibility(View.INVISIBLE);
                         break;
                     case R.id.radio2:
                         strBookFor="";
                         strBookFor="Friend";
-                        break;
-                }
-            }
-        });
-
-        radioA.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch(checkedId){
-                    case R.id.radio3:
-                        strTrip="";
-                        strTrip="OneWay";
-                        radio3.setBackgroundColor(getResources().getColor(colorLight));
-                        radio4.setBackgroundColor(getResources().getColor(colorTransparent));
-                        break;
-                    case R.id.radio4:
-                        strTrip="";
-                        strTrip="RoundTrip";
-                        radio4.setBackgroundColor(getResources().getColor(colorLight));
-                        radio3.setBackgroundColor(getResources().getColor(colorTransparent));
-                        break;
-                }
-            }
-        });
-
-        radioB.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch(checkedId){
-                    case R.id.radio5:
-                        strAC="";
-                        strAC="AC";
-                        radio5.setBackgroundColor(getResources().getColor(colorLight));
-                        radio6.setBackgroundColor(getResources().getColor(colorTransparent));
-                        break;
-                    case R.id.radio6:
-                        strAC="";
-                        strAC="NonAC";
-                        radio6.setBackgroundColor(getResources().getColor(colorLight));
-                        radio5.setBackgroundColor(getResources().getColor(colorTransparent));
+                        FriendContact.setText("");
+                        FriendContact.setVisibility(View.VISIBLE);
                         break;
                 }
             }
@@ -152,6 +120,30 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.oneway:
+                oneway.setBackground(getResources().getDrawable(R.drawable.buttonselected));
+                roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                strTrip="";
+                strTrip="Oneway";
+                break;
+            case R.id.roundtrip:
+                roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonselected));
+                oneway.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                strTrip="";
+                strTrip="Roundtrip";
+                break;
+            case R.id.AC:
+                AC.setBackground(getResources().getDrawable(R.drawable.buttonselected));
+                NonAC.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                strAC="";
+                strAC="AC";
+                break;
+            case R.id.NonAC:
+                NonAC.setBackground(getResources().getDrawable(R.drawable.buttonselected));
+                AC.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                strAC="";
+                strAC="NonAC";
+                break;
             case R.id.button1:
                 strPickup = Pickup.getText().toString();
                 strDestination = Destination.getText().toString();
@@ -164,10 +156,10 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
                     alertDialog("Please choose who are you booking the ride for.");
                 } else if (radio2.isChecked()&&strNumber.matches("")) {
                     alertDialog("Please enter friend's contact number.");
-                } else if(strAC.matches("")) {
-                    alertDialog("Please choose between AC or Non-AC");
                 } else if(strTrip.matches("")) {
                     alertDialog("Please choose between one way or round trip");
+                } else if(strAC.matches("")) {
+                    alertDialog("Please choose between AC or Non-AC");
                 } else {
                     try {
                         Book();

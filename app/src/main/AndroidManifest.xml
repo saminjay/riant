@@ -66,7 +66,11 @@
             android:name=".TripsActivity"
             android:label="@string/title_activity_trips" />
         <activity android:name=".AirportBookActivity" />
-        <activity android:name=".LocalBookActivity"></activity>
+        <activity android:name=".LocalBookActivity" />
+        <activity android:name=".CorporateBookActivity" />
+        <activity android:name=".OutstationBookActivity" />
+        <activity android:name=".OutstateBookActivity" />
+        <activity android:name=".StationBookActivity"></activity>
     </application>
 
 </manifest>

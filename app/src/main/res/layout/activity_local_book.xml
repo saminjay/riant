@@ -14,236 +14,284 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/imageView"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp">
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="15dp"
-            android:text="Local: "
-            android:textColor="@color/colorLight"
-            android:textSize="22sp" />
-
-        <TextView
-            android:id="@+id/line1"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="Local:"
+        android:textColor="@color/colorLight"
+        android:textSize="22sp" />
+    <ScrollView
+        android:layout_below="@id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorWhite"
-            android:layout_below="@id/text"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/line1"
-            android:id="@+id/text1"
-            android:layout_marginTop="10dp"
-            android:textSize="18sp"
-            android:text="Pickup:"/>
-
-        <EditText
-            android:id="@+id/edit1"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@id/text1"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:hint="Enter Pickup Location"
-            android:singleLine="true"
-            android:textColorHint="@color/colorWhite"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text1"
-            android:layout_marginTop="10dp"
-            android:textSize="18sp"
-            android:text="Destination:"/>
-
-        <EditText
-            android:id="@+id/edit2"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/text2"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:hint="Enter Destination Location"
-            android:singleLine="true"
-            android:textColorHint="@color/colorWhite"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/text3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text2"
-            android:layout_marginTop="10dp"
-            android:textSize="18sp"
-            android:text="For whom you want to book the ride?"/>
-
-        <RadioGroup
-            android:id="@+id/radio"
-            android:layout_below="@id/text3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp">
-            <RadioButton
-                android:id="@+id/radio1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="For Yourself"/>
-            <RadioButton
-                android:id="@+id/radio2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:text="For Friend"/>
-        </RadioGroup>
-
-        <EditText
-            android:id="@+id/edit3"
-            android:layout_alignBottom="@id/radio"
-            android:layout_width="160dp"
-            android:textColorHint="@color/colorWhite"
-            android:hint="Friend's Mobile Number"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:layout_margin="0dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-
-        <TextView
-            android:id="@+id/line2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/white"
-            android:layout_marginTop="20dp"
-            android:layout_below="@id/radio"/>
-
-        <RadioGroup
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/radioA"
-            android:orientation="horizontal"
-            android:layout_below="@id/line2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:layout_margin="22dp"
-                android:textAlignment="center"
-                android:textColor="@android:color/white"
-                android:id="@+id/radio3"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="One-Way"/>
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
 
             <TextView
-                android:id="@+id/line3"
-                android:layout_width="1dp"
-                android:layout_height="60dp"
-                android:background="@color/colorWhite" />
-
-            <RadioButton
-                android:layout_margin="22dp"
-                android:textAlignment="center"
-                android:id="@+id/radio4"
-                android:layout_weight="1"
+                android:id="@+id/line1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:text="Round Trip"/>
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/line4"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/white"
-            android:layout_below="@id/radioA"/>
-
-        <RadioGroup
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/radioB"
-            android:orientation="horizontal"
-            android:layout_below="@id/line4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/radio5"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="22dp"
-                android:text="AC"
-                android:textSize="16sp" />
+                android:layout_height="1dp"
+                android:background="@color/colorWhite"/>
 
             <TextView
-                android:id="@+id/line5"
-                android:layout_width="1dp"
-                android:layout_height="60dp"
-                android:background="@color/colorWhite" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line1"
+                android:id="@+id/text1"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:text="Pickup:"/>
 
-            <RadioButton
-                android:id="@+id/radio6"
-                android:layout_weight="1"
+            <EditText
+                android:id="@+id/edit1"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/text1"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:hint="Enter Pickup Location"
+                android:maxLines="1"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text1"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:text="Destination:"/>
+
+            <EditText
+                android:id="@+id/edit2"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/text2"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:hint="Enter Destination Location"
+                android:maxLines="1"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/text2"
+                android:layout_marginTop="10dp"
+                android:textSize="18sp"
+                android:text="For whom you want to book the ride?"/>
+
+            <RadioGroup
+                android:id="@+id/radio"
+                android:layout_below="@id/text3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp">
+                <RadioButton
+                    android:id="@+id/radio1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="For Yourself"/>
+                <RadioButton
+                    android:id="@+id/radio2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="For Friend"/>
+            </RadioGroup>
+
+            <EditText
+                android:id="@+id/edit3"
+                android:layout_alignBottom="@id/radio"
+                android:layout_width="160dp"
+                android:textColorHint="@color/colorWhite"
+                android:hint="Friend's Mobile Number"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_margin="0dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"/>
+
+            <TextView
+                android:id="@+id/line2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/radio"/>
+
+            <LinearLayout
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/trip"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_below="@id/line2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="One Way"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"/>
+                    <ImageButton
+                        android:layout_margin="5dp"
+                        android:layout_height="40dp"
+                        android:layout_width="40dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/buttonshape"
+                        android:id="@+id/oneway"
+                        android:src="@drawable/oneway"
+                        android:layout_gravity="center"
+                        android:text="One-Way"/>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/line3"
+                    android:layout_width="1dp"
+                    android:layout_height="80dp"
+                    android:background="@color/colorWhite" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
+                        android:text="Round Trip"
+                        android:layout_gravity="center"
+                        android:textSize="20sp"/>
+                    <ImageButton
+                        android:id="@+id/roundtrip"
+                        android:layout_margin="5dp"
+                        android:layout_height="40dp"
+                        android:layout_width="40dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/buttonshape"
+                        android:src="@drawable/twoway"
+                        android:layout_gravity="center"
+                        android:text="One-Way"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/line4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"
+                android:layout_below="@id/trip"/>
+
+            <LinearLayout
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:id="@+id/ac"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_below="@id/line4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <Button
+                        android:layout_margin="5dp"
+                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/buttonshape"
+                        android:id="@+id/AC"
+                        android:layout_gravity="center"
+                        android:text="AC"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/line5"
+                    android:layout_width="1dp"
+                    android:layout_height="80dp"
+                    android:background="@color/colorWhite" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+                    <Button
+                        android:layout_margin="5dp"
+                        android:layout_height="50dp"
+                        android:layout_width="50dp"
+                        android:scaleType="fitCenter"
+                        android:adjustViewBounds="true"
+                        android:background="@drawable/buttonshape"
+                        android:id="@+id/NonAC"
+                        android:src="@drawable/twoway"
+                        android:layout_gravity="center"
+                        android:text="Non AC"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/line6"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"
+                android:layout_below="@id/ac"/>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Estimate Fair"
+                android:layout_marginTop="10dp"
+                android:padding="15dp"
+                android:layout_below="@id/line6"
+                android:background="@color/colorLight"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="35sp"
+                android:layout_alignBottom="@+id/button"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true" />
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="22dp"
-                android:text="Non AC"
-                android:textSize="16sp" />
-        </RadioGroup>
+                android:text="BOOK RIANT"
+                android:background="@color/colorAccent"
+                android:layout_below="@id/button"/>
 
-        <TextView
-            android:id="@+id/line6"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/white"
-            android:layout_below="@id/radioB"/>
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estimate Fair"
-            android:layout_marginTop="10dp"
-            android:padding="15dp"
-            android:layout_below="@id/line6"
-            android:background="@color/colorLight"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="35sp"
-            android:layout_alignBottom="@+id/button"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-
-        <Button
-            android:id="@+id/button1"
-            android:layout_marginTop="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="BOOK RIANT"
-            android:background="@color/colorAccent"
-            android:layout_below="@id/button"/>
-
-    </RelativeLayout>
-
+        </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

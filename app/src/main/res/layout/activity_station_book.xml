@@ -14,15 +14,16 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:text="Airport Drop: "
         android:layout_below="@id/imageView"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="Station Drop: "
         android:textColor="@color/colorLight"
         android:textSize="22sp" />
     <ScrollView

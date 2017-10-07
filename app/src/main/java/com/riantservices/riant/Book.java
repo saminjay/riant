@@ -123,10 +123,10 @@ public class Book extends Fragment {
     }
     private void fetchBookData() {
         SessionManager session = new SessionManager(getActivity());
-        session.getEmail();
+        String Email=session.getEmail();
         try {
             String data = URLEncoder.encode("email", "UTF-8")
-                    + "=" + URLEncoder.encode(session.getEmail(), "UTF-8");
+                    + "=" + URLEncoder.encode(Email, "UTF-8");
             try {
                 String response;
                 URL url= new URL("http://riantservices.com/App_Data/Login.php");

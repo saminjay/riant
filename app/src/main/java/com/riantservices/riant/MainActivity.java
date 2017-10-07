@@ -9,6 +9,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +31,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,6 +59,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private String response;
     SessionManager session;
     RelativeLayout view1,view2;
+    boolean pickupMarked=false;
+    private LatLng pickup,destination;
+    Marker pickupMarker,destinationMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +69,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_main);
         view1 = (RelativeLayout) findViewById(R.id.menu);
         view2 = (RelativeLayout) findViewById(R.id.extended);
-        view1.setVisibility(View.VISIBLE);
-        view2.setVisibility(View.GONE);
         session = new SessionManager(getApplicationContext());
         ImageButton[] icons=new ImageButton[10];
         TextView[] iconText=new TextView[5];
@@ -175,6 +179,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         map.setTrafficEnabled(true);
         map.setBuildingsEnabled(true);
         googleMap = map;
+        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                mark(latLng);
+            }
+        });
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                view2.setVisibility(View.INVISIBLE);
+            }
+        });
         GPSTracker gps = new GPSTracker(this);
         UserEmail = session.getEmail();
         Lat = gps.getLatitude();
@@ -182,7 +198,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng CURRENT_LOCATION = new LatLng(Lat, Lon);
         googleMap.addMarker(new MarkerOptions().position(CURRENT_LOCATION).title("Current Location"));
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION, 15);
-        googleMap.animateCamera(update);
+        //googleMap.animateCamera(update);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
         String perm[] = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -209,6 +225,42 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
         else
             requestPermissions(perm, 1);
+    }
+    protected void mark(LatLng latLng){
+        if(pickupMarked){
+            if(destinationMarker!=null) destinationMarker.remove();
+            destinationMarker=googleMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title("Destination")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar)));
+            destinationMarker.showInfoWindow();
+            destination=latLng;
+            pickupMarked=false;
+            bookMenu(pickup,destination);
+        }
+        else{
+            if(pickupMarker!=null) pickupMarker.remove();
+            pickupMarker=googleMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title("Pickup")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar)));
+            pickupMarker.showInfoWindow();
+            pickup=latLng;
+            pickupMarked=true;
+        }
+    }
+    protected void bookMenu(LatLng pickup,LatLng destination){
+        final Intent intent=new Intent(MainActivity.this,TripMenu.class);
+        float[] temp= new float[2];
+        temp[0]= (float) pickup.latitude;temp[1]= (float) pickup.longitude;
+        intent.putExtra("pickupLoc",temp);
+        temp[0]= (float) destination.longitude;temp[1]= (float) destination.longitude;
+        intent.putExtra("destinationLoc",temp);
+        new Timer().schedule(new TimerTask(){
+            public void run() {
+                startActivity(intent);
+            }
+        }, 2000);
     }
 
     protected void UpdateGPS(final String Email) throws UnsupportedEncodingException {
@@ -292,14 +344,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                             JSONObject resultArrayJson = TaxiDrivers.getJSONObject(i);
                             String Latitude = resultArrayJson.getString("Latitude");
                             String Longitude = resultArrayJson.getString("Longitude");
-                            String CabNo = resultArrayJson.getString("CabNo");
                             String CabType = resultArrayJson.getString("CabType");
                             double Lat = Double.parseDouble(Latitude);
                             double Lon = Double.parseDouble(Longitude);
                             LatLng Taxi_Location = new LatLng(Lat, Lon);
                                 googleMap.addMarker(new MarkerOptions()
                                         .position(Taxi_Location)
-                                        .title(CabType)
+                                        .title("Riant "+CabType)
                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar))
                                 );
                         }

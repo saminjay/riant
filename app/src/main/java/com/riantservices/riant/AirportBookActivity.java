@@ -2,10 +2,14 @@ package com.riantservices.riant;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +17,8 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,6 +30,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.List;
+import java.util.Locale;
 
 import static com.riantservices.riant.R.color.colorBlack;
 import static com.riantservices.riant.R.color.colorTransparent;
@@ -33,6 +41,7 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
     private EditText Pickup,Destination,FriendContact;
     private RadioButton radio2;
     private String strEmail,strBookFor,strTrip,strAC,strPickup, strDestination,strNumber;
+    private LatLng pickup,destination;
     SessionManager session;
     ImageButton oneway,roundtrip;
     Button AC,NonAC;
@@ -41,6 +50,11 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strBookFor="";strTrip="";strAC="";strPickup="";strDestination="";strNumber="";
+        float[] temp;
+        temp=getIntent().getFloatArrayExtra("pickupLoc");
+        pickup=new LatLng(temp[0],temp[1]);
+        temp=getIntent().getFloatArrayExtra("destinationLoc");
+        destination=new LatLng(temp[0],temp[1]);
         setContentView(R.layout.activity_airport_book);
         Button button=(Button)findViewById(R.id.button);
         Button button1=(Button)findViewById(R.id.button1);
@@ -64,15 +78,8 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
         radio=(RadioGroup)findViewById(R.id.radio);
         radio2=(RadioButton)findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
-        Intent intent = getIntent();
-        if(intent.hasExtra("Email")) {
-            String Pickup_Location = intent.getStringExtra("pickupLocation");
-            String Destination_Location = intent.getStringExtra("destinationLocation");
-            Pickup.setText(Pickup_Location);
-            Destination.setText(Destination_Location);
-        }
+        getAddress();
         radio.clearCheck();
-
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -114,6 +121,36 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
         Destination.setOnFocusChangeListener(onFocusChangeListener);
         FriendContact.setOnFocusChangeListener(onFocusChangeListener);
 
+    }
+
+    public void getAddress(){
+        Geocoder geocoder=new Geocoder(this, Locale.getDefault());
+        Address address;
+        String result;
+        try {
+            List<Address> pickupAddress;
+            List<Address> destinationAddress;
+            pickupAddress = geocoder.getFromLocation(pickup.latitude, pickup.longitude, 1);
+            destinationAddress = geocoder.getFromLocation(destination.latitude, destination.longitude, 1);
+            if(pickupAddress.size()>0){
+                address=pickupAddress.get(0);
+                result="";
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+                    result+=(address.getAddressLine(i)+" ");
+                Pickup.setText(result);
+            }
+            if(destinationAddress.size()>0){
+                address=destinationAddress.get(0);
+                result="";
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+                    result+=(address.getAddressLine(i)+" ");
+                Destination.setText(result);
+            }
+        }
+        catch (IOException | IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override

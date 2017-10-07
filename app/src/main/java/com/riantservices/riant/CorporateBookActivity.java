@@ -35,18 +35,18 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
     private EditText Pickup, Destination, FriendContact, Time;
     private RadioButton radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9;
     private String strEmail, strBookFor, strCar, strAC, strPickup, strDestination, strNumber, strTime;
-    private char mon,tue,wed,thu,fri,sat,sun;
+    private String mon,tue,wed,thu,fri,sat,sun;
     SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        strBookFor = ""; mon='n';
-        strCar = ""; tue='n';
-        strAC = ""; wed='n';
-        strPickup = ""; thu='n';
-        strDestination = ""; fri='n';
-        strNumber = ""; sat='n'; sun='n';
+        strBookFor = ""; mon="n";
+        strCar = ""; tue="n";
+        strAC = ""; wed="n";
+        strPickup = ""; thu="n";
+        strDestination = ""; fri="n";
+        strNumber = ""; sat="n"; sun="n";
         setContentView(R.layout.activity_corporate_book);
         Button mon = (Button)findViewById(R.id.mon);
         Button tue = (Button)findViewById(R.id.tue);
@@ -216,32 +216,32 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mon:
-                if(mon=='n') {view.setBackground(getResources().getDrawable(buttonselected));mon='y';}
-                else {view.setBackground(getResources().getDrawable(buttonshape));mon='n';}
+                if(mon=="n") {view.setBackground(getResources().getDrawable(buttonselected));mon="y";}
+                else {view.setBackground(getResources().getDrawable(buttonshape));mon="n";}
                 break;
             case R.id.tue:
-                if(tue=='n') {view.setBackground(getResources().getDrawable(buttonselected));tue='y';}
-                else {view.setBackground(getResources().getDrawable(buttonshape));tue='n';}
+                if(tue=="n") {view.setBackground(getResources().getDrawable(buttonselected));tue="y";}
+                else {view.setBackground(getResources().getDrawable(buttonshape));tue="n";}
                 break;
             case R.id.wed:
-                if(wed=='n') {view.setBackground(getResources().getDrawable(buttonselected));wed='y';}
-                else {view.setBackground(getResources().getDrawable(buttonshape));wed='n';}
+                if(wed=="n") {view.setBackground(getResources().getDrawable(buttonselected));wed="y";}
+                else {view.setBackground(getResources().getDrawable(buttonshape));wed="n";}
                 break;
             case R.id.thu:
-                if(thu=='n') {view.setBackground(getResources().getDrawable(buttonselected));thu='y';}
-                else {view.setBackground(getResources().getDrawable(buttonshape));thu='n';}
+                if(thu=="n") {view.setBackground(getResources().getDrawable(buttonselected));thu="y";}
+                else {view.setBackground(getResources().getDrawable(buttonshape));thu="n";}
                 break;
             case R.id.fri:
-                if(fri=='n') {view.setBackground(getResources().getDrawable(buttonselected));fri='y';}
-                else {view.setBackground(getResources().getDrawable(buttonshape));fri='n';}
+                if(fri=="n") {view.setBackground(getResources().getDrawable(buttonselected));fri="y";}
+                else {view.setBackground(getResources().getDrawable(buttonshape));fri="n";}
                 break;
             case R.id.sat:
-                if(sat=='n') {view.setBackground(getResources().getDrawable(buttonselected));sat='y';}
-                else {view.setBackground(getResources().getDrawable(buttonshape));sat='n';}
+                if(sat=="n") {view.setBackground(getResources().getDrawable(buttonselected));sat="y";}
+                else {view.setBackground(getResources().getDrawable(buttonshape));sat="n";}
                 break;
             case R.id.sun:
-                if(sun=='n') {view.setBackground(getResources().getDrawable(buttonselected));sun='y';}
-                else {view.setBackground(getResources().getDrawable(buttonshape));sun='n';}
+                if(sun=="n") {view.setBackground(getResources().getDrawable(buttonselected));sun="y";}
+                else {view.setBackground(getResources().getDrawable(buttonshape));sun="n";}
                 break;
             case R.id.button1:
                 strPickup = Pickup.getText().toString();
@@ -258,7 +258,7 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                     alertDialog("Please enter friend's contact number.");
                 } else if (strTime.matches("")) {
                     alertDialog("Please select the time of arrival.");
-                } else if (mon=='n'&&tue=='n'&&wed=='n'&&thu=='n'&&fri=='n'&&sat=='n'&&sun=='n') {
+                } else if (mon=="n"&&tue=="n"&&wed=="n"&&thu=="n"&&fri=="n"&&sat=="n"&&sun=="n") {
                     alertDialog("Please select atleast one working day.");
                 } else if (strCar.matches("")) {
                     alertDialog("Please choose a Car Type");
@@ -298,6 +298,20 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                 + "=" + URLEncoder.encode(strBookFor, "UTF-8");
         data += "&" + URLEncoder.encode("number", "UTF-8")
                 + "=" + URLEncoder.encode(strNumber, "UTF-8");
+        data += "&" + URLEncoder.encode("mon", "UTF-8")
+                + "=" + URLEncoder.encode(mon, "UTF-8");
+        data += "&" + URLEncoder.encode("tue", "UTF-8")
+                + "=" + URLEncoder.encode(tue, "UTF-8");
+        data += "&" + URLEncoder.encode("wed", "UTF-8")
+                + "=" + URLEncoder.encode(wed, "UTF-8");
+        data += "&" + URLEncoder.encode("thu", "UTF-8")
+                + "=" + URLEncoder.encode(thu, "UTF-8");
+        data += "&" + URLEncoder.encode("fri", "UTF-8")
+                + "=" + URLEncoder.encode(fri, "UTF-8");
+        data += "&" + URLEncoder.encode("sat", "UTF-8")
+                + "=" + URLEncoder.encode(sat, "UTF-8");
+        data += "&" + URLEncoder.encode("sun", "UTF-8")
+                + "=" + URLEncoder.encode(sun, "UTF-8");
         data += "&" + URLEncoder.encode("ac", "UTF-8")
                 + "=" + URLEncoder.encode(strAC, "UTF-8");
         data += "&" + URLEncoder.encode("car", "UTF-8")

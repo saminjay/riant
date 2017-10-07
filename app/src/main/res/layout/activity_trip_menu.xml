@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.riantservices.riant.TripMenu"
+    android:background="@drawable/bg">
+    <Button
+        android:id="@+id/airport"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Airport Book"
+        android:background="@color/colorPrimary"/>
+    <Button
+        android:id="@+id/corporate"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Corporate Book"
+        android:background="@color/colorPrimary"/>
+    <Button
+        android:id="@+id/local"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Local Book"
+        android:background="@color/colorPrimary"/>
+    <Button
+        android:id="@+id/outstate"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Outstate Book"
+        android:background="@color/colorPrimary"/>
+    <Button
+        android:id="@+id/outstation"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Outstation Book"
+        android:background="@color/colorPrimary"/>
+    <Button
+        android:id="@+id/station"
+        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="Station Book"
+        android:background="@color/colorPrimary"/>
+</LinearLayout>

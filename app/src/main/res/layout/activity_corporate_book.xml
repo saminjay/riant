@@ -338,6 +338,71 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:id="@+id/line5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"
+                android:layout_marginTop="20dp"
+                android:layout_below="@id/carType"/>
+
+            <TextView
+                android:id="@+id/text6"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/line5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set duration:"/>
+
+            <RelativeLayout
+                android:background="#44ffffff"
+                android:layout_marginTop="10dp"
+                android:layout_below="@id/text6"
+                android:id="@+id/duration"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+                <RadioGroup
+                    android:id="@+id/radioC"
+                    android:layout_centerInParent="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+                    <RadioButton
+                        android:id="@+id/radio10"
+                        android:padding="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_margin="2dp"
+                        android:text="1 Week"/>
+                    <RadioButton
+                        android:id="@+id/radio11"
+                        android:padding="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:textSize="20sp"
+                        android:text="1 Month"/>
+                    <RadioButton
+                        android:id="@+id/radio12"
+                        android:padding="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20sp"
+                        android:layout_margin="2dp"
+                        android:text="3 Months"/>
+                    <RadioButton
+                        android:id="@+id/radio13"
+                        android:padding="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:textSize="20sp"
+                        android:text="6 Months"/>
+
+                </RadioGroup>
+            </RelativeLayout>
+
             <Button
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
@@ -345,7 +410,7 @@
                 android:text="Estimate Fair"
                 android:layout_marginTop="10dp"
                 android:padding="15dp"
-                android:layout_below="@id/carType"
+                android:layout_below="@id/duration"
                 android:background="@color/colorLight"/>
 
             <TextView

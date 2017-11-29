@@ -33,8 +33,8 @@ import static com.riantservices.riant.R.drawable.buttonshape;
 
 public class CorporateBookActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText Pickup, Destination, FriendContact, Time;
-    private RadioButton radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9;
-    private String strEmail, strBookFor, strCar, strAC, strPickup, strDestination, strNumber, strTime;
+    private RadioButton radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9, radio10, radio11, radio12, radio13;
+    private String strEmail, strBookFor, strCar, strAC, strPickup, strDestination, strNumber, strTime, strDuration;
     private String mon,tue,wed,thu,fri,sat,sun;
     SessionManager session;
 
@@ -69,7 +69,7 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         getSupportActionBar().hide();
         session = new SessionManager(getApplicationContext());
         strEmail = session.getEmail();
-        RadioGroup radio, radioA, radioB;
+        RadioGroup radio, radioA, radioB, radioC;
         Pickup = (EditText) findViewById(R.id.edit1);
         Destination = (EditText) findViewById(R.id.edit2);
         FriendContact = (EditText) findViewById(R.id.edit3);
@@ -77,6 +77,7 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         radio = (RadioGroup) findViewById(R.id.radio);
         radioA = (RadioGroup) findViewById(R.id.radioA);
         radioB = (RadioGroup) findViewById(R.id.radioB);
+        radioC = (RadioGroup) findViewById(R.id.radioC);
         radio2 = (RadioButton) findViewById(R.id.radio2);
         radio3 = (RadioButton) findViewById(R.id.radio3);
         radio4 = (RadioButton) findViewById(R.id.radio4);
@@ -85,6 +86,10 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         radio7 = (RadioButton) findViewById(R.id.radio7);
         radio8 = (RadioButton) findViewById(R.id.radio8);
         radio9 = (RadioButton) findViewById(R.id.radio9);
+        radio10 = (RadioButton) findViewById(R.id.radio10);
+        radio11 = (RadioButton) findViewById(R.id.radio11);
+        radio12 = (RadioButton) findViewById(R.id.radio12);
+        radio13 = (RadioButton) findViewById(R.id.radio13);
         FriendContact.setVisibility(View.INVISIBLE);
         Intent intent = getIntent();
         if (intent.hasExtra("Email")) {
@@ -96,6 +101,7 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         radio.clearCheck();
         radioA.clearCheck();
         radioB.clearCheck();
+        radioC.clearCheck();
 
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -189,6 +195,47 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
             }
         });
 
+        radioC.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId) {
+                    case R.id.radio10:
+                        strDuration = "";
+                        strDuration = "1 Week";
+                        radio10.setBackgroundColor(getResources().getColor(colorLight));
+                        radio11.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio12.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio13.setBackgroundColor(getResources().getColor(colorTransparent));
+                        break;
+                    case R.id.radio11:
+                        strDuration = "";
+                        strDuration = "1 Month";
+                        radio11.setBackgroundColor(getResources().getColor(colorLight));
+                        radio10.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio12.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio13.setBackgroundColor(getResources().getColor(colorTransparent));
+                        break;
+                    case R.id.radio12:
+                        strDuration = "";
+                        strDuration = "3 Months";
+                        radio12.setBackgroundColor(getResources().getColor(colorLight));
+                        radio11.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio10.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio13.setBackgroundColor(getResources().getColor(colorTransparent));
+                        break;
+                    case R.id.radio13:
+                        strDuration = "";
+                        strDuration = "6 Months";
+                        radio13.setBackgroundColor(getResources().getColor(colorLight));
+                        radio11.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio12.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio10.setBackgroundColor(getResources().getColor(colorTransparent));
+                        break;
+
+                }
+            }
+        });
+
         View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -264,6 +311,8 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                     alertDialog("Please choose a Car Type");
                 } else if (strAC.matches("")) {
                     alertDialog("Please choose between AC or Non-AC");
+                } else if (strDuration.matches("")) {
+                    alertDialog("Please select the duration for which you want the service");
                 } else {
                     try {
                         Book();
@@ -298,6 +347,8 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                 + "=" + URLEncoder.encode(strBookFor, "UTF-8");
         data += "&" + URLEncoder.encode("number", "UTF-8")
                 + "=" + URLEncoder.encode(strNumber, "UTF-8");
+        data += "&" + URLEncoder.encode("time", "UTF-8")
+                + "=" + URLEncoder.encode(strTime, "UTF-8");
         data += "&" + URLEncoder.encode("mon", "UTF-8")
                 + "=" + URLEncoder.encode(mon, "UTF-8");
         data += "&" + URLEncoder.encode("tue", "UTF-8")
@@ -316,6 +367,8 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                 + "=" + URLEncoder.encode(strAC, "UTF-8");
         data += "&" + URLEncoder.encode("car", "UTF-8")
                 + "=" + URLEncoder.encode(strCar, "UTF-8");
+        data += "&" + URLEncoder.encode("duration", "UTF-8")
+                + "=" + URLEncoder.encode(strDuration, "UTF-8");
         try {
             String response;
             URL url = new URL("http://riantservices.com/App_Data/Book.php");

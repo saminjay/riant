@@ -1,4 +1,5 @@
 <resources>
+    <string name="google_maps_key">AIzaSyDIM0GKlhpQ2vNkFyRBgXAW5iP3ZW6nvCE</string>
     <string name="app_name">RIANT</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>

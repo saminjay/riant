@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.riantservices.riant"
-    android:versionCode="1"
-    android:versionName="1.0">
-
-    <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="25" />
+    package="com.riantservices.riant">
 
     <permission
         android:name="com.riantservices.riant.RECIEVE_MAPS"
@@ -40,7 +34,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB-DNPksA_Ki_fLHPHSrca5ekKRyEZTIIg" />
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".Splash"

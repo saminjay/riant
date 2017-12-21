@@ -287,7 +287,29 @@
             android:layout_marginStart="7dp"
             android:layout_alignBottom="@+id/notifictions1" />
     </RelativeLayout>
-<ImageButton
+
+    <Button
+        android:id="@+id/clear"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/buttonselected"
+        android:text="X"
+        android:textSize="30sp" />
+
+    <Button
+        android:id="@+id/proceed"
+        android:layout_width="45dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sos"
+        android:layout_alignStart="@+id/sos"
+        android:layout_centerVertical="true"
+        android:background="@drawable/buttonselected"
+        android:text=">>"
+        android:textSize="30sp" />
+
+    <ImageButton
     android:id="@+id/sos"
     android:contentDescription="@string/app_name"
     android:layout_width="40dp"

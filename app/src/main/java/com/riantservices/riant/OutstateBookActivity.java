@@ -1,7 +1,6 @@
 package com.riantservices.riant;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +13,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,10 +26,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-import static com.riantservices.riant.R.color.colorBlack;
-import static com.riantservices.riant.R.color.colorTransparent;
-import static com.riantservices.riant.R.color.colorWhite;
-
 public class OutstateBookActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText Pickup,Destination,FriendContact;
     private RadioButton radio2;
@@ -36,18 +33,19 @@ public class OutstateBookActivity extends AppCompatActivity implements View.OnCl
     SessionManager session;
     ImageButton oneway,roundtrip;
     Button AC,NonAC;
+    private LatLng pickup,destination;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strBookFor="";strTrip="";strAC="";strPickup="";strDestination="";strNumber="";
         setContentView(R.layout.activity_outstate_book);
-        Button button=(Button)findViewById(R.id.button);
-        Button button1=(Button)findViewById(R.id.button1);
-        oneway=(ImageButton)findViewById(R.id.oneway);
-        roundtrip=(ImageButton)findViewById(R.id.roundtrip);
-        AC =(Button)findViewById(R.id.AC);
-        NonAC=(Button)findViewById(R.id.NonAC);
+        Button button=findViewById(R.id.button);
+        Button button1=findViewById(R.id.button1);
+        oneway=findViewById(R.id.oneway);
+        roundtrip=findViewById(R.id.roundtrip);
+        AC =findViewById(R.id.AC);
+        NonAC=findViewById(R.id.NonAC);
         button.setOnClickListener(this);
         button1.setOnClickListener(this);
         oneway.setOnClickListener(this);
@@ -58,19 +56,18 @@ public class OutstateBookActivity extends AppCompatActivity implements View.OnCl
         session=new SessionManager(getApplicationContext());
         strEmail=session.getEmail();
         RadioGroup radio;
-        Pickup=(EditText)findViewById(R.id.edit1);
-        Destination=(EditText)findViewById(R.id.edit2);
-        FriendContact=(EditText)findViewById(R.id.edit3);
-        radio=(RadioGroup)findViewById(R.id.radio);
-        radio2=(RadioButton)findViewById(R.id.radio2);
+        Pickup=findViewById(R.id.edit1);
+        Destination=findViewById(R.id.edit2);
+        FriendContact=findViewById(R.id.edit3);
+        radio=findViewById(R.id.radio);
+        radio2=findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
-        Intent intent = getIntent();
-        if(intent.hasExtra("Email")) {
-            String Pickup_Location = intent.getStringExtra("pickupLocation");
-            String Destination_Location = intent.getStringExtra("destinationLocation");
-            Pickup.setText(Pickup_Location);
-            Destination.setText(Destination_Location);
-        }
+
+        Bundle Coordinates=getIntent().getExtras();
+        double[] lat=Coordinates.getDoubleArray("lat");
+        double[] lng=Coordinates.getDoubleArray("lng");
+        pickup=new LatLng(lat[0],lng[0]);
+        destination=new LatLng(lat[1],lng[1]);
         radio.clearCheck();
 
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -97,15 +94,15 @@ public class OutstateBookActivity extends AppCompatActivity implements View.OnCl
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorWhite));
-                    textView.setHintTextColor(getResources().getColor(colorBlack));
-                    textView.setTextColor(getResources().getColor(colorBlack));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
+                    textView.setTextColor(getResources().getColor(R.color.colorBlack));
                 }
                 else{
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorTransparent));
-                    textView.setHintTextColor(getResources().getColor(colorWhite));
-                    textView.setTextColor(getResources().getColor(colorWhite));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
+                    textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }
             }
         };

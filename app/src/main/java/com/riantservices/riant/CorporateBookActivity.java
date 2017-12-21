@@ -1,7 +1,6 @@
 package com.riantservices.riant;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,18 +25,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-import static com.riantservices.riant.R.color.colorBlack;
-import static com.riantservices.riant.R.color.colorLight;
-import static com.riantservices.riant.R.color.colorTransparent;
-import static com.riantservices.riant.R.color.colorWhite;
-import static com.riantservices.riant.R.drawable.buttonselected;
-import static com.riantservices.riant.R.drawable.buttonshape;
-
 public class CorporateBookActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText Pickup, Destination, FriendContact, Time;
     private RadioButton radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9, radio10, radio11, radio12, radio13;
     private String strEmail, strBookFor, strCar, strAC, strPickup, strDestination, strNumber, strTime, strDuration;
     private String mon,tue,wed,thu,fri,sat,sun;
+    private LatLng pickup,destination;
     SessionManager session;
 
     @Override
@@ -48,15 +43,15 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         strDestination = ""; fri="n";
         strNumber = ""; sat="n"; sun="n";
         setContentView(R.layout.activity_corporate_book);
-        Button mon = (Button)findViewById(R.id.mon);
-        Button tue = (Button)findViewById(R.id.tue);
-        Button wed = (Button)findViewById(R.id.wed);
-        Button thu = (Button)findViewById(R.id.thu);
-        Button fri = (Button)findViewById(R.id.fri);
-        Button sat = (Button)findViewById(R.id.sat);
-        Button sun = (Button)findViewById(R.id.sun);
-        Button button = (Button) findViewById(R.id.button);
-        Button button1 = (Button) findViewById(R.id.button1);
+        Button mon = findViewById(R.id.mon);
+        Button tue = findViewById(R.id.tue);
+        Button wed = findViewById(R.id.wed);
+        Button thu = findViewById(R.id.thu);
+        Button fri = findViewById(R.id.fri);
+        Button sat = findViewById(R.id.sat);
+        Button sun = findViewById(R.id.sun);
+        Button button = findViewById(R.id.button);
+        Button button1 = findViewById(R.id.button1);
         mon.setOnClickListener(this);
         tue.setOnClickListener(this);
         wed.setOnClickListener(this);
@@ -70,34 +65,32 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         session = new SessionManager(getApplicationContext());
         strEmail = session.getEmail();
         RadioGroup radio, radioA, radioB, radioC;
-        Pickup = (EditText) findViewById(R.id.edit1);
-        Destination = (EditText) findViewById(R.id.edit2);
-        FriendContact = (EditText) findViewById(R.id.edit3);
-        Time = (EditText)findViewById(R.id.time);
-        radio = (RadioGroup) findViewById(R.id.radio);
-        radioA = (RadioGroup) findViewById(R.id.radioA);
-        radioB = (RadioGroup) findViewById(R.id.radioB);
-        radioC = (RadioGroup) findViewById(R.id.radioC);
-        radio2 = (RadioButton) findViewById(R.id.radio2);
-        radio3 = (RadioButton) findViewById(R.id.radio3);
-        radio4 = (RadioButton) findViewById(R.id.radio4);
-        radio5 = (RadioButton) findViewById(R.id.radio5);
-        radio6 = (RadioButton) findViewById(R.id.radio6);
-        radio7 = (RadioButton) findViewById(R.id.radio7);
-        radio8 = (RadioButton) findViewById(R.id.radio8);
-        radio9 = (RadioButton) findViewById(R.id.radio9);
-        radio10 = (RadioButton) findViewById(R.id.radio10);
-        radio11 = (RadioButton) findViewById(R.id.radio11);
-        radio12 = (RadioButton) findViewById(R.id.radio12);
-        radio13 = (RadioButton) findViewById(R.id.radio13);
+        Pickup = findViewById(R.id.edit1);
+        Destination = findViewById(R.id.edit2);
+        FriendContact = findViewById(R.id.edit3);
+        Time = findViewById(R.id.time);
+        radio = findViewById(R.id.radio);
+        radioA = findViewById(R.id.radioA);
+        radioB = findViewById(R.id.radioB);
+        radioC = findViewById(R.id.radioC);
+        radio2 = findViewById(R.id.radio2);
+        radio3 = findViewById(R.id.radio3);
+        radio4 = findViewById(R.id.radio4);
+        radio5 = findViewById(R.id.radio5);
+        radio6 = findViewById(R.id.radio6);
+        radio7 = findViewById(R.id.radio7);
+        radio8 = findViewById(R.id.radio8);
+        radio9 = findViewById(R.id.radio9);
+        radio10 = findViewById(R.id.radio10);
+        radio11 = findViewById(R.id.radio11);
+        radio12 = findViewById(R.id.radio12);
+        radio13 = findViewById(R.id.radio13);
         FriendContact.setVisibility(View.INVISIBLE);
-        Intent intent = getIntent();
-        if (intent.hasExtra("Email")) {
-            String Pickup_Location = intent.getStringExtra("pickupLocation");
-            String Destination_Location = intent.getStringExtra("destinationLocation");
-            Pickup.setText(Pickup_Location);
-            Destination.setText(Destination_Location);
-        }
+        Bundle Coordinates=getIntent().getExtras();
+        double[] lat=Coordinates.getDoubleArray("lat");
+        double[] lng=Coordinates.getDoubleArray("lng");
+        pickup=new LatLng(lat[0],lng[0]);
+        destination=new LatLng(lat[1],lng[1]);
         radio.clearCheck();
         radioA.clearCheck();
         radioB.clearCheck();
@@ -129,47 +122,47 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                     case R.id.radio3:
                         strCar = "";
                         strCar = "Hatchback";
-                        radio3.setBackgroundColor(getResources().getColor(colorLight));
-                        radio4.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio5.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio6.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio7.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio3.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio4.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio5.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio6.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio7.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio4:
                         strCar = "";
                         strCar = "Sedan";
-                        radio4.setBackgroundColor(getResources().getColor(colorLight));
-                        radio3.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio5.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio6.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio7.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio4.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio3.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio5.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio6.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio7.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio5:
                         strCar = "";
                         strCar = "SUV";
-                        radio5.setBackgroundColor(getResources().getColor(colorLight));
-                        radio4.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio3.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio6.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio7.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio5.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio4.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio3.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio6.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio7.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio6:
                         strCar = "";
                         strCar = "Luxury";
-                        radio6.setBackgroundColor(getResources().getColor(colorLight));
-                        radio4.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio5.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio3.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio7.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio6.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio4.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio5.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio3.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio7.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio7:
                         strCar = "";
                         strCar = "Limousine";
-                        radio7.setBackgroundColor(getResources().getColor(colorLight));
-                        radio4.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio5.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio6.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio3.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio7.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio4.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio5.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio6.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio3.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                 }
             }
@@ -182,14 +175,14 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                     case R.id.radio8:
                         strAC = "";
                         strAC = "AC";
-                        radio8.setBackgroundColor(getResources().getColor(colorLight));
-                        radio9.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio8.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio9.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio9:
                         strAC = "";
                         strAC = "NonAC";
-                        radio9.setBackgroundColor(getResources().getColor(colorLight));
-                        radio8.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio9.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio8.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                 }
             }
@@ -202,34 +195,34 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                     case R.id.radio10:
                         strDuration = "";
                         strDuration = "1 Week";
-                        radio10.setBackgroundColor(getResources().getColor(colorLight));
-                        radio11.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio12.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio13.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio10.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio11.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio12.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio13.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio11:
                         strDuration = "";
                         strDuration = "1 Month";
-                        radio11.setBackgroundColor(getResources().getColor(colorLight));
-                        radio10.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio12.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio13.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio11.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio10.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio12.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio13.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio12:
                         strDuration = "";
                         strDuration = "3 Months";
-                        radio12.setBackgroundColor(getResources().getColor(colorLight));
-                        radio11.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio10.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio13.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio12.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio11.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio10.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio13.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio13:
                         strDuration = "";
                         strDuration = "6 Months";
-                        radio13.setBackgroundColor(getResources().getColor(colorLight));
-                        radio11.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio12.setBackgroundColor(getResources().getColor(colorTransparent));
-                        radio10.setBackgroundColor(getResources().getColor(colorTransparent));
+                        radio13.setBackgroundColor(getResources().getColor(R.color.colorLight));
+                        radio11.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio12.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                        radio10.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
 
                 }
@@ -241,14 +234,14 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorWhite));
-                    textView.setHintTextColor(getResources().getColor(colorBlack));
-                    textView.setTextColor(getResources().getColor(colorBlack));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
+                    textView.setTextColor(getResources().getColor(R.color.colorBlack));
                 } else {
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorTransparent));
-                    textView.setHintTextColor(getResources().getColor(colorWhite));
-                    textView.setTextColor(getResources().getColor(colorWhite));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
+                    textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }
             }
         };
@@ -263,32 +256,32 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mon:
-                if(mon=="n") {view.setBackground(getResources().getDrawable(buttonselected));mon="y";}
-                else {view.setBackground(getResources().getDrawable(buttonshape));mon="n";}
+                if(mon.equals("n")) {view.setBackground(getResources().getDrawable(R.drawable.buttonselected));mon="y";}
+                else {view.setBackground(getResources().getDrawable(R.drawable.buttonshape));mon="n";}
                 break;
             case R.id.tue:
-                if(tue=="n") {view.setBackground(getResources().getDrawable(buttonselected));tue="y";}
-                else {view.setBackground(getResources().getDrawable(buttonshape));tue="n";}
+                if(tue.equals("n")) {view.setBackground(getResources().getDrawable(R.drawable.buttonselected));tue="y";}
+                else {view.setBackground(getResources().getDrawable(R.drawable.buttonshape));tue="n";}
                 break;
             case R.id.wed:
-                if(wed=="n") {view.setBackground(getResources().getDrawable(buttonselected));wed="y";}
-                else {view.setBackground(getResources().getDrawable(buttonshape));wed="n";}
+                if(wed.equals("n")) {view.setBackground(getResources().getDrawable(R.drawable.buttonselected));wed="y";}
+                else {view.setBackground(getResources().getDrawable(R.drawable.buttonshape));wed="n";}
                 break;
             case R.id.thu:
-                if(thu=="n") {view.setBackground(getResources().getDrawable(buttonselected));thu="y";}
-                else {view.setBackground(getResources().getDrawable(buttonshape));thu="n";}
+                if(thu.equals("n")) {view.setBackground(getResources().getDrawable(R.drawable.buttonselected));thu="y";}
+                else {view.setBackground(getResources().getDrawable(R.drawable.buttonshape));thu="n";}
                 break;
             case R.id.fri:
-                if(fri=="n") {view.setBackground(getResources().getDrawable(buttonselected));fri="y";}
-                else {view.setBackground(getResources().getDrawable(buttonshape));fri="n";}
+                if(fri.equals("n")) {view.setBackground(getResources().getDrawable(R.drawable.buttonselected));fri="y";}
+                else {view.setBackground(getResources().getDrawable(R.drawable.buttonshape));fri="n";}
                 break;
             case R.id.sat:
-                if(sat=="n") {view.setBackground(getResources().getDrawable(buttonselected));sat="y";}
-                else {view.setBackground(getResources().getDrawable(buttonshape));sat="n";}
+                if(sat.equals("n")) {view.setBackground(getResources().getDrawable(R.drawable.buttonselected));sat="y";}
+                else {view.setBackground(getResources().getDrawable(R.drawable.buttonshape));sat="n";}
                 break;
             case R.id.sun:
-                if(sun=="n") {view.setBackground(getResources().getDrawable(buttonselected));sun="y";}
-                else {view.setBackground(getResources().getDrawable(buttonshape));sun="n";}
+                if(sun.equals("n")) {view.setBackground(getResources().getDrawable(R.drawable.buttonselected));sun="y";}
+                else {view.setBackground(getResources().getDrawable(R.drawable.buttonshape));sun="n";}
                 break;
             case R.id.button1:
                 strPickup = Pickup.getText().toString();
@@ -305,7 +298,7 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                     alertDialog("Please enter friend's contact number.");
                 } else if (strTime.matches("")) {
                     alertDialog("Please select the time of arrival.");
-                } else if (mon=="n"&&tue=="n"&&wed=="n"&&thu=="n"&&fri=="n"&&sat=="n"&&sun=="n") {
+                } else if (mon.equals("n")&&tue.equals("n")&&wed.equals("n")&&thu.equals("n")&&fri.equals("n")&&sat.equals("n")&&sun.equals("n")) {
                     alertDialog("Please select atleast one working day.");
                 } else if (strCar.matches("")) {
                     alertDialog("Please choose a Car Type");

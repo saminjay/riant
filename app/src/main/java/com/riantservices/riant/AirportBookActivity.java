@@ -1,15 +1,12 @@
 package com.riantservices.riant;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,10 +30,6 @@ import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 
-import static com.riantservices.riant.R.color.colorBlack;
-import static com.riantservices.riant.R.color.colorTransparent;
-import static com.riantservices.riant.R.color.colorWhite;
-
 public class AirportBookActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText Pickup,Destination,FriendContact;
     private RadioButton radio2;
@@ -49,19 +42,19 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle Coordinates=getIntent().getExtras();
         strBookFor="";strTrip="";strAC="";strPickup="";strDestination="";strNumber="";
-        float[] temp;
-        temp=getIntent().getFloatArrayExtra("pickupLoc");
-        pickup=new LatLng(temp[0],temp[1]);
-        temp=getIntent().getFloatArrayExtra("destinationLoc");
-        destination=new LatLng(temp[0],temp[1]);
+        double[] lat=Coordinates.getDoubleArray("lat");
+        double[] lng=Coordinates.getDoubleArray("lng");
+        pickup=new LatLng(lat[0],lng[0]);
+        destination=new LatLng(lat[1],lng[1]);
         setContentView(R.layout.activity_airport_book);
-        Button button=(Button)findViewById(R.id.button);
-        Button button1=(Button)findViewById(R.id.button1);
-        oneway=(ImageButton)findViewById(R.id.oneway);
-        roundtrip=(ImageButton)findViewById(R.id.roundtrip);
-        AC =(Button)findViewById(R.id.AC);
-        NonAC=(Button)findViewById(R.id.NonAC);
+        Button button=findViewById(R.id.button);
+        Button button1=findViewById(R.id.button1);
+        oneway=findViewById(R.id.oneway);
+        roundtrip=findViewById(R.id.roundtrip);
+        AC =findViewById(R.id.AC);
+        NonAC=findViewById(R.id.NonAC);
         button.setOnClickListener(this);
         button1.setOnClickListener(this);
         oneway.setOnClickListener(this);
@@ -72,11 +65,11 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
         session=new SessionManager(getApplicationContext());
         strEmail=session.getEmail();
         RadioGroup radio;
-        Pickup=(EditText)findViewById(R.id.edit1);
-        Destination=(EditText)findViewById(R.id.edit2);
-        FriendContact=(EditText)findViewById(R.id.edit3);
-        radio=(RadioGroup)findViewById(R.id.radio);
-        radio2=(RadioButton)findViewById(R.id.radio2);
+        Pickup=findViewById(R.id.edit1);
+        Destination=findViewById(R.id.edit2);
+        FriendContact=findViewById(R.id.edit3);
+        radio=findViewById(R.id.radio);
+        radio2=findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
         getAddress();
         radio.clearCheck();
@@ -104,15 +97,15 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorWhite));
-                    textView.setHintTextColor(getResources().getColor(colorBlack));
-                    textView.setTextColor(getResources().getColor(colorBlack));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
+                    textView.setTextColor(getResources().getColor(R.color.colorBlack));
                 }
                 else{
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorTransparent));
-                    textView.setHintTextColor(getResources().getColor(colorWhite));
-                    textView.setTextColor(getResources().getColor(colorWhite));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
+                    textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }
             }
         };

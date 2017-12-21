@@ -26,6 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.riantservices.riant.R.color.colorBlack;
@@ -46,6 +47,7 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        destination=new ArrayList<>();
         strBookFor="";strTrip="";strAC="";strPickup="";strDestination="";strNumber="";
         setContentView(R.layout.activity_local_book);
         Button button=findViewById(R.id.button);

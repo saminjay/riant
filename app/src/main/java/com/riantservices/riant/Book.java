@@ -3,6 +3,7 @@ package com.riantservices.riant;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,24 +69,12 @@ class BookElements{
         return distance;
     }
 
-    public void setDistance(String distance) {
-        this.distance = distance;
-    }
-
     public String getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
     public String getDriver() {
         return driver;
-    }
-
-    public void setDriver(String driver) {
-        this.driver = driver;
     }
 
     public String getContact() {
@@ -83,10 +84,6 @@ class BookElements{
     public void setContact(String contact) { this.contact = contact;}
 
     public String getFare() { return fare;}
-
-    public void setFare(String fare) {
-        this.fare = fare;
-    }
 }
 
 public class Book extends Fragment {
@@ -98,7 +95,7 @@ public class Book extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
-        recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
+        recyclerView = rootView.findViewById(R.id.recycler_view);
         mAdapter = new BookAdapter(BookList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -121,55 +118,62 @@ public class Book extends Fragment {
         fetchBookData();
         return rootView;
     }
+
     private void fetchBookData() {
-        SessionManager session = new SessionManager(getActivity());
-        String Email=session.getEmail();
-        try {
-            String data = URLEncoder.encode("email", "UTF-8")
-                    + "=" + URLEncoder.encode(Email, "UTF-8");
-            try {
-                String response;
-                URL url= new URL("http://riantservices.com/App_Data/Login.php");
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write( data );
-                wr.flush();
-                response = slurp(conn.getInputStream());
-                respond(response);
+        final SessionManager session = new SessionManager(getActivity());
+        Thread t = new Thread() {
+
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
+
+                try {
+                    HttpPost post = new HttpPost("url");
+                    json.put("email", session.getEmail());
+                    StringEntity se = new StringEntity( json.toString());
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
+
+                /*Checking response */
+                    if(response!=null){
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                        respond(in);
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    alertDialog("Error: Cannot Estabilish Connection");
+                }
+
+                Looper.loop(); //Loop in the message queue
             }
-            catch(Exception ex) {
-                alertDialog("Error in Connection. Please try later.");
-            }
-        }
-        catch (UnsupportedEncodingException e){}
-        mAdapter.notifyDataSetChanged();
-    }
-    public static String slurp(final InputStream is) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
-        }
-        return out.toString();
+        };
+
+        t.start();
     }
 
-    public void respond(String response)throws IOException{
-        BufferedReader reader = new BufferedReader(new StringReader(response));
-        int n = Integer.parseInt(reader.readLine());
-        for(int i=0;i<n;i++){
-            String pickup = reader.readLine();
-            String destination = reader.readLine();
-            String dateTime = reader.readLine();
-            String distance = reader.readLine();
-            String driver = reader.readLine();
-            String contact = reader.readLine();
-            String fare = reader.readLine();
-            BookElements BookElements = new BookElements(pickup,destination,dateTime,distance,driver,contact,fare);
-            BookList.add(BookElements);
+    public void respond(InputStream in)throws JSONException {
+        JSONObject result = new JSONObject(in.toString());
+        JSONObject resultArrayJson;
+        JSONArray book = result.getJSONArray("history");
+        String pickup,destination,dateTime,distance,driver,contact,fare;
+        BookElements BookElement;
+        int lenArray = book.length();
+        for (int i = 0; i < lenArray; i++) {
+            resultArrayJson = book.getJSONObject(i);
+            pickup = resultArrayJson.getString("pickup");
+            destination = resultArrayJson.getString("destination");
+            dateTime = resultArrayJson.getString("dateTime");
+            distance = result.getString("distance");
+            driver = result.getString("driver");
+            contact = result.getString("contact");
+            fare = result.getString("fare");
+            BookElement = new BookElements(pickup,destination,dateTime,distance,driver,contact,fare);
+            BookList.add(BookElement);
         }
     }
 

@@ -3,6 +3,7 @@ package com.riantservices.riant;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.os.Bundle;
 import android.text.method.PasswordTransformationMethod;
@@ -12,22 +13,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.riantservices.riant.R.color.colorBlack;
-import static com.riantservices.riant.R.color.colorTransparent;
-import static com.riantservices.riant.R.color.colorWhite;
 
 public class LoginActivity extends Activity implements OnClickListener  {
 
@@ -39,8 +38,8 @@ public class LoginActivity extends Activity implements OnClickListener  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Intent intent = getIntent();
-        EtLogEmail = (EditText) findViewById(R.id.LogEmail);
-        EtLogPass = (EditText) findViewById(R.id.LogPass);
+        EtLogEmail = findViewById(R.id.LogEmail);
+        EtLogPass = findViewById(R.id.LogPass);
         if(intent.hasExtra("Email")) {
             String Email_User_From_register = intent.getStringExtra("Email");
             String PassUser_From_register = intent.getStringExtra("Pass");
@@ -52,22 +51,22 @@ public class LoginActivity extends Activity implements OnClickListener  {
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorWhite));
-                    textView.setHintTextColor(getResources().getColor(colorBlack));
-                    textView.setTextColor(getResources().getColor(colorBlack));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
+                    textView.setTextColor(getResources().getColor(R.color.colorBlack));
                 }
                 else{
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorTransparent));
-                    textView.setHintTextColor(getResources().getColor(colorWhite));
-                    textView.setTextColor(getResources().getColor(colorWhite));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
+                    textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }
             }
         };
         EtLogEmail.setOnFocusChangeListener(onFocusChangeListener);
         EtLogPass.setOnFocusChangeListener(onFocusChangeListener);
-        btnSignin = (Button) findViewById(R.id.btnSignin);
-        btnRegister = (Button) findViewById(R.id.btnRegister);
+        btnSignin = findViewById(R.id.btnSignin);
+        btnRegister = findViewById(R.id.btnRegister);
         btnSignin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);
         EtLogPass.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -90,12 +89,7 @@ public class LoginActivity extends Activity implements OnClickListener  {
                     alertDialog("Invalid Email Id");
                     break;
                 } else {
-                    try {
-                        Login(strEmail, strPass);
-                    }
-                    catch (UnsupportedEncodingException e){
-                        alertDialog("Unsupported Encoding");
-                    }
+                    Login(strEmail, strPass);
                 }
                 break;
             case R.id.btnRegister:
@@ -116,55 +110,60 @@ public class LoginActivity extends Activity implements OnClickListener  {
     }
 
     public boolean isValidEmailAddress(String email) {
-        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         Pattern p = Pattern.compile(ePattern);
         Matcher m = p.matcher(email);
         return m.matches();
     }
 
-    protected void Login(final String Email,final String Password)throws UnsupportedEncodingException{
-        String data = URLEncoder.encode("email", "UTF-8")
-                + "=" + URLEncoder.encode(Email, "UTF-8");
-        data += "&" + URLEncoder.encode("password", "UTF-8")
-                + "=" + URLEncoder.encode(Password, "UTF-8");
-        try {
-            String response;
-            URL url= new URL("http://riantservices.com/App_Data/Login.php");
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write( data );
-            wr.flush();
-            response = slurp(conn.getInputStream());
-            respond(response);
-        }
-        catch(Exception ex) {
-            alertDialog("Error in Connection. Please try later.");
-        }
+    protected void Login(final String email, final String pwd) {
+        Thread t = new Thread() {
+
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
+
+                try {
+                    HttpPost post = new HttpPost("url");
+                    json.put("email", email);
+                    json.put("password", pwd);
+                    StringEntity se = new StringEntity( json.toString());
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
+
+                /*Checking response */
+                    if(response!=null){
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                        respond(in);
+
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    alertDialog("Error: Cannot Estabilish Connection");
+                }
+
+                Looper.loop(); //Loop in the message queue
+            }
+        };
+
+        t.start();
     }
 
-    public static String slurp(final InputStream is) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
-        }
-        return out.toString();
-    }
-
-    public void respond(String response)throws IOException{
-        BufferedReader reader = new BufferedReader(new StringReader(response));
-        int Status = Integer.parseInt(reader.readLine());
-        String User_name = reader.readLine();
-        String User_email = reader.readLine();
-        String Role_Id = reader.readLine();
+    public void respond(InputStream in)throws JSONException {
+        JSONObject result = new JSONObject(in.toString());
+        int Status = result.getInt("status");
+        String User_name = result.getString("user_name");
+        String User_email = result.getString("user_email");
+        String Role = result.getString("role");
         if(Status == 1){
 
             SessionManager session = new SessionManager(getApplicationContext());
-            session.createLoginSession(User_name, User_email,Role_Id);
+            session.createLoginSession(User_name, User_email,Role);
             Intent mainActivity = new Intent(this, MainActivity.class);
             startActivity(mainActivity);
             overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_left);

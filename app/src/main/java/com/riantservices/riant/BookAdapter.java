@@ -17,13 +17,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
 
         public MyViewHolder(View view) {
             super(view);
-            pickup = (TextView) view.findViewById(R.id.pickup_addr);
-            destination = (TextView) view.findViewById(R.id.destination);
-            dateTime = (TextView) view.findViewById(R.id.dateTime);
-            distance = (TextView) view.findViewById(R.id.distance);
-            driver = (TextView) view.findViewById(R.id.driver);
-            contact = (TextView) view.findViewById(R.id.contact);
-            fare = (TextView) view.findViewById(R.id.fare);
+            pickup = view.findViewById(R.id.pickup_addr);
+            destination = view.findViewById(R.id.destination);
+            dateTime = view.findViewById(R.id.dateTime);
+            distance = view.findViewById(R.id.distance);
+            driver = view.findViewById(R.id.driver);
+            contact = view.findViewById(R.id.contact);
+            fare = view.findViewById(R.id.fare);
         }
     }
 

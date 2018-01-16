@@ -60,7 +60,8 @@
                 android:hint="Enter Pickup Location"
                 android:maxLines="1"
                 android:textColorHint="@color/colorWhite"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:background="@drawable/textboxborder" />
 
             <TextView
                 android:id="@+id/text2"
@@ -81,7 +82,8 @@
                 android:hint="Enter Destination Location"
                 android:maxLines="1"
                 android:textColorHint="@color/colorWhite"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:background="@drawable/textboxborder" />
 
             <TextView
                 android:id="@+id/text3"
@@ -122,7 +124,8 @@
                 android:textSize="14sp"
                 android:layout_margin="0dp"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/textboxborder"/>
 
             <TextView
                 android:id="@+id/line2"

@@ -21,6 +21,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:text="Outstate: "
         android:layout_below="@id/imageView"
         android:textColor="@color/colorLight"
@@ -31,7 +32,7 @@
         android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:paddingLeft="15dp"
             android:paddingRight="15dp">
 
@@ -60,7 +61,8 @@
                 android:hint="Enter Pickup Location"
                 android:maxLines="1"
                 android:textColorHint="@color/colorWhite"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:background="@drawable/textboxborder"/>
 
             <TextView
                 android:id="@+id/text2"
@@ -81,7 +83,8 @@
                 android:hint="Enter Destination Location"
                 android:maxLines="1"
                 android:textColorHint="@color/colorWhite"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:background="@drawable/textboxborder"/>
 
             <TextView
                 android:id="@+id/text3"
@@ -90,14 +93,15 @@
                 android:layout_below="@id/text2"
                 android:layout_marginTop="10dp"
                 android:textSize="18sp"
-                android:text="For whom you want to book the ride?"/>
+                android:text="For whom you want to book the ride?" />
 
             <RadioGroup
                 android:id="@+id/radio"
                 android:layout_below="@id/text3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="30dp">
+                android:layout_marginLeft="30dp"
+                android:layout_marginStart="30dp">
                 <RadioButton
                     android:id="@+id/radio1"
                     android:layout_width="wrap_content"
@@ -122,7 +126,8 @@
                 android:textSize="14sp"
                 android:layout_margin="0dp"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/textboxborder"/>
 
             <TextView
                 android:id="@+id/line2"

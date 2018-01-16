@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -37,6 +50,7 @@ class HistoryElements{
         this.amount = amount;
         latLng=new LatLng(lat,lng);
     }
+
     public String getDestination() {
         return destination;
     }
@@ -49,21 +63,12 @@ class HistoryElements{
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
-        this.dateTime = dateTime;
-    }
-
     public String getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
-        this.amount = amount;
-    }
-
     public LatLng getLatLng(){ return latLng;}
 
-    public  void setLatLng(LatLng latLng){ this.latLng=latLng;}
 }
 
 public class History extends Fragment {
@@ -75,7 +80,7 @@ public class History extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
-        recyclerView = (RecyclerView)rootView.findViewById(R.id.recycler_view);
+        recyclerView = rootView.findViewById(R.id.recycler_view);
         mAdapter = new HistoryAdapter(HistoryList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -98,53 +103,61 @@ public class History extends Fragment {
         fetchHistoryData();
         return rootView;
     }
+
     private void fetchHistoryData() {
-        SessionManager session = new SessionManager(getActivity());
-        session.getEmail();
-        try {
-            String data = URLEncoder.encode("email", "UTF-8")
-                    + "=" + URLEncoder.encode(session.getEmail(), "UTF-8");
-            try {
-                String response;
-                URL url= new URL("http://riantservices.com/App_Data/Login.php");
-                URLConnection conn = url.openConnection();
-                conn.setDoOutput(true);
-                OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                wr.write( data );
-                wr.flush();
-                response = slurp(conn.getInputStream());
-                respond(response);
+        final SessionManager session = new SessionManager(getActivity());
+        Thread t = new Thread() {
+
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
+
+                try {
+                    HttpPost post = new HttpPost("url");
+                    json.put("email", session.getEmail());
+                    StringEntity se = new StringEntity( json.toString());
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
+
+                /*Checking response */
+                    if(response!=null){
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                        respond(in);
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    alertDialog("Error: Cannot Estabilish Connection");
+                }
+
+                Looper.loop(); //Loop in the message queue
             }
-            catch(Exception ex) {
-                alertDialog("Error in Connection. Please try later.");
-            }
-        }
-        catch (UnsupportedEncodingException e){}
-        mAdapter.notifyDataSetChanged();
-    }
-    public static String slurp(final InputStream is) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
-        }
-        return out.toString();
+        };
+
+        t.start();
     }
 
-    public void respond(String response)throws IOException{
-        BufferedReader reader = new BufferedReader(new StringReader(response));
-        int n = Integer.parseInt(reader.readLine());
-        for(int i=0;i<n;i++){
-            String destination = reader.readLine();
-            String dateTime = reader.readLine();
-            String amt = reader.readLine();
-            double lat = Double.parseDouble(reader.readLine());
-            double lng = Double.parseDouble(reader.readLine());
-            HistoryElements HistoryElements = new HistoryElements(destination,dateTime,amt,lat,lng);
-            HistoryList.add(HistoryElements);
+    public void respond(InputStream in)throws JSONException {
+        JSONObject result = new JSONObject(in.toString());
+        JSONObject resultArrayJson;
+        JSONArray history = result.getJSONArray("history");
+        String destination,dateTime,fare;
+        double lat,lng;
+        HistoryElements HistoryElement;
+        int lenArray = history.length();
+        for (int i = 0; i < lenArray; i++) {
+            resultArrayJson = history.getJSONObject(i);
+            destination = resultArrayJson.getString("destination");
+            dateTime = resultArrayJson.getString("dateTime");
+            fare = resultArrayJson.getString("fare");
+            lat = result.getDouble("lat");
+            lng = result.getDouble("lng");
+            HistoryElement = new HistoryElements(destination,dateTime,fare,lat,lng);
+            HistoryList.add(HistoryElement);
         }
     }
 

@@ -14,6 +14,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +40,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Vibrator;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
@@ -63,6 +72,7 @@ import static java.lang.Thread.sleep;
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     static GoogleMap googleMap;
+    private Marker userMarker;
     private String response;
     SessionManager session;
     RelativeLayout view1, view2;
@@ -346,46 +356,43 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         GPSTracker gps = new GPSTracker(this);
         final double lat = gps.getLatitude();
         final double lon = gps.getLongitude();
-        googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                Toast.makeText(MainActivity.this, marker.getTitle(), Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-        try {
-            Thread t = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        String data = URLEncoder.encode("lat", "UTF-8")
-                                + "=" + URLEncoder.encode(String.valueOf(lat), "UTF-8") + "&" +
-                                URLEncoder.encode("lon", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(lon), "UTF-8") + "&"
-                                + URLEncoder.encode("UserEmail", "UTF-8")
-                                + "=" + URLEncoder.encode(Email, "UTF-8");
-                        java.net.URL url = new URL("http://riantservices.com/App_Data/updateGPS.php");
-                        URLConnection conn = url.openConnection();
-                        conn.setDoOutput(true);
-                        OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-                        wr.write(data);
-                        wr.flush();
-                        response = slurp(conn.getInputStream());
-                        respond(response);
-                    } catch (Exception ex) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                alertDialog("Error in Connection. Please try later.");
-                            }
-                        });
+        userMarker.setPosition(new LatLng(lat,lon));
+        Thread t = new Thread() {
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
+
+                try {
+                    HttpPost post = new HttpPost("url");
+                    json.put("email", Email);
+                    StringEntity se = new StringEntity(json.toString());
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
+
+            /*Checking response */
+                    if (response != null) {
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                        respond(in);
+
                     }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    alertDialog("Error: Cannot Estabilish Connection");
                 }
-            };
-            sleep(2000);
-            t.start();
+                Looper.loop(); //Loop in the message queue
+            }
+        };
+        try {
+            t.sleep(2000);
         } catch (InterruptedException e) {
-            Log.e("developer", "Thread updating GPS is interrupted");
+            e.printStackTrace();
         }
+        t.start();
     }
 
     public void alertDialog(String Message) {
@@ -397,53 +404,38 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }).setIcon(android.R.drawable.ic_dialog_alert).show();
     }
 
-    public static String slurp(final InputStream is) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
-        }
-        return out.toString();
-    }
-
-    public void respond(final String response) throws IOException {
-        try {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    JSONObject reader;
-                    try {
-                        reader = new JSONObject(response);
-                        JSONObject StatusRequest = reader.getJSONObject("Result");
-                        JSONArray TaxiDrivers = StatusRequest.getJSONArray("TaxiDrivers");
-                        int lenArray = TaxiDrivers.length();
-                        for (int i = 0; i < lenArray; i++) {
-                            JSONObject resultArrayJson = TaxiDrivers.getJSONObject(i);
-                            String Latitude = resultArrayJson.getString("Latitude");
-                            String Longitude = resultArrayJson.getString("Longitude");
-                            String CabType = resultArrayJson.getString("CabType");
-                            double Lat = Double.parseDouble(Latitude);
-                            double Lon = Double.parseDouble(Longitude);
-                            LatLng Taxi_Location = new LatLng(Lat, Lon);
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(Taxi_Location)
-                                    .title("Riant " + CabType)
-                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar))
-                            );
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+    public void respond(InputStream in) throws JSONException {
+        final JSONObject result = new JSONObject(in.toString());
+        Thread t = new Thread(){
+            public void run(){
+                try {
+                    JSONObject resultArrayJson;
+                    String Latitude,Longitude,CabType;
+                    double Lat,Lon;
+                    LatLng Taxi_Location;
+                    JSONObject StatusRequest = result.getJSONObject("result");
+                    JSONArray TaxiDrivers = StatusRequest.getJSONArray("TaxiDrivers");
+                    int lenArray = TaxiDrivers.length();
+                    for (int i = 0; i < lenArray; i++) {
+                        resultArrayJson = TaxiDrivers.getJSONObject(i);
+                        Latitude = resultArrayJson.getString("Latitude");
+                        Longitude = resultArrayJson.getString("Longitude");
+                        CabType = resultArrayJson.getString("CabType");
+                        Lat = Double.parseDouble(Latitude);
+                        Lon = Double.parseDouble(Longitude);
+                        Taxi_Location = new LatLng(Lat, Lon);
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(Taxi_Location)
+                                .title("Riant " + CabType)
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.bar)));
                     }
                 }
-            });
-            sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+                catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        };
+        t.start();
     }
 
     private String getDirectionsUrl(LatLng origin, LatLng dest) {

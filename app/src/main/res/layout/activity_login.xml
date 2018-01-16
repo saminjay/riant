@@ -17,7 +17,8 @@
         android:textColorHint="@color/colorWhite"
         android:inputType="textEmailAddress"
         android:layout_centerInParent="true"
-        android:theme="@style/MyEditTextTheme">
+        android:theme="@style/MyEditTextTheme"
+        android:background="@drawable/textboxborder">
     </EditText>
 
     <EditText
@@ -35,28 +36,29 @@
         android:layout_below="@+id/LogEmail"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
-        android:theme="@style/MyEditTextTheme"/>
+        android:theme="@style/MyEditTextTheme"
+        android:background="@drawable/textboxborder"/>
 
     <Button
         android:id="@+id/btnSignin"
         android:layout_width="wrap_content"
-        android:layout_height="32dp"
+        android:layout_height="40dp"
         android:text="@string/sign_in"
-        android:textSize="16sp"
+        android:textSize="24sp"
         android:background="@color/colorPrimary"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorWhite"
         android:layout_above="@+id/btnRegister"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="50dp"
         android:layout_centerHorizontal="true" />
 
     <Button
         android:id="@+id/btnRegister"
         android:layout_width="fill_parent"
-        android:layout_height="32dp"
+        android:layout_height="48dp"
         android:background="@color/colorPrimary"
         android:text="@string/btnRegister"
         android:textColor="#fffb00"
-        android:textSize="20sp"
+        android:textSize="24sp"
         android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

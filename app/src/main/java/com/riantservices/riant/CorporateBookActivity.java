@@ -1,6 +1,7 @@
 package com.riantservices.riant;
 
 import android.content.DialogInterface;
+import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,17 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -329,79 +341,66 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                 }).setIcon(android.R.drawable.ic_dialog_alert).show();
     }
 
-    protected void Book() throws UnsupportedEncodingException {
-        String data = URLEncoder.encode("email", "UTF-8")
-                + "=" + URLEncoder.encode(strEmail, "UTF-8");
-        data += "&" + URLEncoder.encode("pickup", "UTF-8")
-                + "=" + URLEncoder.encode(strPickup, "UTF-8");
-        data += "&" + URLEncoder.encode("destination", "UTF-8")
-                + "=" + URLEncoder.encode(strDestination, "UTF-8");
-        data += "&" + URLEncoder.encode("bookFor", "UTF-8")
-                + "=" + URLEncoder.encode(strBookFor, "UTF-8");
-        data += "&" + URLEncoder.encode("number", "UTF-8")
-                + "=" + URLEncoder.encode(strNumber, "UTF-8");
-        data += "&" + URLEncoder.encode("time", "UTF-8")
-                + "=" + URLEncoder.encode(strTime, "UTF-8");
-        data += "&" + URLEncoder.encode("mon", "UTF-8")
-                + "=" + URLEncoder.encode(mon, "UTF-8");
-        data += "&" + URLEncoder.encode("tue", "UTF-8")
-                + "=" + URLEncoder.encode(tue, "UTF-8");
-        data += "&" + URLEncoder.encode("wed", "UTF-8")
-                + "=" + URLEncoder.encode(wed, "UTF-8");
-        data += "&" + URLEncoder.encode("thu", "UTF-8")
-                + "=" + URLEncoder.encode(thu, "UTF-8");
-        data += "&" + URLEncoder.encode("fri", "UTF-8")
-                + "=" + URLEncoder.encode(fri, "UTF-8");
-        data += "&" + URLEncoder.encode("sat", "UTF-8")
-                + "=" + URLEncoder.encode(sat, "UTF-8");
-        data += "&" + URLEncoder.encode("sun", "UTF-8")
-                + "=" + URLEncoder.encode(sun, "UTF-8");
-        data += "&" + URLEncoder.encode("ac", "UTF-8")
-                + "=" + URLEncoder.encode(strAC, "UTF-8");
-        data += "&" + URLEncoder.encode("car", "UTF-8")
-                + "=" + URLEncoder.encode(strCar, "UTF-8");
-        data += "&" + URLEncoder.encode("duration", "UTF-8")
-                + "=" + URLEncoder.encode(strDuration, "UTF-8");
-        try {
-            String response;
-            URL url = new URL("http://riantservices.com/App_Data/Book.php");
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write(data);
-            wr.flush();
-            response = slurp(conn.getInputStream());
-            respond(response);
-        } catch (Exception ex) {
-            alertDialog("Error in Connection. Please try later.");
-        }
+
+    protected void Book()throws UnsupportedEncodingException{
+        Thread t = new Thread() {
+
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
+
+                try {
+                    HttpPost post = new HttpPost("url");
+                    json.put("email", strEmail);
+                    json.put("pickup", strPickup);
+                    json.put("destination", strDestination);
+                    json.put("bookFor", strBookFor);
+                    json.put("number", strNumber);
+                    json.put("time", strTime);
+                    json.put("ac", strAC);
+                    json.put("car", strCar);
+                    json.put("duration", strDuration);
+                    json.put("mon", mon);
+                    json.put("tue", tue);
+                    json.put("wed", wed);
+                    json.put("thu", thu);
+                    json.put("fri", fri);
+                    json.put("sat", sat);
+                    json.put("sun", sun);
+                    StringEntity se = new StringEntity( json.toString());
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
+
+                /*Checking response */
+                    if(response!=null){
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                        respond(in);
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    alertDialog("Error: Cannot Estabilish Connection");
+                }
+
+                Looper.loop(); //Loop in the message queue
+            }
+        };
+
+        t.start();
     }
 
-    public static String slurp(final InputStream is) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
+    public void respond(InputStream in)throws JSONException {
+        JSONObject result=new JSONObject(in.toString());
+
+        if(result.getInt("status")==1){
+            alertDialog("Booking Successful");
+
         }
-        return out.toString();
-    }
-
-    public void respond(String response) throws IOException {
-        BufferedReader reader = new BufferedReader(new StringReader(response));
-        int Status = Integer.parseInt(reader.readLine());
-        //String User_name = reader.readLine();
-        //String User_email = reader.readLine();
-        //String Role_Id = reader.readLine();
-        if (Status == 1) {
-
-            //Intent mainActivity = new Intent(this, MainActivity.class);
-            //startActivity(mainActivity);
-            //overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_left);
-
-        } else {
+        else{
             alertDialog("System error, please contact with administrator");
         }
     }

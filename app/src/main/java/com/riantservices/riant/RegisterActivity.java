@@ -5,12 +5,24 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,12 +46,12 @@ public class RegisterActivity extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-        UserName = (EditText)findViewById(R.id.RegUsername);
-        Email = (EditText)findViewById(R.id.RegEmail);
-        Phone = (EditText)findViewById(R.id.RegPhone);
-        Pass1 = (EditText)findViewById(R.id.RegPass);
-        Pass2 = (EditText)findViewById(R.id.RegPass2);
-        BtnRegister = (Button)findViewById(R.id.BtnRegister);
+        UserName = findViewById(R.id.RegUsername);
+        Email = findViewById(R.id.RegEmail);
+        Phone = findViewById(R.id.RegPhone);
+        Pass1 = findViewById(R.id.RegPass);
+        Pass2 = findViewById(R.id.RegPass2);
+        BtnRegister = findViewById(R.id.BtnRegister);
         BtnRegister.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,67 +128,60 @@ public class RegisterActivity extends Activity{
     }
 
     protected void Register(final String Name, final String Email,final String Phone,final String Password)throws UnsupportedEncodingException {
-        String response;
-        String data = URLEncoder.encode("name", "UTF-8")
-                + "=" + URLEncoder.encode(Name, "UTF-8");
-        data += "&" + URLEncoder.encode("email", "UTF-8")
-                + "=" + URLEncoder.encode(Email, "UTF-8");
-        data += "&" + URLEncoder.encode("phone", "UTF-8")
-                + "=" + URLEncoder.encode(Phone, "UTF-8");
-        data += "&" + URLEncoder.encode("password", "UTF-8")
-                + "=" + URLEncoder.encode(Password, "UTF-8");
-        try {
-            java.net.URL url= new URL("http://riantservices.com/App_Data/Register.php");
-            URLConnection conn = url.openConnection();
-            conn.setDoOutput(true);
-            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-            wr.write( data );
-            wr.flush();
-            response = slurp(conn.getInputStream());
-            respond(Integer.parseInt(response));
-        }
-        catch(Exception ex) {
-            alertDialog("Error in Connection. Please try later.");
-        }
+        Thread t = new Thread() {
+
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
+
+                try {
+                    HttpPost post = new HttpPost("url");
+                    json.put("name", Name);
+                    json.put("email", Email);
+                    json.put("phone", Phone);
+                    json.put("password", Password);
+                    StringEntity se = new StringEntity( json.toString());
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
+
+                /*Checking response */
+                    if(response!=null){
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                        respond(in);
+
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    alertDialog("Error: Cannot Estabilish Connection");
+                }
+
+                Looper.loop(); //Loop in the message queue
+            }
+        };
+
+        t.start();
     }
 
-    @NonNull
-    public static String slurp(final InputStream is) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        StringBuilder out = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-        String line;
-        while ((line = reader.readLine()) != null) {
-            out.append(line);
-            out.append(newLine);
-        }
-        return out.toString();
-    }
+    public void respond(InputStream in)throws JSONException {
+        JSONObject result = new JSONObject(in.toString());
+        int Status = result.getInt("status");
+        if(Status == 1){
+            alertDialog("Registration Successful. Welcome to Riant Family.");
+            Intent loginActivity = new Intent(this, LoginActivity.class);
+            loginActivity.putExtra("Email",strEmail);
+            loginActivity.putExtra("Pass",strPass);
+            startActivity(loginActivity);
+            overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_left);
 
-    public void respond(int callBack){
-        if(callBack == 1){
-            final Intent GoLogin = new Intent(this, LoginActivity.class);
+        }else if(Status == 0){
 
-            new AlertDialog.Builder(this)
-                    .setTitle("Riant Message")
-                    .setMessage("You have successfully registered, Please login and enjoy our services")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
+            alertDialog("Email is already being used by another user.");
 
-                            GoLogin.putExtra("Email", strEmail);
-                            GoLogin.putExtra("Pass", strEmail);
-                            startActivity(GoLogin);
-                            overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_left);
-
-                        }
-                    })
-			        .setIcon(android.R.drawable.ic_input_add)
-                    .show();
-
-        }else if(callBack == 0){
-            alertDialog("Registration failed, please try again");
-        }else if(callBack == 2){
-            alertDialog("Already exist a user with same email ID");
         }else{
             alertDialog("System error, please contact with administrator");
         }

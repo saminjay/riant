@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -24,19 +23,8 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-
-import static com.riantservices.riant.R.color.colorBlack;
-import static com.riantservices.riant.R.color.colorTransparent;
-import static com.riantservices.riant.R.color.colorWhite;
 
 public class RegisterActivity extends Activity{
     EditText UserName, Email, Phone, Pass1, Pass2;
@@ -89,15 +77,15 @@ public class RegisterActivity extends Activity{
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorWhite));
-                    textView.setHintTextColor(getResources().getColor(colorBlack));
-                    textView.setTextColor(getResources().getColor(colorBlack));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
+                    textView.setTextColor(getResources().getColor(R.color.colorBlack));
                 }
                 else{
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorTransparent));
-                    textView.setHintTextColor(getResources().getColor(colorWhite));
-                    textView.setTextColor(getResources().getColor(colorWhite));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
+                    textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }
             }
         };
@@ -121,7 +109,7 @@ public class RegisterActivity extends Activity{
     }
 
     public boolean isValidEmailAddress(String email) {
-        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        String ePattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         java.util.regex.Pattern p = java.util.regex.Pattern.compile(ePattern);
         java.util.regex.Matcher m = p.matcher(email);
         return m.matches();

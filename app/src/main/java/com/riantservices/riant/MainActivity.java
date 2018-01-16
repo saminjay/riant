@@ -4,12 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +31,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -54,7 +50,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -67,13 +62,11 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import static java.lang.Thread.sleep;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     static GoogleMap googleMap;
     private Marker userMarker;
-    private String response;
     SessionManager session;
     RelativeLayout view1, view2;
     boolean pickupMarked = false;
@@ -271,7 +264,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         Lat = gps.getLatitude();
         Lon = gps.getLongitude();
         LatLng CURRENT_LOCATION = new LatLng(Lat, Lon);
-        googleMap.addMarker(new MarkerOptions().position(CURRENT_LOCATION).title("Current Location"));
+        userMarker = googleMap.addMarker(new MarkerOptions().position(CURRENT_LOCATION).title("Current Location"));
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION, 15);
         googleMap.animateCamera(update);
         googleMap.getUiSettings().setMapToolbarEnabled(false);

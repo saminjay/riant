@@ -2,7 +2,6 @@ package com.riantservices.riant;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.AlertDialog;
@@ -28,23 +27,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 class HistoryElements{
     private String destination,dateTime,amount;
     private LatLng latLng;
-    public HistoryElements(String destination, String dateTime, String amount,double lat,double lng) {
+
+    HistoryElements(String destination, String dateTime, String amount, double lat, double lng) {
         this.destination = destination;
         this.dateTime = dateTime;
         this.amount = amount;
@@ -59,29 +50,27 @@ class HistoryElements{
         this.destination = destination;
     }
 
-    public String getDateTime() {
+    String getDateTime() {
         return dateTime;
     }
 
-    public String getAmount() {
+    String getAmount() {
         return amount;
     }
 
-    public LatLng getLatLng(){ return latLng;}
-
+    LatLng getLatLng(){ return latLng;}
 }
 
 public class History extends Fragment {
 
     private List<HistoryElements> HistoryList = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private HistoryAdapter mAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
-        recyclerView = rootView.findViewById(R.id.recycler_view);
-        mAdapter = new HistoryAdapter(HistoryList);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
+        HistoryAdapter mAdapter = new HistoryAdapter(HistoryList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

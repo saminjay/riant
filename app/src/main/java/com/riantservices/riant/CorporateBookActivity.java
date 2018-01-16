@@ -26,16 +26,8 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 
 public class CorporateBookActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText Pickup, Destination, FriendContact, Time;
@@ -356,7 +348,9 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                     HttpPost post = new HttpPost("url");
                     json.put("email", strEmail);
                     json.put("pickup", strPickup);
+                    json.put("pickupCoordinate",pickup);
                     json.put("destination", strDestination);
+                    json.put("destinationCoordinate",destination);
                     json.put("bookFor", strBookFor);
                     json.put("number", strNumber);
                     json.put("time", strTime);

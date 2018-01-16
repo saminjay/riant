@@ -12,10 +12,10 @@ import java.util.List;
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> {
     private List<BookElements> bookList;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView pickup, destination, dateTime, distance, driver, contact, fare;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView pickup, destination, dateTime, distance, driver, contact, fare;
 
-        public MyViewHolder(View view) {
+        MyViewHolder(View view) {
             super(view);
             pickup = view.findViewById(R.id.pickup_addr);
             destination = view.findViewById(R.id.destination);
@@ -28,7 +28,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
     }
 
 
-    public BookAdapter(List<BookElements> bookList) {
+    BookAdapter(List<BookElements> bookList) {
         this.bookList = bookList;
     }
 
@@ -43,13 +43,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         BookElements bookElements = bookList.get(position);
-        holder.pickup.setText("Pickup Address: "+bookElements.getPickup());
-        holder.destination.setText("Destination Address: "+bookElements.getDestination());
-        holder.fare.setText("Estimated Fare: "+bookElements.getFare());
-        holder.contact.setText("Contact: "+bookElements.getContact());
-        holder.driver.setText("Driver's Name:"+bookElements.getDriver());
+        holder.pickup.setText(String.format("Pickup Address: %s", bookElements.getPickup()));
+        holder.destination.setText(String.format("Destination Address: %s", bookElements.getDestination()));
+        holder.fare.setText(String.format("Estimated Fare: %s", bookElements.getFare()));
+        holder.contact.setText(String.format("Contact: %s", bookElements.getContact()));
+        holder.driver.setText(String.format("Driver's Name:%s", bookElements.getDriver()));
         holder.dateTime.setText(bookElements.getDateTime());
-        holder.distance.setText("Distance: "+bookElements.getDistance());
+        holder.distance.setText(String.format("Distance: %s", bookElements.getDistance()));
     }
 
     @Override

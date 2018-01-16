@@ -3,7 +3,6 @@ package com.riantservices.riant;
 import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
@@ -30,16 +29,9 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.List;
 import java.util.Locale;
 
@@ -74,7 +66,8 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
         roundtrip.setOnClickListener(this);
         AC.setOnClickListener(this);
         NonAC.setOnClickListener(this);
-        getSupportActionBar().hide();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().hide();
         session=new SessionManager(getApplicationContext());
         strEmail=session.getEmail();
         RadioGroup radio;
@@ -142,14 +135,14 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
                 address=pickupAddress.get(0);
                 result="";
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-                    result+=(address.getAddressLine(i)+" ");
+                    result=result.concat(address.getAddressLine(i)+" ");
                 Pickup.setText(result);
             }
             if(destinationAddress.size()>0){
                 address=destinationAddress.get(0);
                 result="";
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-                    result+=(address.getAddressLine(i)+" ");
+                    result=result.concat(address.getAddressLine(i)+" ");
                 Destination.setText(result);
             }
         }
@@ -240,7 +233,9 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
                     HttpPost post = new HttpPost("url");
                     json.put("email", strEmail);
                     json.put("pickup", strPickup);
+                    json.put("pickupCoordinate",pickup);
                     json.put("destination", strDestination);
+                    json.put("destinationCoordinate",destination);
                     json.put("bookFor", strBookFor);
                     json.put("number", strNumber);
                     json.put("ac", strAC);

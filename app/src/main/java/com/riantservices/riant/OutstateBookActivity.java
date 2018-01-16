@@ -27,16 +27,8 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 
 public class OutstateBookActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText Pickup,Destination,FriendContact;
@@ -64,7 +56,8 @@ public class OutstateBookActivity extends AppCompatActivity implements View.OnCl
         roundtrip.setOnClickListener(this);
         AC.setOnClickListener(this);
         NonAC.setOnClickListener(this);
-        getSupportActionBar().hide();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().hide();
         session=new SessionManager(getApplicationContext());
         strEmail=session.getEmail();
         RadioGroup radio;
@@ -206,7 +199,9 @@ public class OutstateBookActivity extends AppCompatActivity implements View.OnCl
                     HttpPost post = new HttpPost("url");
                     json.put("email", strEmail);
                     json.put("pickup", strPickup);
+                    json.put("pickupCoordinate",pickup);
                     json.put("destination", strDestination);
+                    json.put("destinationCoordinate",destination);
                     json.put("bookFor", strBookFor);
                     json.put("number", strNumber);
                     json.put("ac", strAC);

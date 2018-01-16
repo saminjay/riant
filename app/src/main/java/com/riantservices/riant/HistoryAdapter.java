@@ -20,9 +20,9 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
 
         MyViewHolder(View view) {
             super(view);
-            destination = (TextView) view.findViewById(R.id.destination);
-            dateTime = (TextView) view.findViewById(R.id.dateTime);
-            amount = (TextView) view.findViewById(R.id.amount);
+            destination = view.findViewById(R.id.destination);
+            dateTime = view.findViewById(R.id.dateTime);
+            amount = view.findViewById(R.id.amount);
             location=new LatLng(0,0);
         }
     }

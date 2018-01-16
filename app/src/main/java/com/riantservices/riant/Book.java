@@ -25,22 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 class BookElements{
     private String pickup, destination, dateTime, distance, driver, contact, fare;
-    public BookElements(String pickup, String destination, String dateTime, String distance, String driver, String contact, String fare) {
+    BookElements(String pickup, String destination, String dateTime, String distance, String driver, String contact, String fare) {
         this.pickup=pickup;
         this.destination=destination;
         this.dateTime=dateTime;
@@ -65,15 +56,15 @@ class BookElements{
         this.destination = destination;
     }
 
-    public String getDistance() {
+    String getDistance() {
         return distance;
     }
 
-    public String getDateTime() {
+    String getDateTime() {
         return dateTime;
     }
 
-    public String getDriver() {
+    String getDriver() {
         return driver;
     }
 
@@ -89,14 +80,13 @@ class BookElements{
 public class Book extends Fragment {
 
     private List<BookElements> BookList = new ArrayList<>();
-    private RecyclerView recyclerView;
-    private BookAdapter mAdapter;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
-        recyclerView = rootView.findViewById(R.id.recycler_view);
-        mAdapter = new BookAdapter(BookList);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
+        BookAdapter mAdapter = new BookAdapter(BookList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

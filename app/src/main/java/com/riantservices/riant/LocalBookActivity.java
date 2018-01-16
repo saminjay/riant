@@ -1,7 +1,6 @@
 package com.riantservices.riant;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
@@ -28,23 +27,10 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.riantservices.riant.R.color.colorBlack;
-import static com.riantservices.riant.R.color.colorLight;
-import static com.riantservices.riant.R.color.colorTransparent;
-import static com.riantservices.riant.R.color.colorWhite;
 
 public class LocalBookActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText Pickup,Destination,FriendContact;
@@ -74,7 +60,8 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         roundtrip.setOnClickListener(this);
         AC.setOnClickListener(this);
         NonAC.setOnClickListener(this);
-        getSupportActionBar().hide();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().hide();
         session=new SessionManager(getApplicationContext());
         strEmail=session.getEmail();
         RadioGroup radio;
@@ -117,15 +104,15 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorWhite));
-                    textView.setHintTextColor(getResources().getColor(colorBlack));
-                    textView.setTextColor(getResources().getColor(colorBlack));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
+                    textView.setTextColor(getResources().getColor(R.color.colorBlack));
                 }
                 else{
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(colorTransparent));
-                    textView.setHintTextColor(getResources().getColor(colorWhite));
-                    textView.setTextColor(getResources().getColor(colorWhite));
+                    textView.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                    textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
+                    textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }
             }
         };
@@ -217,7 +204,9 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
                     HttpPost post = new HttpPost("url");
                     json.put("email", strEmail);
                     json.put("pickup", strPickup);
+                    json.put("pickupCoordinate",pickup);
                     json.put("destination", strDestination);
+                    json.put("destinationCoordinate",destination);
                     json.put("bookFor", strBookFor);
                     json.put("number", strNumber);
                     json.put("ac", strAC);

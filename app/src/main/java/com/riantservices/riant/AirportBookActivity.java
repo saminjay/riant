@@ -103,13 +103,13 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
             public void onFocusChange(View v, boolean hasFocus) {
                 if(hasFocus){
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                    textView.setBackground(getResources().getDrawable(R.drawable.textboxselected));
                     textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
                     textView.setTextColor(getResources().getColor(R.color.colorBlack));
                 }
                 else{
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                    textView.setBackground(getResources().getDrawable(R.drawable.textboxborder));
                     textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
                     textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }

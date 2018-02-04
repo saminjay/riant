@@ -236,14 +236,15 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
+                if(hasFocus){
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+                    textView.setBackground(getResources().getDrawable(R.drawable.textboxselected));
                     textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
                     textView.setTextColor(getResources().getColor(R.color.colorBlack));
-                } else {
+                }
+                else{
                     TextView textView = (TextView) v;
-                    textView.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
+                    textView.setBackground(getResources().getDrawable(R.drawable.textboxborder));
                     textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
                     textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }

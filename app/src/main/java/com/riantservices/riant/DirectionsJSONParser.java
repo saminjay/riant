@@ -1,7 +1,5 @@
 package com.riantservices.riant;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;

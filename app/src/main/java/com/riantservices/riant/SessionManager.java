@@ -15,18 +15,18 @@ class SessionManager {
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
-    private static final String KEY_ROLE = "role";
+    private static final String KEY_NUMBER = "number";
     SessionManager(Context context){
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
      
-    void createLoginSession(String name, String email, String role){
+    void createLoginSession(String name, String email, String number){
         editor = pref.edit();
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(KEY_NAME, name);
         editor.putString(KEY_EMAIL, email);
-        editor.putString(KEY_ROLE, role);
+        editor.putString(KEY_NUMBER, number);
         editor.apply();
     }
 
@@ -34,7 +34,7 @@ class SessionManager {
         HashMap<String, String> user = new HashMap<>();
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
-        user.put(KEY_ROLE, pref.getString(KEY_ROLE, null));
+        user.put(KEY_NUMBER, pref.getString(KEY_NUMBER, null));
         return user;
     }
 
@@ -50,6 +50,14 @@ class SessionManager {
 
     String getEmail(){
         return pref.getString(KEY_EMAIL,null);
+    }
+
+    String getName(){
+        return pref.getString(KEY_NAME,null);
+    }
+
+    String getNumber(){
+        return pref.getString(KEY_NUMBER,null);
     }
 
     boolean isLoggedIn(){

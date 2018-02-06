@@ -9,4 +9,7 @@
     <color name="colorBlack">#000000</color>
     <color name="colorTransparent">#00000000</color>
     <color name="colorGrey">#999999</color>>
+    <color name="colorLightGrey">#cccccc</color>
+    <color name="colorDirtyWhite">#eeeeee</color>
+    <color name="colorCream">#ffc46c</color>
 </resources>

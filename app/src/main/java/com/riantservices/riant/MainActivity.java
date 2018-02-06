@@ -31,6 +31,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -38,6 +39,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -67,6 +69,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     static GoogleMap googleMap;
     private Marker userMarker;
+    private GPSTracker gps;
     SessionManager session;
     RelativeLayout view1, view2;
     boolean pickupMarked = false;
@@ -78,6 +81,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        gps = new GPSTracker(this);
         view1 = findViewById(R.id.menu);
         view2 = findViewById(R.id.extended);
         session = new SessionManager(getApplicationContext());
@@ -93,38 +97,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        final int longClickDuration = 5000; //for long click to trigger after 5 seconds
-        ImageButton sos = findViewById(R.id.sos);
-
-        sos.setOnTouchListener(new View.OnTouchListener() {
-            boolean isLongPress = false;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    isLongPress = true;
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isLongPress) {
-                                Vibrator vibrator = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-                                vibrator.vibrate(200);
-                                Intent intent = new Intent(Intent.ACTION_CALL);
-                                intent.setData(Uri.parse("tel:100"));
-                                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                                    alertDialog("SOS activated. Calling 100.");
-                                    startActivity(intent);
-                                } else alertDialog("SOS failed");
-                            }
-                        }
-                    }, longClickDuration);
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    isLongPress = false;
-                }
-                return true;
-            }
-        });
+        SOSView sosView = findViewById(R.id.sos);
         ImageButton bar = findViewById(R.id.bar);
         bar.setOnClickListener(new OnClickListener() {
             @Override
@@ -143,18 +116,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.account:
                     case R.id.account1:
                     case R.id.textAccount1:
-                        alertDialog("Account is clicked");
+                        Intent goAccount = new Intent(MainActivity.this, AccountActivity.class);
+                        startActivity(goAccount);
                         break;
                     case R.id.trips:
                     case R.id.trips1:
                     case R.id.textTrips1:
-                        Intent goTrips = new Intent(getApplicationContext(), TripsActivity.class);
+                        Intent goTrips = new Intent(MainActivity.this, TripsActivity.class);
                         startActivity(goTrips);
                         break;
                     case R.id.notifictions:
                     case R.id.notifictions1:
                     case R.id.textNotifications1:
-                        alertDialog("Notifications is clisked");
+                        alertDialog("Notifications is clicked");
                         break;
                     case R.id.settings:
                     case R.id.settings1:
@@ -190,6 +164,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(final GoogleMap map) {
+        Location location;
         destination = new ArrayList<>();
         SearchView searchView = (findViewById(R.id.searchView));
         Button button = findViewById(R.id.proceed);
@@ -230,7 +205,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                         address = addressList.get(0);
                         LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
                         map.addMarker(new MarkerOptions().position(latLng).title(query));
-                        map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
                     }
                 }
                 return true;
@@ -241,8 +216,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 return false;
             }
         });
-        double Lat, Lon;
-        String UserEmail;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.setTrafficEnabled(true);
         map.setBuildingsEnabled(true);
@@ -259,36 +232,15 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 view2.setVisibility(View.INVISIBLE);
             }
         });
-        GPSTracker gps = new GPSTracker(this);
-        UserEmail = session.getEmail();
-        Lat = gps.getLatitude();
-        Lon = gps.getLongitude();
-        LatLng CURRENT_LOCATION = new LatLng(Lat, Lon);
-        userMarker = googleMap.addMarker(new MarkerOptions().position(CURRENT_LOCATION).title("Current Location"));
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION, 15);
+
+        MarkerOptions options=new MarkerOptions().position(new LatLng(20.2961,85.8245)).title("Current Location");
+        userMarker = googleMap.addMarker(options);
+        LatLng CURRENT_LOCATION = new LatLng(gps.getLatitude(), gps.getLongitude());
+        userMarker.setPosition(CURRENT_LOCATION);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION,15);
         googleMap.animateCamera(update);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
-        String perm[] = {Manifest.permission.ACCESS_FINE_LOCATION};
-        if (Build.VERSION.SDK_INT >= 23 &&
-                ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-
-            googleMap.setMyLocationEnabled(true);
-            try {
-                UpdateGPS(UserEmail);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-
-        } else if (Build.VERSION.SDK_INT < 23) {
-            googleMap.setMyLocationEnabled(true);
-            try {
-                UpdateGPS(UserEmail);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        } else
-            requestPermissions(perm, 1);
     }
 
     protected void mark(LatLng latLng) {

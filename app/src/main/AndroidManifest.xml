@@ -55,9 +55,10 @@
         <activity android:name=".OutstationBookActivity" />
         <activity android:name=".OutstateBookActivity" />
         <activity android:name=".StationBookActivity" />
-        <activity android:name=".TripMenu"/>
+        <activity android:name=".TripMenu" />
+        <service android:name="GPSTracker" />
 
-        <service android:name=".GPSTracker" />
+        <activity android:name=".AccountActivity"></activity>
     </application>
 
 </manifest>

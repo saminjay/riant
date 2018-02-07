@@ -61,7 +61,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     static GoogleMap googleMap;
     private Marker userMarker;
-    private GPSTracker gps;
     SessionManager session;
     boolean pickupMarked = false;
     private LatLng pickup;
@@ -93,7 +92,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        gps = new GPSTracker(this);
         session = new SessionManager(getApplicationContext());
         ImageButton[] icons = new ImageButton[5];
         TextView[] iconText = new TextView[5];
@@ -229,10 +227,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         MarkerOptions options=new MarkerOptions().position(new LatLng(20.2961,85.8245)).title("Current Location");
         userMarker = googleMap.addMarker(options);
-        LatLng CURRENT_LOCATION = new LatLng(gps.getLatitude(), gps.getLongitude());
-        userMarker.setPosition(CURRENT_LOCATION);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION,15);
-        googleMap.animateCamera(update);
+        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(userMarker.getPosition(),15);
+        SingleShotLocationProvider.requestSingleUpdate(MainActivity.this,
+        new SingleShotLocationProvider.LocationCallback() {
+            @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                Log.d("loc","My cordinates:"+ location.toString());
+                LatLng CURRENT_LOCATION = new LatLng(location.latitude, location.longitude);
+                userMarker.setPosition(CURRENT_LOCATION);
+                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION,15);
+                googleMap.animateCamera(update);
+            }
+        });
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
     }

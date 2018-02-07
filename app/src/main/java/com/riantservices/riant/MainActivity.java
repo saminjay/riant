@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
@@ -32,16 +33,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -62,21 +63,39 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker userMarker;
     private GPSTracker gps;
     SessionManager session;
-    RelativeLayout view1, view2;
     boolean pickupMarked = false;
     private LatLng pickup;
     private List<LatLng> destination;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.drawer_open, R.string.drawer_close) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
         gps = new GPSTracker(this);
-        view1 = findViewById(R.id.menu);
-        view2 = findViewById(R.id.extended);
         session = new SessionManager(getApplicationContext());
-        ImageButton[] icons = new ImageButton[10];
+        ImageButton[] icons = new ImageButton[5];
         TextView[] iconText = new TextView[5];
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -91,40 +110,38 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         bar.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (view2.getVisibility() == View.INVISIBLE) {
-                    view2.setVisibility(View.VISIBLE);
-                } else {
-                    view2.setVisibility(View.INVISIBLE);
-                }
+                mDrawerLayout.openDrawer(Gravity.START,true);
+            }
+        });
+        Button expandButton = findViewById(R.id.expand);
+        expandButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDrawerLayout.openDrawer(Gravity.START,true);
             }
         });
         OnClickListener iconClickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 switch (v.getId()) {
-                    case R.id.account:
                     case R.id.account1:
                     case R.id.textAccount1:
                         Intent goAccount = new Intent(MainActivity.this, AccountActivity.class);
                         startActivity(goAccount);
                         break;
-                    case R.id.trips:
                     case R.id.trips1:
                     case R.id.textTrips1:
                         Intent goTrips = new Intent(MainActivity.this, TripsActivity.class);
                         startActivity(goTrips);
                         break;
-                    case R.id.notifictions:
                     case R.id.notifictions1:
                     case R.id.textNotifications1:
                         alertDialog("Notifications is clicked");
                         break;
-                    case R.id.settings:
                     case R.id.settings1:
                     case R.id.textSettings1:
                         alertDialog("Settings is clicked");
                         break;
-                    case R.id.help:
                     case R.id.help1:
                     case R.id.textHelp1:
                         alertDialog("Help is clicked");
@@ -132,17 +149,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         };
-        icons[0] = findViewById(R.id.account);
-        icons[1] = findViewById(R.id.account1);
-        icons[2] = findViewById(R.id.trips);
-        icons[3] = findViewById(R.id.trips1);
-        icons[4] = findViewById(R.id.settings);
-        icons[5] = findViewById(R.id.settings1);
-        icons[6] = findViewById(R.id.notifictions);
-        icons[7] = findViewById(R.id.notifictions1);
-        icons[8] = findViewById(R.id.help);
-        icons[9] = findViewById(R.id.help1);
-        for (int i = 0; i < 10; i++) icons[i].setOnClickListener(iconClickListener);
+        icons[0] = findViewById(R.id.account1);
+        icons[1] = findViewById(R.id.trips1);
+        icons[2] = findViewById(R.id.settings1);
+        icons[3] = findViewById(R.id.notifictions1);
+        icons[4] = findViewById(R.id.help1);
+        for (int i = 0; i < 5; i++) icons[i].setOnClickListener(iconClickListener);
         iconText[0] = findViewById(R.id.textAccount1);
         iconText[1] = findViewById(R.id.textTrips1);
         iconText[2] = findViewById(R.id.textNotifications1);
@@ -214,12 +226,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 mark(latLng);
             }
         });
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(LatLng latLng) {
-                view2.setVisibility(View.INVISIBLE);
-            }
-        });
 
         MarkerOptions options=new MarkerOptions().position(new LatLng(20.2961,85.8245)).title("Current Location");
         userMarker = googleMap.addMarker(options);
@@ -229,6 +235,18 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         googleMap.animateCamera(update);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     protected void mark(LatLng latLng) {

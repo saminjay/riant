@@ -23,6 +23,7 @@ public class AccountActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
+        if(getSupportActionBar()!=null)getSupportActionBar().hide();
         name = findViewById(R.id.nameSwitcher);
         number = findViewById(R.id.numberSwitcher);
         pass = findViewById(R.id.passSwitcher);

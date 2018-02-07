@@ -92,7 +92,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         };
 
         // Set the drawer toggle as the DrawerListener
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
         gps = new GPSTracker(this);
         session = new SessionManager(getApplicationContext());
         ImageButton[] icons = new ImageButton[5];

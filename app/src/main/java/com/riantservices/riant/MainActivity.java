@@ -23,28 +23,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
-import android.os.Vibrator;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -96,8 +87,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 searchView.setIconified(false);
             }
         });
-
-        SOSView sosView = findViewById(R.id.sos);
         ImageButton bar = findViewById(R.id.bar);
         bar.setOnClickListener(new OnClickListener() {
             @Override
@@ -164,7 +153,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(final GoogleMap map) {
-        Location location;
         destination = new ArrayList<>();
         SearchView searchView = (findViewById(R.id.searchView));
         Button button = findViewById(R.id.proceed);
@@ -466,20 +454,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         @Override
         protected void onPostExecute(List<List<HashMap<String,String>>> result) {
-            ArrayList points;
+            ArrayList<LatLng> points;
             PolylineOptions lineOptions = null;
 
             for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList();
+                points = new ArrayList<>();
                 lineOptions = new PolylineOptions();
 
                 List<HashMap<String,String>> path = result.get(i);
 
                 for (int j = 0; j < path.size(); j++) {
-                    HashMap point = path.get(j);
+                    HashMap<String, String> point = path.get(j);
 
-                    double lat = Double.parseDouble(point.get("lat").toString());
-                    double lng = Double.parseDouble(point.get("lng").toString());
+                    double lat = Double.parseDouble(point.get("lat"));
+                    double lng = Double.parseDouble(point.get("lng"));
                     LatLng position = new LatLng(lat, lng);
 
                     points.add(position);
@@ -487,7 +475,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
                 lineOptions.addAll(points);
                 lineOptions.width(12);
-                lineOptions.color(Color.argb(255,255,50,00));
+                lineOptions.color(Color.argb(255,255,50,0));
                 lineOptions.geodesic(true);
             }
             try {

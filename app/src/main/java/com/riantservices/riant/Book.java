@@ -86,27 +86,44 @@ public class Book extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
-        BookAdapter mAdapter = new BookAdapter(BookList);
+        BookAdapter mAdapter = new BookAdapter(this.getActivity(),BookList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.addItemDecoration(new ListDividerItem(getActivity(), LinearLayoutManager.VERTICAL, R.drawable.listdivider));
         recyclerView.setAdapter(mAdapter);
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                BookElements bookElements = BookList.get(position);
-                Toast.makeText(getActivity(), bookElements.getPickup()+ " to "+bookElements.getDestination(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onLongClick(View view, int position) {
-
+                BookElements bookElements = BookList.get(position);
+                Toast.makeText(getActivity(), bookElements.getPickup()+ " to "+bookElements.getDestination(), Toast.LENGTH_SHORT).show();
             }
         }));
+        getDummyData();
         fetchBookData();
         return rootView;
+    }
+
+    private void getDummyData(){
+        String pickup,destination,dateTime,distance,driver,contact,fare;
+        BookElements BookElement;
+        pickup = "District Center, Chandrasekharpur";
+        dateTime = "On 06/12/2017 at 10:30 am";
+        fare = "100.00";
+        distance = "15.1 kms";
+        driver = "Vahan Vahak";
+        contact = "9999999999";
+        destination = "Plot No-176, Saheed Nagar";
+        BookElement = new BookElements(pickup,destination,dateTime,distance,driver,contact,fare);
+        BookList.add(BookElement);
+        BookList.add(BookElement);
+        BookList.add(BookElement);
+        BookList.add(BookElement);
+        BookList.add(BookElement);
     }
 
     private void fetchBookData() {

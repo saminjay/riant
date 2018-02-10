@@ -1,35 +1,42 @@
 package com.riantservices.riant;
 
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
+    private Context mContext;
     private List<HistoryElements> HistoryList;
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView destination, dateTime, amount;
-        private LatLng location;
+        LatLng location;
+        ImageView map;
 
         MyViewHolder(View view) {
             super(view);
-            destination = view.findViewById(R.id.destination);
+            destination = view.findViewById(R.id.destination_addr);
             dateTime = view.findViewById(R.id.dateTime);
             amount = view.findViewById(R.id.amount);
-            location=new LatLng(0,0);
+            map = view.findViewById(R.id.map);
+            location = new LatLng(0,0);
         }
     }
 
 
-    HistoryAdapter(List<HistoryElements> HistoryList) {
+    HistoryAdapter(List<HistoryElements> HistoryList, Context context) {
         this.HistoryList = HistoryList;
+        mContext = context;
     }
 
     @Override
@@ -44,10 +51,14 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
     public void onBindViewHolder(MyViewHolder holder, int position) {
         HistoryElements HistoryElements = HistoryList.get(position);
         holder.location=HistoryElements.getLatLng();
-        //make map from getLatLng
-        holder.destination.setText("Destination: "+HistoryElements.getDestination());
+        String URL = "http://maps.google.com/maps/api/staticmap?center="+holder.location.latitude+","+holder.location.longitude+"&markers=color:red%7C"+holder.location.latitude+","+holder.location.longitude+"&zoom=15&size=400x160&sensor=false&key="+R.string.google_maps_key;
+        Picasso.with(mContext).load(URL)
+               .placeholder(R.drawable.default_placeholder)
+               .error(R.drawable.default_placeholder)
+               .fit().noFade().into(holder.map);
+        holder.destination.setText(HistoryElements.getDestination());
         holder.dateTime.setText(HistoryElements.getDateTime());
-        holder.amount.setText("Rs. "+HistoryElements.getAmount());
+        holder.amount.setText(String.format("Rs.%s", HistoryElements.getAmount()));
     }
 
     @Override

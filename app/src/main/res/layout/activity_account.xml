@@ -58,7 +58,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/darkseparator"/>
+            android:background="@drawable/blackseparator"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/lightseparator"/>
+            android:background="@drawable/greyseparator"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,6 +140,7 @@
                         android:textColor="@color/colorBlack"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:inputType="phone"
                         android:background="@color/colorCream"/>
                 </ViewSwitcher>
 
@@ -155,7 +156,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/lightseparator"/>
+            android:background="@drawable/greyseparator"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -185,7 +186,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/lightseparator"/>
+            android:background="@drawable/greyseparator"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -216,6 +217,7 @@
                         android:textSize="20sp" />
                     <EditText
                         android:id="@+id/ETPass"
+                        android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/colorCream" />
@@ -234,7 +236,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/lightseparator"/>
+            android:background="@drawable/greyseparator"/>
     </LinearLayout>
     <Button
         android:id="@+id/logout"

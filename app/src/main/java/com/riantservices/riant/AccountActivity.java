@@ -76,10 +76,17 @@ public class AccountActivity extends AppCompatActivity{
     };
 
     public void saveData(String name,String number,String password){
+        boolean sendSuccess;
         //send data to server
-        this.name.showPrevious();
-        this.number.showPrevious();
-        this.pass.showPrevious();
+        sendSuccess=true;
+        //
+        if(this.name.getNextView().getId()==R.id.name) this.name.showNext();
+        if(this.number.getNextView().getId()==R.id.number) this.number.showNext();
+        if(this.pass.getNextView().getId()==R.id.pass) this.pass.showNext();
+        if(sendSuccess){
+            Tname.setText(ETname.getText());
+            Tnumber.setText(ETnumber.getText());
+        }
     }
 
     public void loadData(){

@@ -182,6 +182,13 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 map.clear();
             }
         });
+        ImageButton locate = findViewById(R.id.locate);
+        locate.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestLocation();
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -224,17 +231,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         MarkerOptions options=new MarkerOptions().position(new LatLng(20.2961,85.8245)).title("Current Location");
         userMarker = googleMap.addMarker(options);
+        userMarker.setVisible(false);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(userMarker.getPosition(),15);
-        SingleShotLocationProvider.requestSingleUpdate(MainActivity.this,
-        new SingleShotLocationProvider.LocationCallback() {
-            @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
-                Log.d("loc","My cordinates:"+ location.toString());
-                LatLng CURRENT_LOCATION = new LatLng(location.latitude, location.longitude);
-                userMarker.setPosition(CURRENT_LOCATION);
-                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION,15);
-                googleMap.animateCamera(update);
-            }
-        });
+        googleMap.animateCamera(update);
+        requestLocation();
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
     }
@@ -249,6 +249,20 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    protected void requestLocation(){
+        SingleShotLocationProvider.requestSingleUpdate(MainActivity.this,
+                new SingleShotLocationProvider.LocationCallback() {
+                    @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
+                        Log.d("loc","My cordinates:"+ location.toString());
+                        LatLng CURRENT_LOCATION = new LatLng(location.latitude, location.longitude);
+                        userMarker.setPosition(CURRENT_LOCATION);
+                        userMarker.setVisible(true);
+                        CameraUpdate update = CameraUpdateFactory.newLatLng(CURRENT_LOCATION);
+                        googleMap.animateCamera(update);
+                    }
+                });
     }
 
     protected void mark(LatLng latLng) {

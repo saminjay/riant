@@ -70,12 +70,11 @@ public class History extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.history, container, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
-        HistoryAdapter mAdapter = new HistoryAdapter(HistoryList);
+        HistoryAdapter mAdapter = new HistoryAdapter(HistoryList,this.getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayoutManager.VERTICAL));
-        recyclerView.setAdapter(mAdapter);
+        recyclerView.addItemDecoration(new ListDividerItem(getActivity(), LinearLayoutManager.VERTICAL, R.drawable.listdivider));
         recyclerView.setAdapter(mAdapter);
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
@@ -83,14 +82,26 @@ public class History extends Fragment {
                 HistoryElements HistoryElements = HistoryList.get(position);
                 Toast.makeText(getActivity(), HistoryElements.getDestination(), Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onLongClick(View view, int position) {
-
             }
         }));
+        getDummyData();
         fetchHistoryData();
         return rootView;
+    }
+
+    private void getDummyData(){
+        String destination,dateTime,fare;
+        double lat,lng;
+        HistoryElements HistoryElement;
+        destination = "Plot No-176, Saheed Nagar";
+        dateTime = "On 06/12/2017 at 10:30 am";
+        fare = "100.00";
+        lat = 20.2;
+        lng = 85;
+        HistoryElement = new HistoryElements(destination,dateTime,fare,lat,lng);
+        HistoryList.add(HistoryElement);
     }
 
     private void fetchHistoryData() {

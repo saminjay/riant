@@ -5,72 +5,187 @@
     android:focusable="true"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
     android:clickable="true"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/pickup_addr"
-        android:textColor="@color/colorWhite"
-        android:text="Pickup Address"
-        android:layout_alignParentTop="true"
+    <LinearLayout
+        android:id="@+id/pickup"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/destination"
-        android:layout_below="@id/pickup_addr"
-        android:text="Destination Address"
-        android:textColor="@color/colorWhite"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/dateTime"
-        android:layout_marginTop="5dp"
-        android:textColor="@color/colorWhite"
-        android:layout_width="wrap_content"
-        android:text="On date at time"
         android:layout_height="wrap_content"
-        android:layout_below="@id/destination"/>
+        android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/colorWhite"
+            android:text="Pickup Address:"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/pickup_addr"
+            android:textColor="@color/colorWhite"
+            android:text="Pickup Address"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_marginStart="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/distance"
-        android:textColor="@color/colorWhite"
+    <LinearLayout
+        android:id="@+id/destination"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/pickup"
+        android:orientation="horizontal">
+        <TextView
+            android:textColor="@color/colorWhite"
+            android:text="Destination Address:"
+            android:layout_gravity="center_vertical"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/destination_addr"
+            android:textColor="@color/colorWhite"
+            android:text="Destination Address"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_marginStart="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/dateTimeDistance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/destination"
+        android:orientation="horizontal"
+        android:baselineAligned="false"
+        android:layout_marginTop="20dp">
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_weight="0.5">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical">
+                <TextView
+                    android:id="@+id/dateTime"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_width="wrap_content"
+                    android:text="On date at time"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/distance"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorWhite"
+                    android:layout_width="wrap_content"
+                    android:text="Distance:"
+                    android:layout_below="@id/dateTime"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:layout_weight="0.5">
+            <TextView
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_width="wrap_content"
+                android:text="Estimated Fare:"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+            <TextView
+                android:id="@+id/fare"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"
+                android:layout_width="wrap_content"
+                android:text="Estimated Fare"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/boxDriver"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dateTimeDistance"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driver's Name:"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/driver"
+            android:textColor="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:text="Driver's Name"
+            android:layout_marginStart="4dp"
+            android:textSize="16sp"
+            android:layout_below="@id/dateTimeDistance"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/boxContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/boxDriver"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Contact Number:"
+            android:textColor="@color/colorWhite"
+            android:textSize="16sp"/>
+        <TextView
+            android:id="@+id/contact"
+            android:textColor="@color/colorWhite"
+            android:layout_width="wrap_content"
+            android:text="Contact Number"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:textSize="16sp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/bar"
+            android:background="@color/colorTransparent" />
+    </LinearLayout>
+
+    <Button
+        android:layout_height="40dp"
         android:layout_width="wrap_content"
-        android:text="Distance:"
-        android:layout_below="@id/dateTime"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/fare"
+        android:layout_below="@id/boxContact"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:textSize="16sp"
-        android:layout_alignBottom="@id/distance"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textColor="@color/colorWhite"
-        android:layout_width="wrap_content"
-        android:text="Estimated Fare:"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/driver"
-        android:textColor="@color/colorWhite"
-        android:layout_width="wrap_content"
-        android:text="Driver's Name:"
-        android:layout_below="@id/distance"
-        android:layout_marginTop="5dp"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/contact"
-        android:textColor="@color/colorWhite"
-        android:layout_width="wrap_content"
-        android:text="Contact Number:"
-        android:layout_below="@id/driver"
-        android:layout_height="wrap_content" />
-
-
+        android:background="@drawable/round_button"
+        android:text="CANCEL"/>
 </RelativeLayout>

@@ -306,7 +306,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //}
         //alertDialog(Float.toString(d));
         i=0;
-        final Intent intent = new Intent(MainActivity.this, TripMenu.class);
+        final Intent intent = new Intent(MainActivity.this, MenuActivity.class);
         Bundle bundle = new Bundle();
         double[] lat = new double[destination.size() + 1];
         double[] lng = new double[destination.size() + 1];

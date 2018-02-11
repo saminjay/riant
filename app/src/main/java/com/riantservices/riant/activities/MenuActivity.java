@@ -10,7 +10,7 @@ import com.riantservices.riant.R;
 
 import java.lang.reflect.Array;
 
-public class TripMenu extends AppCompatActivity implements View.OnClickListener{
+public class MenuActivity extends AppCompatActivity implements View.OnClickListener{
 
     Bundle Coordinates;
 

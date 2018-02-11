@@ -8,7 +8,7 @@ import android.os.Bundle;
 import com.riantservices.riant.R;
 import com.riantservices.riant.helpers.SessionManager;
 
-public class Splash extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
 
     SessionManager session;
     private Handler mHandler = new Handler();

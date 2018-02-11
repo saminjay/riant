@@ -37,7 +37,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.Splash"
+            android:name=".activities.SplashActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,7 +55,7 @@
         <activity android:name=".activities.OutstationBookActivity" />
         <activity android:name=".activities.OutstateBookActivity" />
         <activity android:name=".activities.StationBookActivity" />
-        <activity android:name=".activities.TripMenu" />
+        <activity android:name=".activities.MenuActivity" />
         <service android:name=".helpers.GPSTracker" />
         <activity android:name=".activities.AccountActivity" />
     </application>

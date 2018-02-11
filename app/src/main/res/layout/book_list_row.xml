@@ -157,6 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Contact Number:"
+            android:layout_gravity="center_vertical"
             android:textColor="@color/colorWhite"
             android:textSize="16sp"/>
         <TextView
@@ -164,6 +165,7 @@
             android:textColor="@color/colorWhite"
             android:layout_width="wrap_content"
             android:text="Contact Number"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="4dp"
             android:layout_marginLeft="4dp"
             android:textSize="16sp"
@@ -175,7 +177,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
-            android:src="@drawable/bar"
+            android:src="@android:drawable/sym_call_outgoing"
             android:background="@color/colorTransparent" />
     </LinearLayout>
 

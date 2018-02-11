@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.helpers;
 
 import java.util.HashMap;
 
@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-class SessionManager {
+import com.riantservices.riant.activities.LoginActivity;
+
+public class SessionManager {
     private SharedPreferences pref;
     private Editor editor;
     private Context _context;
@@ -16,12 +18,12 @@ class SessionManager {
     private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_NUMBER = "number";
-    SessionManager(Context context){
+    public SessionManager(Context context){
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
      
-    void createLoginSession(String name, String email, String number){
+    public void createLoginSession(String name, String email, String number){
         editor = pref.edit();
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(KEY_NAME, name);
@@ -38,7 +40,7 @@ class SessionManager {
         return user;
     }
 
-    void logoutUser(){
+    public void logoutUser(){
         editor = pref.edit();
         editor.clear();
         editor.apply();
@@ -48,19 +50,19 @@ class SessionManager {
         _context.startActivity(i);
     }
 
-    String getEmail(){
+    public String getEmail(){
         return pref.getString(KEY_EMAIL,null);
     }
 
-    String getName(){
+    public String getName(){
         return pref.getString(KEY_NAME,null);
     }
 
-    String getNumber(){
+    public String getNumber(){
         return pref.getString(KEY_NUMBER,null);
     }
 
-    boolean isLoggedIn(){
+    public boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }
 }

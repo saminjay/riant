@@ -22,5 +22,5 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.riantservices.riant.TripsActivity" />
+    tools:context="com.riantservices.riant.activities.TripsActivity" />
 </LinearLayout>

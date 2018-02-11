@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.activities;
 
 import android.content.DialogInterface;
 import android.os.Looper;
@@ -14,6 +14,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.SessionManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -65,7 +67,8 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         sun.setOnClickListener(this);
         button.setOnClickListener(this);
         button1.setOnClickListener(this);
-        getSupportActionBar().hide();
+        if(getSupportActionBar()!=null)
+            getSupportActionBar().hide();
         session = new SessionManager(getApplicationContext());
         strEmail = session.getEmail();
         RadioGroup radio, radioA, radioB, radioC;
@@ -91,10 +94,14 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         radio13 = findViewById(R.id.radio13);
         FriendContact.setVisibility(View.INVISIBLE);
         Bundle Coordinates=getIntent().getExtras();
-        double[] lat=Coordinates.getDoubleArray("lat");
-        double[] lng=Coordinates.getDoubleArray("lng");
-        pickup=new LatLng(lat[0],lng[0]);
-        destination=new LatLng(lat[1],lng[1]);
+        if(Coordinates!=null){
+            double[] lat=Coordinates.getDoubleArray("lat");
+            double[] lng=Coordinates.getDoubleArray("lng");
+            if(lat!=null&&lng!=null){
+                pickup=new LatLng(lat[0],lng[0]);
+                destination=new LatLng(lat[1],lng[1]);
+            }
+        }
         radio.clearCheck();
         radioA.clearCheck();
         radioB.clearCheck();

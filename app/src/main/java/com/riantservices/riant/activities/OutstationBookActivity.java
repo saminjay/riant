@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.activities;
 
 import android.content.DialogInterface;
 import android.os.Looper;
@@ -15,6 +15,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.SessionManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -30,7 +32,7 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-public class StationBookActivity extends AppCompatActivity implements View.OnClickListener{
+public class OutstationBookActivity extends AppCompatActivity implements View.OnClickListener{
     private EditText Pickup,Destination,FriendContact;
     private RadioButton radio2;
     private String strEmail,strBookFor,strTrip,strAC,strPickup, strDestination,strNumber;
@@ -43,7 +45,7 @@ public class StationBookActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         strBookFor="";strTrip="";strAC="";strPickup="";strDestination="";strNumber="";
-        setContentView(R.layout.activity_station_book);
+        setContentView(R.layout.activity_outstation_book);
         Button button=findViewById(R.id.button);
         Button button1=findViewById(R.id.button1);
         oneway=findViewById(R.id.oneway);
@@ -67,12 +69,18 @@ public class StationBookActivity extends AppCompatActivity implements View.OnCli
         radio=findViewById(R.id.radio);
         radio2=findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
-        Bundle Coordinates=getIntent().getBundleExtra("Coordinates");
-        double[] lat=Coordinates.getDoubleArray("lat");
-        double[] lng=Coordinates.getDoubleArray("lng");
-        pickup=new LatLng(lat[0],lng[0]);
-        destination=new LatLng(lat[1],lng[1]);
+
+        Bundle Coordinates=getIntent().getExtras();
+        if(Coordinates!=null){
+            double[] lat=Coordinates.getDoubleArray("lat");
+            double[] lng=Coordinates.getDoubleArray("lng");
+            if(lat!=null&&lng!=null){
+                pickup=new LatLng(lat[0],lng[0]);
+                destination=new LatLng(lat[1],lng[1]);
+            }
+        }
         radio.clearCheck();
+
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -186,44 +194,44 @@ public class StationBookActivity extends AppCompatActivity implements View.OnCli
     protected void Book()throws UnsupportedEncodingException{
         Thread t = new Thread() {
 
-        public void run() {
-            Looper.prepare(); //For Preparing Message Pool for the child Thread
-            HttpClient client = new DefaultHttpClient();
-            HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
-            HttpResponse response;
-            JSONObject json = new JSONObject();
+            public void run() {
+                Looper.prepare(); //For Preparing Message Pool for the child Thread
+                HttpClient client = new DefaultHttpClient();
+                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
+                HttpResponse response;
+                JSONObject json = new JSONObject();
 
-            try {
-                HttpPost post = new HttpPost("url");
-                json.put("email", strEmail);
-                json.put("pickup", strPickup);
-                json.put("pickupCoordinate", pickup);
-                json.put("destination", strDestination);
-                json.put("destinationCoordinate", destination);
-                json.put("bookFor", strBookFor);
-                json.put("number", strNumber);
-                json.put("ac", strAC);
-                json.put("trip", strTrip);
-                StringEntity se = new StringEntity( json.toString());
-                se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                post.setEntity(se);
-                response = client.execute(post);
+                try {
+                    HttpPost post = new HttpPost("url");
+                    json.put("email", strEmail);
+                    json.put("pickup", strPickup);
+                    json.put("pickupCoordinate",pickup);
+                    json.put("destination", strDestination);
+                    json.put("destinationCoordinate",destination);
+                    json.put("bookFor", strBookFor);
+                    json.put("number", strNumber);
+                    json.put("ac", strAC);
+                    json.put("trip", strTrip);
+                    StringEntity se = new StringEntity( json.toString());
+                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+                    post.setEntity(se);
+                    response = client.execute(post);
 
                 /*Checking response */
-                if(response!=null){
-                    InputStream in = response.getEntity().getContent(); //Get the data in the entity
-                    respond(in);
+                    if(response!=null){
+                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
+                        respond(in);
 
+                    }
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                    alertDialog("Error: Cannot Estabilish Connection");
                 }
 
-            } catch(Exception e) {
-                e.printStackTrace();
-                alertDialog("Error: Cannot Estabilish Connection");
+                Looper.loop(); //Loop in the message queue
             }
-
-            Looper.loop(); //Loop in the message queue
-        }
-    };
+        };
 
         t.start();
     }

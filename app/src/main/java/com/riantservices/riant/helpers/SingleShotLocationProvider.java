@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.helpers;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,7 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
-class SingleShotLocationProvider {
+public class SingleShotLocationProvider {
 
     public interface LocationCallback {
         void onNewLocationAvailable(GPSCoordinates location);
@@ -21,7 +21,7 @@ class SingleShotLocationProvider {
     // calls back to calling thread, note this is for low grain: if you want higher precision, swap the
     // contents of the else and if. Also be sure to check gps permission/settings are allowed.
     // call usually takes <10ms
-    static void requestSingleUpdate(final Context context, final LocationCallback callback) {
+    public static void requestSingleUpdate(final Context context, final LocationCallback callback) {
         final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean isNetworkEnabled = locationManager != null && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
         if(checkPermission(context)){
@@ -80,13 +80,21 @@ class SingleShotLocationProvider {
 
 
     // consider returning Location instead of this dummy wrapper class
-    static class GPSCoordinates {
+    public static class GPSCoordinates {
         float longitude = -1;
         float latitude = -1;
 
         GPSCoordinates(double theLatitude, double theLongitude) {
             longitude = (float) theLongitude;
             latitude = (float) theLatitude;
+        }
+
+        public float getLatitude() {
+            return latitude;
+        }
+
+        public float getLongitude() {
+            return longitude;
         }
     }
 }

@@ -1,7 +1,6 @@
-package com.riantservices.riant;
+package com.riantservices.riant.helpers;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -24,14 +23,7 @@ public class ListDividerItem extends RecyclerView.ItemDecoration {
 
     private int mOrientation;
 
-    ListDividerItem(Context context, int orientation) {
-        final TypedArray a = context.obtainStyledAttributes(ATTRS);
-        mDivider = a.getDrawable(0);
-        a.recycle();
-        setOrientation(orientation);
-    }
-
-    ListDividerItem(Context context, int orientation, int resId) {
+    public ListDividerItem(Context context, int orientation, int resId) {
         mDivider = ContextCompat.getDrawable(context, resId);
         setOrientation(orientation);
     }

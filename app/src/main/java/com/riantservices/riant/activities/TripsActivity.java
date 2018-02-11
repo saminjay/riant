@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.activities;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -10,22 +10,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.riantservices.riant.models.Book;
+import com.riantservices.riant.models.History;
+import com.riantservices.riant.R;
+
 public class TripsActivity extends AppCompatActivity{
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +22,27 @@ public class TripsActivity extends AppCompatActivity{
         setContentView(R.layout.activity_trips);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        /*
+      The {@link android.support.v4.view.PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link android.support.v13.app.FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        /*
+      The {@link ViewPager} that will host the section contents.
+     */
+        ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout=(TabLayout)findViewById(R.id.tabs);
+        TabLayout tabLayout= findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        getSupportActionBar().hide();
+        if(getSupportActionBar()!=null) getSupportActionBar().hide();
     }
 
 
@@ -74,7 +74,7 @@ public class TripsActivity extends AppCompatActivity{
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -82,11 +82,9 @@ public class TripsActivity extends AppCompatActivity{
         public Fragment getItem(int position) {
             switch(position){
                 case 0:
-                    Book book=new Book();
-                    return book;
+                    return new Book();
                 case 1:
-                    History history=new History();
-                    return history;
+                    return new History();
                 default:
                     return null;
             }

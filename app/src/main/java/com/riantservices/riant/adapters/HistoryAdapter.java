@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.adapters;
 
 
 import android.content.Context;
@@ -10,11 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.riantservices.riant.R;
+import com.riantservices.riant.models.HistoryElements;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
     private Context mContext;
     private List<HistoryElements> HistoryList;
 
@@ -34,7 +36,7 @@ class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.MyViewHolder> {
     }
 
 
-    HistoryAdapter(List<HistoryElements> HistoryList, Context context) {
+    public HistoryAdapter(List<HistoryElements> HistoryList, Context context) {
         this.HistoryList = HistoryList;
         mContext = context;
     }

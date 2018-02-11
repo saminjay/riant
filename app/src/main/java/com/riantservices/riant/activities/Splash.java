@@ -1,9 +1,12 @@
-package com.riantservices.riant;
+package com.riantservices.riant.activities;
 
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.SessionManager;
 
 public class Splash extends AppCompatActivity {
 

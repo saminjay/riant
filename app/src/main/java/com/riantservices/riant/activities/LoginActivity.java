@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.activities;
 
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -12,6 +12,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.SessionManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;

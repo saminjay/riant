@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.helpers;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -10,10 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+public class DirectionsJSONParser {
 
-class DirectionsJSONParser {
-
-    List<List<HashMap<String,String>>> parse(JSONObject jObject){
+    public List<List<HashMap<String,String>>> parse(JSONObject jObject){
 
         List<List<HashMap<String, String>>> routes = new ArrayList<>() ;
         JSONArray jRoutes;

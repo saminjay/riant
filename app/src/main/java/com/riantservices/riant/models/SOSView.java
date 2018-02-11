@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.models;
 import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,6 +15,8 @@ import android.support.v7.app.AlertDialog;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.riantservices.riant.R;
 
 public class SOSView extends View {
 

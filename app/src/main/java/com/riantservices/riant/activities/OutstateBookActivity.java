@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.activities;
 
 import android.content.DialogInterface;
 import android.os.Looper;
@@ -15,6 +15,8 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.SessionManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -69,10 +71,14 @@ public class OutstateBookActivity extends AppCompatActivity implements View.OnCl
         FriendContact.setVisibility(View.INVISIBLE);
 
         Bundle Coordinates=getIntent().getExtras();
-        double[] lat=Coordinates.getDoubleArray("lat");
-        double[] lng=Coordinates.getDoubleArray("lng");
-        pickup=new LatLng(lat[0],lng[0]);
-        destination=new LatLng(lat[1],lng[1]);
+        if(Coordinates!=null){
+            double[] lat=Coordinates.getDoubleArray("lat");
+            double[] lng=Coordinates.getDoubleArray("lng");
+            if(lat!=null&&lng!=null){
+                pickup=new LatLng(lat[0],lng[0]);
+                destination=new LatLng(lat[1],lng[1]);
+            }
+        }
         radio.clearCheck();
 
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {

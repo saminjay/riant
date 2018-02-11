@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.activities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -55,6 +55,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.riantservices.riant.helpers.DirectionsJSONParser;
+import com.riantservices.riant.helpers.GPSTracker;
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.SessionManager;
+import com.riantservices.riant.helpers.SingleShotLocationProvider;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -256,7 +261,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 new SingleShotLocationProvider.LocationCallback() {
                     @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
                         Log.d("loc","My cordinates:"+ location.toString());
-                        LatLng CURRENT_LOCATION = new LatLng(location.latitude, location.longitude);
+                        LatLng CURRENT_LOCATION = new LatLng(location.getLatitude(), location.getLongitude());
                         userMarker.setPosition(CURRENT_LOCATION);
                         userMarker.setVisible(true);
                         CameraUpdate update = CameraUpdateFactory.newLatLng(CURRENT_LOCATION);
@@ -515,7 +520,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             try {
                 googleMap.addPolyline(lineOptions);
             }
-            catch (Exception e){
+            catch (Exception ignored){
 
             }
         }

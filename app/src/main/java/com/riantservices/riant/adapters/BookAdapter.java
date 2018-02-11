@@ -1,10 +1,8 @@
-package com.riantservices.riant;
+package com.riantservices.riant.adapters;
 
 
-import android.*;
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.riantservices.riant.R;
+import com.riantservices.riant.models.BookElements;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
     }
 
 
-    BookAdapter(Context context, List<BookElements> bookList) {
+    public BookAdapter(Context context, List<BookElements> bookList) {
         this.bookList = bookList;
         mcontext = context;
     }

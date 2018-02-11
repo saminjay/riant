@@ -37,7 +37,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".Splash"
+            android:name=".activities.Splash"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,19 +45,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".TripsActivity" />
-        <activity android:name=".AirportBookActivity" />
-        <activity android:name=".LocalBookActivity" />
-        <activity android:name=".CorporateBookActivity" />
-        <activity android:name=".OutstationBookActivity" />
-        <activity android:name=".OutstateBookActivity" />
-        <activity android:name=".StationBookActivity" />
-        <activity android:name=".TripMenu" />
-        <service android:name=".GPSTracker" />
-        <activity android:name=".AccountActivity" />
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.TripsActivity" />
+        <activity android:name=".activities.AirportBookActivity" />
+        <activity android:name=".activities.LocalBookActivity" />
+        <activity android:name=".activities.CorporateBookActivity" />
+        <activity android:name=".activities.OutstationBookActivity" />
+        <activity android:name=".activities.OutstateBookActivity" />
+        <activity android:name=".activities.StationBookActivity" />
+        <activity android:name=".activities.TripMenu" />
+        <service android:name=".helpers.GPSTracker" />
+        <activity android:name=".activities.AccountActivity" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.models;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -12,6 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.riantservices.riant.adapters.BookAdapter;
+import com.riantservices.riant.helpers.ClickListener;
+import com.riantservices.riant.helpers.ListDividerItem;
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.RecyclerTouchListener;
+import com.riantservices.riant.helpers.SessionManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -28,54 +35,6 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-class BookElements{
-    private String pickup, destination, dateTime, distance, driver, contact, fare;
-    BookElements(String pickup, String destination, String dateTime, String distance, String driver, String contact, String fare) {
-        this.pickup=pickup;
-        this.destination=destination;
-        this.dateTime=dateTime;
-        this.distance=distance;
-        this.driver=driver;
-        this.contact=contact;
-        this.fare=fare;
-    }
-    public String getPickup() {
-        return pickup;
-    }
-
-    public void setPickup(String pickup) {
-        this.pickup = pickup;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    String getDistance() {
-        return distance;
-    }
-
-    String getDateTime() {
-        return dateTime;
-    }
-
-    String getDriver() {
-        return driver;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) { this.contact = contact;}
-
-    public String getFare() { return fare;}
-}
 
 public class Book extends Fragment {
 

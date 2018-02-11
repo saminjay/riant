@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.helpers;
 
 import android.app.AlertDialog;
 import android.app.Service;

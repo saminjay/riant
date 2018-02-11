@@ -15,7 +15,7 @@
             xmlns:custom="http://schemas.android.com/apk/res-auto"
             android:animateLayoutChanges="true"
             android:id="@+id/com"
-            tool:context=".MainActivity">
+            tool:context=".activities.MainActivity">
 
             <RelativeLayout
                 android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_margin="8dp"/>
 
-            <com.riantservices.riant.SOSView
+            <com.riantservices.riant.models.SOSView
                 android:id="@+id/sos"
                 android:contentDescription="@string/app_name"
                 android:layout_width="50dp"

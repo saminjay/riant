@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.models;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -13,7 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
+import com.riantservices.riant.adapters.HistoryAdapter;
+import com.riantservices.riant.helpers.ClickListener;
+import com.riantservices.riant.helpers.ListDividerItem;
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.RecyclerTouchListener;
+import com.riantservices.riant.helpers.SessionManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -31,35 +36,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-class HistoryElements{
-    private String destination,dateTime,amount;
-    private LatLng latLng;
 
-    HistoryElements(String destination, String dateTime, String amount, double lat, double lng) {
-        this.destination = destination;
-        this.dateTime = dateTime;
-        this.amount = amount;
-        latLng=new LatLng(lat,lng);
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
-    }
-
-    String getDateTime() {
-        return dateTime;
-    }
-
-    String getAmount() {
-        return amount;
-    }
-
-    LatLng getLatLng(){ return latLng;}
-}
 
 public class History extends Fragment {
 

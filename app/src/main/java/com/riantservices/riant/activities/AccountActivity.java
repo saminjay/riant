@@ -1,4 +1,4 @@
-package com.riantservices.riant;
+package com.riantservices.riant.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
+import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.SessionManager;
 
 public class AccountActivity extends AppCompatActivity{
 

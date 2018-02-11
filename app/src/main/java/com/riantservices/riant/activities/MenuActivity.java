@@ -17,7 +17,7 @@ public class MenuActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trip_menu);
+        setContentView(R.layout.activity_menu);
         Intent intent=getIntent();
         Coordinates=intent.getBundleExtra("Coordinates");
         int p=Array.getLength(Coordinates.getDoubleArray("lat"));

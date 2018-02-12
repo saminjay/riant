@@ -1,12 +1,19 @@
-package com.riantservices.riant.activities;
+package com.riantservices.riant.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -29,68 +36,79 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-public class LocalBookActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class AirportBookFragment extends Fragment implements View.OnClickListener {
+
     SessionManager session;
     ImageButton oneway, roundtrip;
     Button AC, NonAC;
     private EditText Pickup, Destination, FriendContact;
     private RadioButton radio2;
     private String strEmail, strBookFor, strTrip, strAC, strPickup, strDestination, strNumber;
-    private LatLng pickup;
-    private List<LatLng> destination;
+    private LatLng pickup, destination;
+
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        destination = new ArrayList<>();
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.activity_airport_book, container, false);
+
+        Bundle coordinates = getActivity().getIntent().getExtras();
+
         strBookFor = "";
         strTrip = "";
         strAC = "";
         strPickup = "";
         strDestination = "";
         strNumber = "";
-        setContentView(R.layout.activity_local_book);
-        Button button = findViewById(R.id.button);
-        Button button1 = findViewById(R.id.button1);
-        oneway = findViewById(R.id.oneway);
-        roundtrip = findViewById(R.id.roundtrip);
-        AC = findViewById(R.id.AC);
-        NonAC = findViewById(R.id.NonAC);
+
+        if (coordinates != null) {
+            double[] lat = coordinates.getDoubleArray("lat");
+            double[] lng = coordinates.getDoubleArray("lng");
+
+            if (lat != null && lng != null) {
+                pickup = new LatLng(lat[0], lng[0]);
+                destination = new LatLng(lat[1], lng[1]);
+            }
+
+        }
+
+
+        Button button = rootView.findViewById(R.id.button);
+        Button button1 = rootView.findViewById(R.id.button1);
+        oneway = rootView.findViewById(R.id.oneway);
+        roundtrip = rootView.findViewById(R.id.roundtrip);
+        AC = rootView.findViewById(R.id.AC);
+        NonAC = rootView.findViewById(R.id.NonAC);
+
         button.setOnClickListener(this);
         button1.setOnClickListener(this);
         oneway.setOnClickListener(this);
         roundtrip.setOnClickListener(this);
         AC.setOnClickListener(this);
         NonAC.setOnClickListener(this);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().hide();
-        session = new SessionManager(getApplicationContext());
+
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
+        session = new SessionManager(getContext());
         strEmail = session.getEmail();
         RadioGroup radio;
-        Pickup = findViewById(R.id.edit1);
-        Destination = findViewById(R.id.edit2);
-        FriendContact = findViewById(R.id.edit3);
-        radio = findViewById(R.id.radio);
-        radio2 = findViewById(R.id.radio2);
+        Pickup = rootView.findViewById(R.id.edit1);
+        Destination = rootView.findViewById(R.id.edit2);
+        FriendContact = rootView.findViewById(R.id.edit3);
+        radio = rootView.findViewById(R.id.radio);
+        radio2 = rootView.findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
-
-        Bundle Coordinates = getIntent().getExtras();
-        if (Coordinates != null) {
-            double[] lat = Coordinates.getDoubleArray("lat");
-            double[] lng = Coordinates.getDoubleArray("lng");
-            if (lat != null && lng != null) {
-                pickup = new LatLng(lat[0], lng[0]);
-                for (int i = 1; i < lat.length; i++)
-                    destination.add(new LatLng(lat[i], lng[i]));
-            }
-        }
+        getAddress();
         radio.clearCheck();
-
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -131,6 +149,35 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         Destination.setOnFocusChangeListener(onFocusChangeListener);
         FriendContact.setOnFocusChangeListener(onFocusChangeListener);
 
+        return rootView;
+    }
+
+    public void getAddress() {
+        Geocoder geocoder = new Geocoder(getContext(), Locale.getDefault());
+        Address address;
+        String result;
+        try {
+            List<Address> pickupAddress;
+            List<Address> destinationAddress;
+            pickupAddress = geocoder.getFromLocation(pickup.latitude, pickup.longitude, 1);
+            destinationAddress = geocoder.getFromLocation(destination.latitude, destination.longitude, 1);
+            if (pickupAddress.size() > 0) {
+                address = pickupAddress.get(0);
+                result = "";
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+                    result = result.concat(address.getAddressLine(i) + " ");
+                Pickup.setText(result);
+            }
+            if (destinationAddress.size() > 0) {
+                address = destinationAddress.get(0);
+                result = "";
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
+                    result = result.concat(address.getAddressLine(i) + " ");
+                Destination.setText(result);
+            }
+        } catch (IOException | IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -165,22 +212,22 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
                 strDestination = Destination.getText().toString();
                 strNumber = FriendContact.getText().toString();
                 if (strPickup.matches("")) {
-                    alertDialog("Please enter your Pickup Location");
+                    alertDialog("Please enter your Pickup Location", getContext());
                 } else if (strDestination.matches("")) {
-                    alertDialog("Please enter your Destination");
+                    alertDialog("Please enter your Destination", getContext());
                 } else if (strBookFor.matches("")) {
-                    alertDialog("Please choose who are you booking the ride for.");
+                    alertDialog("Please choose who are you booking the ride for.", getContext());
                 } else if (radio2.isChecked() && strNumber.matches("")) {
-                    alertDialog("Please enter friend's contact number.");
+                    alertDialog("Please enter friend's contact number.", getContext());
                 } else if (strTrip.matches("")) {
-                    alertDialog("Please choose between one way or round trip");
+                    alertDialog("Please choose between one way or round trip", getContext());
                 } else if (strAC.matches("")) {
-                    alertDialog("Please choose between AC or Non-AC");
+                    alertDialog("Please choose between AC or Non-AC", getContext());
                 } else {
                     try {
                         Book();
                     } catch (UnsupportedEncodingException e) {
-                        alertDialog("Unsupported Encoding");
+                        alertDialog("Unsupported Encoding", getContext());
                     }
                 }
                 break;
@@ -190,9 +237,9 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void alertDialog(String Message) {
+    public void alertDialog(String Message, Context context) {
 
-        new AlertDialog.Builder(this).setTitle("Riant Alert").setMessage(Message)
+        new AlertDialog.Builder(context).setTitle("Riant Alert").setMessage(Message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -234,7 +281,7 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    alertDialog("Error: Cannot Estabilish Connection");
+                    alertDialog("Error: Cannot Estabilish Connection", getContext());
                 }
 
                 Looper.loop(); //Loop in the message queue
@@ -248,10 +295,10 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         JSONObject result = new JSONObject(in.toString());
 
         if (result.getInt("status") == 1) {
-            alertDialog("Booking Successful");
+            alertDialog("Booking Successful", getContext());
 
         } else {
-            alertDialog("System error, please contact with administrator");
+            alertDialog("System error, please contact with administrator", getContext());
         }
     }
 }

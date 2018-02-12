@@ -1,12 +1,17 @@
-package com.riantservices.riant.activities;
+package com.riantservices.riant.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -31,7 +36,8 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-public class CorporateBookActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class CorporateBookFragment extends Fragment implements View.OnClickListener {
     SessionManager session;
     private EditText Pickup, Destination, FriendContact, Time;
     private RadioButton radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9, radio10, radio11, radio12, radio13;
@@ -40,8 +46,11 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
     private LatLng pickup, destination;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        View rootView = inflater.inflate(R.layout.activity_corporate_book, container, false);
+
         strBookFor = "";
         mon = "n";
         strCar = "";
@@ -55,16 +64,17 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         strNumber = "";
         sat = "n";
         sun = "n";
-        setContentView(R.layout.activity_corporate_book);
-        Button mon = findViewById(R.id.mon);
-        Button tue = findViewById(R.id.tue);
-        Button wed = findViewById(R.id.wed);
-        Button thu = findViewById(R.id.thu);
-        Button fri = findViewById(R.id.fri);
-        Button sat = findViewById(R.id.sat);
-        Button sun = findViewById(R.id.sun);
-        Button button = findViewById(R.id.button);
-        Button button1 = findViewById(R.id.button1);
+
+        Button mon = rootView.findViewById(R.id.mon);
+        Button tue = rootView.findViewById(R.id.tue);
+        Button wed = rootView.findViewById(R.id.wed);
+        Button thu = rootView.findViewById(R.id.thu);
+        Button fri = rootView.findViewById(R.id.fri);
+        Button sat = rootView.findViewById(R.id.sat);
+        Button sun = rootView.findViewById(R.id.sun);
+        Button button = rootView.findViewById(R.id.button);
+        Button button1 = rootView.findViewById(R.id.button1);
+
         mon.setOnClickListener(this);
         tue.setOnClickListener(this);
         wed.setOnClickListener(this);
@@ -74,33 +84,36 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         sun.setOnClickListener(this);
         button.setOnClickListener(this);
         button1.setOnClickListener(this);
-        if (getSupportActionBar() != null)
-            getSupportActionBar().hide();
-        session = new SessionManager(getApplicationContext());
+
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        session = new SessionManager(getContext());
         strEmail = session.getEmail();
+
         RadioGroup radio, radioA, radioB, radioC;
-        Pickup = findViewById(R.id.edit1);
-        Destination = findViewById(R.id.edit2);
-        FriendContact = findViewById(R.id.edit3);
-        Time = findViewById(R.id.time);
-        radio = findViewById(R.id.radio);
-        radioA = findViewById(R.id.radioA);
-        radioB = findViewById(R.id.radioB);
-        radioC = findViewById(R.id.radioC);
-        radio2 = findViewById(R.id.radio2);
-        radio3 = findViewById(R.id.radio3);
-        radio4 = findViewById(R.id.radio4);
-        radio5 = findViewById(R.id.radio5);
-        radio6 = findViewById(R.id.radio6);
-        radio7 = findViewById(R.id.radio7);
-        radio8 = findViewById(R.id.radio8);
-        radio9 = findViewById(R.id.radio9);
-        radio10 = findViewById(R.id.radio10);
-        radio11 = findViewById(R.id.radio11);
-        radio12 = findViewById(R.id.radio12);
-        radio13 = findViewById(R.id.radio13);
+        Pickup = rootView.findViewById(R.id.edit1);
+        Destination = rootView.findViewById(R.id.edit2);
+        FriendContact = rootView.findViewById(R.id.edit3);
+        Time = rootView.findViewById(R.id.time);
+        radio = rootView.findViewById(R.id.radio);
+        radioA = rootView.findViewById(R.id.radioA);
+        radioB = rootView.findViewById(R.id.radioB);
+        radioC = rootView.findViewById(R.id.radioC);
+        radio2 = rootView.findViewById(R.id.radio2);
+        radio3 = rootView.findViewById(R.id.radio3);
+        radio4 = rootView.findViewById(R.id.radio4);
+        radio5 = rootView.findViewById(R.id.radio5);
+        radio6 = rootView.findViewById(R.id.radio6);
+        radio7 = rootView.findViewById(R.id.radio7);
+        radio8 = rootView.findViewById(R.id.radio8);
+        radio9 = rootView.findViewById(R.id.radio9);
+        radio10 = rootView.findViewById(R.id.radio10);
+        radio11 = rootView.findViewById(R.id.radio11);
+        radio12 = rootView.findViewById(R.id.radio12);
+        radio13 = rootView.findViewById(R.id.radio13);
         FriendContact.setVisibility(View.INVISIBLE);
-        Bundle Coordinates = getIntent().getExtras();
+
+        Bundle Coordinates = getActivity().getIntent().getExtras();
         if (Coordinates != null) {
             double[] lat = Coordinates.getDoubleArray("lat");
             double[] lng = Coordinates.getDoubleArray("lng");
@@ -268,7 +281,9 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         Destination.setOnFocusChangeListener(onFocusChangeListener);
         FriendContact.setOnFocusChangeListener(onFocusChangeListener);
 
+        return rootView;
     }
+
 
     @Override
     public void onClick(View view) {
@@ -342,28 +357,28 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
                 strNumber = FriendContact.getText().toString();
                 strTime = Time.getText().toString();
                 if (strPickup.matches("")) {
-                    alertDialog("Please enter your Pickup Location");
+                    alertDialog("Please enter your Pickup Location", getContext());
                 } else if (strDestination.matches("")) {
-                    alertDialog("Please enter your Destination");
+                    alertDialog("Please enter your Destination", getContext());
                 } else if (strBookFor.matches("")) {
-                    alertDialog("Please choose who are you booking the ride for.");
+                    alertDialog("Please choose who are you booking the ride for.", getContext());
                 } else if (radio2.isChecked() && strNumber.matches("")) {
-                    alertDialog("Please enter friend's contact number.");
+                    alertDialog("Please enter friend's contact number.", getContext());
                 } else if (strTime.matches("")) {
-                    alertDialog("Please select the time of arrival.");
+                    alertDialog("Please select the time of arrival.", getContext());
                 } else if (mon.equals("n") && tue.equals("n") && wed.equals("n") && thu.equals("n") && fri.equals("n") && sat.equals("n") && sun.equals("n")) {
-                    alertDialog("Please select atleast one working day.");
+                    alertDialog("Please select atleast one working day.", getContext());
                 } else if (strCar.matches("")) {
-                    alertDialog("Please choose a Car Type");
+                    alertDialog("Please choose a Car Type", getContext());
                 } else if (strAC.matches("")) {
-                    alertDialog("Please choose between AC or Non-AC");
+                    alertDialog("Please choose between AC or Non-AC", getContext());
                 } else if (strDuration.matches("")) {
-                    alertDialog("Please select the duration for which you want the service");
+                    alertDialog("Please select the duration for which you want the service", getContext());
                 } else {
                     try {
                         Book();
                     } catch (UnsupportedEncodingException e) {
-                        alertDialog("Unsupported Encoding");
+                        alertDialog("Unsupported Encoding", getContext());
                     }
                 }
                 break;
@@ -373,9 +388,9 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         }
     }
 
-    public void alertDialog(String Message) {
+    public void alertDialog(String Message, Context context) {
 
-        new AlertDialog.Builder(this).setTitle("Riant Alert").setMessage(Message)
+        new AlertDialog.Builder(context).setTitle("Riant Alert").setMessage(Message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -426,7 +441,7 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    alertDialog("Error: Cannot Estabilish Connection");
+                    alertDialog("Error: Cannot Estabilish Connection", getContext());
                 }
 
                 Looper.loop(); //Loop in the message queue
@@ -440,10 +455,11 @@ public class CorporateBookActivity extends AppCompatActivity implements View.OnC
         JSONObject result = new JSONObject(in.toString());
 
         if (result.getInt("status") == 1) {
-            alertDialog("Booking Successful");
+            alertDialog("Booking Successful", getContext());
 
         } else {
-            alertDialog("System error, please contact with administrator");
+            alertDialog("System error, please contact with administrator", getContext());
         }
     }
+
 }

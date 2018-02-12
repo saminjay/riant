@@ -1,14 +1,17 @@
-package com.riantservices.riant.activities;
+package com.riantservices.riant.fragments;
 
+import android.content.Context;
 import android.content.DialogInterface;
-import android.location.Address;
-import android.location.Geocoder;
+import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -31,68 +34,75 @@ import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.Locale;
 
-public class AirportBookActivity extends AppCompatActivity implements View.OnClickListener{
-    private EditText Pickup,Destination,FriendContact;
-    private RadioButton radio2;
-    private String strEmail,strBookFor,strTrip,strAC,strPickup, strDestination,strNumber;
-    private LatLng pickup,destination;
+public class StationBookFragment extends Fragment implements View.OnClickListener {
     SessionManager session;
-    ImageButton oneway,roundtrip;
-    Button AC,NonAC;
+    ImageButton oneway, roundtrip;
+    Button AC, NonAC;
+    private EditText Pickup, Destination, FriendContact;
+    private RadioButton radio2;
+    private String strEmail, strBookFor, strTrip, strAC, strPickup, strDestination, strNumber;
+    private LatLng pickup, destination;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Bundle Coordinates=getIntent().getExtras();
-        strBookFor="";strTrip="";strAC="";strPickup="";strDestination="";strNumber="";
-        double[] lat=Coordinates.getDoubleArray("lat");
-        double[] lng=Coordinates.getDoubleArray("lng");
-        pickup=new LatLng(lat[0],lng[0]);
-        destination=new LatLng(lat[1],lng[1]);
-        setContentView(R.layout.activity_airport_book);
-        Button button=findViewById(R.id.button);
-        Button button1=findViewById(R.id.button1);
-        oneway=findViewById(R.id.oneway);
-        roundtrip=findViewById(R.id.roundtrip);
-        AC =findViewById(R.id.AC);
-        NonAC=findViewById(R.id.NonAC);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_station_book, container, false);
+
+        strBookFor = "";
+        strTrip = "";
+        strAC = "";
+        strPickup = "";
+        strDestination = "";
+        strNumber = "";
+
+        Button button = rootView.findViewById(R.id.button);
+        Button button1 = rootView.findViewById(R.id.button1);
+        oneway = rootView.findViewById(R.id.oneway);
+        roundtrip = rootView.findViewById(R.id.roundtrip);
+        AC = rootView.findViewById(R.id.AC);
+        NonAC = rootView.findViewById(R.id.NonAC);
         button.setOnClickListener(this);
         button1.setOnClickListener(this);
         oneway.setOnClickListener(this);
         roundtrip.setOnClickListener(this);
         AC.setOnClickListener(this);
         NonAC.setOnClickListener(this);
-        if(getSupportActionBar()!=null)
-            getSupportActionBar().hide();
-        session=new SessionManager(getApplicationContext());
-        strEmail=session.getEmail();
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        session = new SessionManager(getContext());
+        strEmail = session.getEmail();
         RadioGroup radio;
-        Pickup=findViewById(R.id.edit1);
-        Destination=findViewById(R.id.edit2);
-        FriendContact=findViewById(R.id.edit3);
-        radio=findViewById(R.id.radio);
-        radio2=findViewById(R.id.radio2);
+        Pickup = rootView.findViewById(R.id.edit1);
+        Destination = rootView.findViewById(R.id.edit2);
+        FriendContact = rootView.findViewById(R.id.edit3);
+        radio = rootView.findViewById(R.id.radio);
+        radio2 = rootView.findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
-        getAddress();
+        Bundle Coordinates = getActivity().getIntent().getBundleExtra("Coordinates");
+        if (Coordinates != null) {
+            double[] lat = Coordinates.getDoubleArray("lat");
+            double[] lng = Coordinates.getDoubleArray("lng");
+            if (lat != null && lng != null) {
+                pickup = new LatLng(lat[0], lng[0]);
+                destination = new LatLng(lat[1], lng[1]);
+            }
+        }
         radio.clearCheck();
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch(checkedId){
+                switch (checkedId) {
                     case R.id.radio1:
-                        strBookFor="";
-                        strBookFor="For Yourself";
+                        strBookFor = "";
+                        strBookFor = "For Yourself";
                         FriendContact.setVisibility(View.INVISIBLE);
                         break;
                     case R.id.radio2:
-                        strBookFor="";
-                        strBookFor="Friend";
+                        strBookFor = "";
+                        strBookFor = "Friend";
                         FriendContact.setText("");
                         FriendContact.setVisibility(View.VISIBLE);
                         break;
@@ -103,13 +113,12 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
         View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(hasFocus){
+                if (hasFocus) {
                     TextView textView = (TextView) v;
                     textView.setBackground(getResources().getDrawable(R.drawable.textboxselected));
                     textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
                     textView.setTextColor(getResources().getColor(R.color.colorBlack));
-                }
-                else{
+                } else {
                     TextView textView = (TextView) v;
                     textView.setBackground(getResources().getDrawable(R.drawable.textboxborder));
                     textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
@@ -122,37 +131,9 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
         Destination.setOnFocusChangeListener(onFocusChangeListener);
         FriendContact.setOnFocusChangeListener(onFocusChangeListener);
 
+        return rootView;
     }
 
-    public void getAddress(){
-        Geocoder geocoder=new Geocoder(this, Locale.getDefault());
-        Address address;
-        String result;
-        try {
-            List<Address> pickupAddress;
-            List<Address> destinationAddress;
-            pickupAddress = geocoder.getFromLocation(pickup.latitude, pickup.longitude, 1);
-            destinationAddress = geocoder.getFromLocation(destination.latitude, destination.longitude, 1);
-            if(pickupAddress.size()>0){
-                address=pickupAddress.get(0);
-                result="";
-                for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-                    result=result.concat(address.getAddressLine(i)+" ");
-                Pickup.setText(result);
-            }
-            if(destinationAddress.size()>0){
-                address=destinationAddress.get(0);
-                result="";
-                for (int i = 0; i < address.getMaxAddressLineIndex(); i++)
-                    result=result.concat(address.getAddressLine(i)+" ");
-                Destination.setText(result);
-            }
-        }
-        catch (IOException | IllegalArgumentException e)
-        {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void onClick(View view) {
@@ -160,49 +141,48 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
             case R.id.oneway:
                 oneway.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonshape));
-                strTrip="";
-                strTrip="Oneway";
+                strTrip = "";
+                strTrip = "Oneway";
                 break;
             case R.id.roundtrip:
                 roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 oneway.setBackground(getResources().getDrawable(R.drawable.buttonshape));
-                strTrip="";
-                strTrip="Roundtrip";
+                strTrip = "";
+                strTrip = "Roundtrip";
                 break;
             case R.id.AC:
                 AC.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 NonAC.setBackground(getResources().getDrawable(R.drawable.buttonshape));
-                strAC="";
-                strAC="AC";
+                strAC = "";
+                strAC = "AC";
                 break;
             case R.id.NonAC:
                 NonAC.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 AC.setBackground(getResources().getDrawable(R.drawable.buttonshape));
-                strAC="";
-                strAC="NonAC";
+                strAC = "";
+                strAC = "NonAC";
                 break;
             case R.id.button1:
                 strPickup = Pickup.getText().toString();
                 strDestination = Destination.getText().toString();
                 strNumber = FriendContact.getText().toString();
                 if (strPickup.matches("")) {
-                    alertDialog("Please enter your Pickup Location");
+                    alertDialog("Please enter your Pickup Location", getContext());
                 } else if (strDestination.matches("")) {
-                    alertDialog("Please enter your Destination");
+                    alertDialog("Please enter your Destination", getContext());
                 } else if (strBookFor.matches("")) {
-                    alertDialog("Please choose who are you booking the ride for.");
-                } else if (radio2.isChecked()&&strNumber.matches("")) {
-                    alertDialog("Please enter friend's contact number.");
-                } else if(strTrip.matches("")) {
-                    alertDialog("Please choose between one way or round trip");
-                } else if(strAC.matches("")) {
-                    alertDialog("Please choose between AC or Non-AC");
+                    alertDialog("Please choose who are you booking the ride for.", getContext());
+                } else if (radio2.isChecked() && strNumber.matches("")) {
+                    alertDialog("Please enter friend's contact number.", getContext());
+                } else if (strTrip.matches("")) {
+                    alertDialog("Please choose between one way or round trip", getContext());
+                } else if (strAC.matches("")) {
+                    alertDialog("Please choose between AC or Non-AC", getContext());
                 } else {
                     try {
                         Book();
-                    }
-                    catch (UnsupportedEncodingException e){
-                        alertDialog("Unsupported Encoding");
+                    } catch (UnsupportedEncodingException e) {
+                        alertDialog("Unsupported Encoding", getContext());
                     }
                 }
                 break;
@@ -212,16 +192,16 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public void alertDialog(String Message) {
+    public void alertDialog(String Message, Context context) {
 
-        new AlertDialog.Builder(this).setTitle("Riant Alert").setMessage(Message)
+        new AlertDialog.Builder(context).setTitle("Riant Alert").setMessage(Message)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).setIcon(android.R.drawable.ic_dialog_alert).show();
     }
 
-    protected void Book()throws UnsupportedEncodingException{
+    protected void Book() throws UnsupportedEncodingException {
         Thread t = new Thread() {
 
             public void run() {
@@ -235,28 +215,28 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
                     HttpPost post = new HttpPost("url");
                     json.put("email", strEmail);
                     json.put("pickup", strPickup);
-                    json.put("pickupCoordinate",pickup);
+                    json.put("pickupCoordinate", pickup);
                     json.put("destination", strDestination);
-                    json.put("destinationCoordinate",destination);
+                    json.put("destinationCoordinate", destination);
                     json.put("bookFor", strBookFor);
                     json.put("number", strNumber);
                     json.put("ac", strAC);
                     json.put("trip", strTrip);
-                    StringEntity se = new StringEntity( json.toString());
+                    StringEntity se = new StringEntity(json.toString());
                     se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
                     post.setEntity(se);
                     response = client.execute(post);
 
                 /*Checking response */
-                    if(response!=null){
+                    if (response != null) {
                         InputStream in = response.getEntity().getContent(); //Get the data in the entity
                         respond(in);
 
                     }
 
-                } catch(Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                    alertDialog("Error: Cannot Estabilish Connection");
+                    alertDialog("Error: Cannot Estabilish Connection", getContext());
                 }
 
                 Looper.loop(); //Loop in the message queue
@@ -266,15 +246,14 @@ public class AirportBookActivity extends AppCompatActivity implements View.OnCli
         t.start();
     }
 
-    public void respond(InputStream in)throws JSONException{
-        JSONObject result=new JSONObject(in.toString());
+    public void respond(InputStream in) throws JSONException {
+        JSONObject result = new JSONObject(in.toString());
 
-        if(result.getInt("status")==1){
-            alertDialog("Booking Successful");
+        if (result.getInt("status") == 1) {
+            alertDialog("Booking Successful", getContext());
 
-        }
-        else{
-            alertDialog("System error, please contact with administrator");
+        } else {
+            alertDialog("System error, please contact with administrator", getContext());
         }
     }
 }

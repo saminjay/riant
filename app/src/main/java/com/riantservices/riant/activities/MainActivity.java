@@ -1,28 +1,5 @@
 package com.riantservices.riant.activities;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.protocol.HTTP;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -55,19 +32,42 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.riantservices.riant.R;
 import com.riantservices.riant.helpers.DirectionsJSONParser;
 import com.riantservices.riant.helpers.GPSTracker;
-import com.riantservices.riant.R;
 import com.riantservices.riant.helpers.SessionManager;
 import com.riantservices.riant.helpers.SingleShotLocationProvider;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
     static GoogleMap googleMap;
-    private Marker userMarker;
     SessionManager session;
     boolean pickupMarked = false;
+    private Marker userMarker;
     private LatLng pickup;
     private List<LatLng> destination;
     private DrawerLayout mDrawerLayout;
@@ -360,7 +360,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
         try {
-            t.sleep(2000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

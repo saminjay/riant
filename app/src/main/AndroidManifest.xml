@@ -49,12 +49,7 @@
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.TripsActivity" />
-        <activity android:name=".activities.AirportBookActivity" />
         <activity android:name=".activities.LocalBookActivity" />
-        <activity android:name=".activities.CorporateBookActivity" />
-        <activity android:name=".activities.OutstationBookActivity" />
-        <activity android:name=".activities.OutstateBookActivity" />
-        <activity android:name=".activities.StationBookActivity" />
         <activity android:name=".activities.MenuActivity" />
         <service android:name=".helpers.GPSTracker" />
         <activity android:name=".activities.AccountActivity" />

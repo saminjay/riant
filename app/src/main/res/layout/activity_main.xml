@@ -93,8 +93,8 @@
                 android:id="@+id/proceed"
                 android:layout_width="45dp"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/sos"
-                android:layout_alignStart="@+id/sos"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="@drawable/buttonselected"
                 android:text=">>"
@@ -112,18 +112,6 @@
                 android:layout_alignParentBottom="true"
                 android:layout_margin="8dp"/>
 
-            <com.riantservices.riant.models.SOSView
-                android:id="@+id/sos"
-                android:contentDescription="@string/app_name"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                custom:circleLabel="SOS"
-                custom:circleColor="@android:color/holo_red_dark"
-                custom:labelColor="@color/colorWhite"
-                android:layout_margin="10dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
         </RelativeLayout>
     </FrameLayout>
     <!-- The navigation drawer -->

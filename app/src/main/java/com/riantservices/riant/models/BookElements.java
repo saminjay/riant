@@ -2,7 +2,7 @@ package com.riantservices.riant.models;
 
 public class BookElements{
     private String pickup, destination, dateTime, distance, driver, contact, fare;
-    BookElements(String pickup, String destination, String dateTime, String distance, String driver, String contact, String fare) {
+    public BookElements(String pickup, String destination, String dateTime, String distance, String driver, String contact, String fare) {
         this.pickup = pickup;
         this.destination = destination;
         this.dateTime = dateTime;

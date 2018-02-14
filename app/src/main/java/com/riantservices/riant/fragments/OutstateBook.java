@@ -36,27 +36,22 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
-
-public class LocalBookFragment extends Fragment implements View.OnClickListener {
-
+public class OutstateBook extends Fragment implements View.OnClickListener {
     SessionManager session;
     ImageButton oneway, roundtrip;
     Button AC, NonAC;
     private EditText Pickup, Destination, FriendContact;
     private RadioButton radio2;
     private String strEmail, strBookFor, strTrip, strAC, strPickup, strDestination, strNumber;
-    private LatLng pickup;
-    private List<LatLng> destination;
+    private LatLng pickup, destination;
+
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_local_book, container, false);
+        View rootView = inflater.inflate(R.layout.activity_outstate_book, container, false);
 
-        destination = new ArrayList<>();
         strBookFor = "";
         strTrip = "";
         strAC = "";
@@ -94,8 +89,7 @@ public class LocalBookFragment extends Fragment implements View.OnClickListener 
             double[] lng = Coordinates.getDoubleArray("lng");
             if (lat != null && lng != null) {
                 pickup = new LatLng(lat[0], lng[0]);
-                for (int i = 1; i < lat.length; i++)
-                    destination.add(new LatLng(lat[i], lng[i]));
+                destination = new LatLng(lat[1], lng[1]);
             }
         }
         radio.clearCheck();
@@ -142,7 +136,6 @@ public class LocalBookFragment extends Fragment implements View.OnClickListener 
 
         return rootView;
     }
-
 
     @Override
     public void onClick(View view) {
@@ -265,6 +258,4 @@ public class LocalBookFragment extends Fragment implements View.OnClickListener 
             alertDialog("System error, please contact with administrator", getContext());
         }
     }
-
-
 }

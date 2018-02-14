@@ -37,7 +37,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 
-public class CorporateBookFragment extends Fragment implements View.OnClickListener {
+public class CorporateBook extends Fragment implements View.OnClickListener {
     SessionManager session;
     private EditText Pickup, Destination, FriendContact, Time;
     private RadioButton radio2, radio3, radio4, radio5, radio6, radio7, radio8, radio9, radio10, radio11, radio12, radio13;

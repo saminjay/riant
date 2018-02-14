@@ -6,7 +6,7 @@ public class HistoryElements{
     private String destination,dateTime,amount;
     private LatLng latLng;
 
-    HistoryElements(String destination, String dateTime, String amount, double lat, double lng) {
+    public HistoryElements(String destination, String dateTime, String amount, double lat, double lng) {
         this.destination = destination;
         this.dateTime = dateTime;
         this.amount = amount;

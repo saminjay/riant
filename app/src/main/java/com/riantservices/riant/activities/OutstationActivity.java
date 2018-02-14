@@ -1,5 +1,6 @@
 package com.riantservices.riant.activities;
 
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.support.design.widget.TabLayout;
@@ -7,18 +8,19 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
 
-import com.riantservices.riant.fragments.Book;
-import com.riantservices.riant.fragments.History;
+import com.google.android.gms.maps.model.LatLng;
 import com.riantservices.riant.R;
+import com.riantservices.riant.fragments.OutstationBook;
+import com.riantservices.riant.fragments.OutstationMap;
+import com.riantservices.riant.interfaces.SendMessage;
 
-public class TripsActivity extends AppCompatActivity{
+public class OutstationActivity extends AppCompatActivity implements SendMessage{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_trips);
+        setContentView(R.layout.activity_outstation);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         /*
@@ -58,9 +60,9 @@ public class TripsActivity extends AppCompatActivity{
         public Fragment getItem(int position) {
             switch(position){
                 case 0:
-                    return new Book();
+                    return new OutstationMap();
                 case 1:
-                    return new History();
+                    return new OutstationBook();
                 default:
                     return null;
             }
@@ -76,11 +78,18 @@ public class TripsActivity extends AppCompatActivity{
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "BOOKINGS";
+                    return "MAP";
                 case 1:
-                    return "HISTORY";
+                    return "BOOK";
             }
             return null;
         }
+    }
+
+    @Override
+    public void sendData(LatLng location, String message, int x) {
+        String tag = "android:switcher:" + R.id.container + ":" + 1;
+        OutstationBook outstationBook = (OutstationBook) getFragmentManager().findFragmentByTag(tag);
+        outstationBook.displayReceivedData(location,message,x);
     }
 }

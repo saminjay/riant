@@ -3,10 +3,8 @@ package com.riantservices.riant.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
@@ -31,9 +29,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
 import com.riantservices.riant.R;
-import com.riantservices.riant.helpers.DirectionsJSONParser;
+import com.riantservices.riant.helpers.DownloadRouteTask;
 import com.riantservices.riant.helpers.GPSTracker;
 import com.riantservices.riant.helpers.SessionManager;
 import com.riantservices.riant.helpers.SingleShotLocationProvider;
@@ -50,15 +47,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -260,11 +252,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         SingleShotLocationProvider.requestSingleUpdate(MainActivity.this,
                 new SingleShotLocationProvider.LocationCallback() {
                     @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
-                        Log.d("loc","My cordinates:"+ location.toString());
+                        Log.d("loc","My cordinates:"+ location.getLatitude()+","+ location.getLongitude());
                         LatLng CURRENT_LOCATION = new LatLng(location.getLatitude(), location.getLongitude());
                         userMarker.setPosition(CURRENT_LOCATION);
                         userMarker.setVisible(true);
-                        CameraUpdate update = CameraUpdateFactory.newLatLng(CURRENT_LOCATION);
+                        userMarker.showInfoWindow();
+                        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION,15);
                         googleMap.animateCamera(update);
                     }
                 });
@@ -278,14 +271,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng origin = pickup;
                 LatLng dest = destination.get(0);
                 String url = getDirectionsUrl(origin, dest);
-                DownloadTask downloadTask = new DownloadTask();
-                downloadTask.execute(url);
+                DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap,null);
+                downloadRouteTask.execute(url);
             } else {
                 LatLng origin = destination.get(destination.size() - 2);
                 LatLng dest = destination.get(destination.size() - 1);
                 String url = getDirectionsUrl(origin, dest);
-                DownloadTask downloadTask = new DownloadTask();
-                downloadTask.execute(url);
+                DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap,null);
+                downloadRouteTask.execute(url);
             }
         } else {
             pickup = latLng;
@@ -306,7 +299,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         //}
         //alertDialog(Float.toString(d));
         i=0;
-        final Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+        final Intent intent = new Intent(MainActivity.this, LocalBookActivity.class);
         Bundle bundle = new Bundle();
         double[] lat = new double[destination.size() + 1];
         double[] lng = new double[destination.size() + 1];
@@ -418,111 +411,5 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
         String output = "json";
         return  "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
-    }
-
-    static class DownloadTask extends AsyncTask<String,Integer,String> {
-
-        @Override
-        protected String doInBackground(String... url) {
-
-            String data = "";
-
-            try {
-                data = downloadUrl(url[0]);
-            } catch (Exception e) {
-                Log.d("Background Task", e.toString());
-            }
-            return data;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-
-            ParserTask parserTask = new ParserTask();
-
-
-            parserTask.execute(result);
-
-        }
-
-        private String downloadUrl(String strUrl) throws IOException {
-            String data = "";
-            InputStream iStream = null;
-            HttpURLConnection urlConnection = null;
-            try {
-                URL url = new URL(strUrl);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.connect();
-                iStream = urlConnection.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line);
-                }
-                data = sb.toString();
-                br.close();
-            } catch (Exception e) {
-                Log.d("Exception", e.toString());
-            } finally {
-                if(iStream!=null) iStream.close();
-                if(urlConnection!=null) urlConnection.disconnect();
-            }
-            return data;
-        }
-    }
-
-    static class ParserTask extends AsyncTask<String, Integer, List<List<HashMap<String,String>>>> {
-
-        @Override
-        protected List<List<HashMap<String,String>>> doInBackground(String... jsonData) {
-
-            JSONObject jObject;
-            List<List<HashMap<String,String>>> routes = null;
-
-            try {
-                jObject = new JSONObject(jsonData[0]);
-                DirectionsJSONParser parser = new DirectionsJSONParser();
-                routes = parser.parse(jObject);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return routes;
-        }
-
-        @Override
-        protected void onPostExecute(List<List<HashMap<String,String>>> result) {
-            ArrayList<LatLng> points;
-            PolylineOptions lineOptions = null;
-
-            for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList<>();
-                lineOptions = new PolylineOptions();
-
-                List<HashMap<String,String>> path = result.get(i);
-
-                for (int j = 0; j < path.size(); j++) {
-                    HashMap<String, String> point = path.get(j);
-
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
-
-                    points.add(position);
-                }
-
-                lineOptions.addAll(points);
-                lineOptions.width(12);
-                lineOptions.color(Color.argb(255,255,50,0));
-                lineOptions.geodesic(true);
-            }
-            try {
-                googleMap.addPolyline(lineOptions);
-            }
-            catch (Exception ignored){
-
-            }
-        }
     }
 }

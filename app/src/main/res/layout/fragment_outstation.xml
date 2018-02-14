@@ -4,16 +4,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/title0"
-        android:adjustViewBounds="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
@@ -58,7 +48,7 @@
                 android:layout_alignBaseline="@id/text1"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:hint="Enter Pickup Location"
+                android:hint="Choose Pickup on MAP"
                 android:maxLines="1"
                 android:textColorHint="@color/colorWhite"
                 android:textSize="14sp"
@@ -77,20 +67,49 @@
                 android:id="@+id/edit2"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/text2"
+                android:layout_alignBaseline="@id/text2"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:hint="Enter Destination Location"
+                android:hint="Choose Destination on MAP"
                 android:maxLines="1"
                 android:textColorHint="@color/colorWhite"
                 android:textSize="14sp"
                 android:background="@drawable/textboxborder" />
 
+            <LinearLayout
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edit2"
+                android:layout_centerHorizontal="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:padding="4dp"
+                    android:textSize="24sp"
+                    android:text="Distance:"/>
+
+                <TextView
+                    android:id="@+id/distance1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:layout_alignBaseline="@id/distance"
+                    android:layout_marginTop="10dp"
+                    android:padding="4dp"
+                    android:textSize="24sp"
+                    android:textColor="@color/colorWhite"/>
+            </LinearLayout>
+
+
             <TextView
                 android:id="@+id/text3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text2"
+                android:layout_below="@id/distance"
                 android:layout_marginTop="10dp"
                 android:textSize="18sp"
                 android:text="For whom you want to book the ride?"/>
@@ -122,6 +141,7 @@
                 android:textColorHint="@color/colorWhite"
                 android:hint="Friend's Mobile Number"
                 android:layout_height="wrap_content"
+                android:padding="4dp"
                 android:textSize="14sp"
                 android:layout_margin="0dp"
                 android:layout_alignParentRight="true"

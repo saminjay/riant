@@ -1,6 +1,9 @@
 package com.riantservices.riant.helpers;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
+import com.riantservices.riant.models.DistanceDirection;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,12 +15,13 @@ import java.util.List;
 
 public class DirectionsJSONParser {
 
-    public List<List<HashMap<String,String>>> parse(JSONObject jObject){
+    public DistanceDirection parse(JSONObject jObject){
 
         List<List<HashMap<String, String>>> routes = new ArrayList<>() ;
         JSONArray jRoutes;
         JSONArray jLegs;
         JSONArray jSteps;
+        float distance = 0;
 
         try {
 
@@ -33,6 +37,7 @@ public class DirectionsJSONParser {
                     for(int k=0;k<jSteps.length();k++){
                         String polyline;
                         polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
+                        distance += (((JSONObject)((JSONObject)jSteps.get(k)).get("distance")).getInt("value"));
                         List<LatLng> list = decodePoly(polyline);
 
                         for(int l=0;l <list.size();l++){
@@ -50,8 +55,7 @@ public class DirectionsJSONParser {
             e.printStackTrace();
         }catch (Exception ignored){
         }
-
-        return routes;
+        return new DistanceDirection(distance,routes);
     }
 
     private List<LatLng> decodePoly(String encoded) {

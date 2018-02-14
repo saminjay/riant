@@ -1,4 +1,4 @@
-package com.riantservices.riant.models;
+package com.riantservices.riant.fragments;
 
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -13,12 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.riantservices.riant.adapters.BookAdapter;
-import com.riantservices.riant.helpers.ClickListener;
+import com.riantservices.riant.adapters.HistoryAdapter;
+import com.riantservices.riant.interfaces.ClickListener;
 import com.riantservices.riant.helpers.ListDividerItem;
 import com.riantservices.riant.R;
 import com.riantservices.riant.helpers.RecyclerTouchListener;
 import com.riantservices.riant.helpers.SessionManager;
+import com.riantservices.riant.models.HistoryElements;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -36,16 +37,18 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book extends Fragment {
 
-    private List<BookElements> BookList = new ArrayList<>();
+
+public class History extends Fragment {
+
+    private List<HistoryElements> HistoryList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.book, container, false);
+        View rootView = inflater.inflate(R.layout.history, container, false);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view);
-        BookAdapter mAdapter = new BookAdapter(this.getActivity(),BookList);
+        HistoryAdapter mAdapter = new HistoryAdapter(HistoryList,this.getActivity());
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -54,38 +57,32 @@ public class Book extends Fragment {
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), recyclerView, new ClickListener() {
             @Override
             public void onClick(View view, int position) {
+                HistoryElements HistoryElements = HistoryList.get(position);
+                Toast.makeText(getActivity(), HistoryElements.getDestination(), Toast.LENGTH_SHORT).show();
             }
-
             @Override
             public void onLongClick(View view, int position) {
-                BookElements bookElements = BookList.get(position);
-                Toast.makeText(getActivity(), bookElements.getPickup()+ " to "+bookElements.getDestination(), Toast.LENGTH_SHORT).show();
             }
         }));
         getDummyData();
-        fetchBookData();
+        fetchHistoryData();
         return rootView;
     }
 
     private void getDummyData(){
-        String pickup,destination,dateTime,distance,driver,contact,fare;
-        BookElements BookElement;
-        pickup = "District Center, Chandrasekharpur";
+        String destination,dateTime,fare;
+        double lat,lng;
+        HistoryElements HistoryElement;
+        destination = "Plot No-176, Saheed Nagar";
         dateTime = "On 06/12/2017 at 10:30 am";
         fare = "100.00";
-        distance = "15.1 kms";
-        driver = "Vahan Vahak";
-        contact = "9999999999";
-        destination = "Plot No-176, Saheed Nagar";
-        BookElement = new BookElements(pickup,destination,dateTime,distance,driver,contact,fare);
-        BookList.add(BookElement);
-        BookList.add(BookElement);
-        BookList.add(BookElement);
-        BookList.add(BookElement);
-        BookList.add(BookElement);
+        lat = 20.2;
+        lng = 85;
+        HistoryElement = new HistoryElements(destination,dateTime,fare,lat,lng);
+        HistoryList.add(HistoryElement);
     }
 
-    private void fetchBookData() {
+    private void fetchHistoryData() {
         final SessionManager session = new SessionManager(getActivity());
         Thread t = new Thread() {
 
@@ -125,21 +122,20 @@ public class Book extends Fragment {
     public void respond(InputStream in)throws JSONException {
         JSONObject result = new JSONObject(in.toString());
         JSONObject resultArrayJson;
-        JSONArray book = result.getJSONArray("history");
-        String pickup,destination,dateTime,distance,driver,contact,fare;
-        BookElements BookElement;
-        int lenArray = book.length();
+        JSONArray history = result.getJSONArray("history");
+        String destination,dateTime,fare;
+        double lat,lng;
+        HistoryElements HistoryElement;
+        int lenArray = history.length();
         for (int i = 0; i < lenArray; i++) {
-            resultArrayJson = book.getJSONObject(i);
-            pickup = resultArrayJson.getString("pickup");
+            resultArrayJson = history.getJSONObject(i);
             destination = resultArrayJson.getString("destination");
             dateTime = resultArrayJson.getString("dateTime");
-            distance = result.getString("distance");
-            driver = result.getString("driver");
-            contact = result.getString("contact");
-            fare = result.getString("fare");
-            BookElement = new BookElements(pickup,destination,dateTime,distance,driver,contact,fare);
-            BookList.add(BookElement);
+            fare = resultArrayJson.getString("fare");
+            lat = result.getDouble("lat");
+            lng = result.getDouble("lng");
+            HistoryElement = new HistoryElements(destination,dateTime,fare,lat,lng);
+            HistoryList.add(HistoryElement);
         }
     }
 

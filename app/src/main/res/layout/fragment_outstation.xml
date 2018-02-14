@@ -20,6 +20,7 @@
         android:layout_below="@id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,51 +31,57 @@
                 android:id="@+id/line1"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/colorWhite"/>
+                android:background="@color/colorWhite" />
 
-            <TextView
+            <ImageView
+                android:id="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/line1"
-                android:id="@+id/text1"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                android:text="Pickup:"/>
+                android:layout_alignBottom="@+id/edit1"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/edit1"
+                android:src="@drawable/bar"
+                android:textSize="18sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edit1"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/text1"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:layout_below="@id/line1"
+                android:layout_marginTop="12dp"
+                android:layout_toRightOf="@id/text2"
+                android:background="@drawable/textboxborder"
                 android:hint="Choose Pickup on MAP"
                 android:maxLines="1"
                 android:textColorHint="@color/colorWhite"
-                android:textSize="14sp"
-                android:background="@drawable/textboxborder"/>
+                android:textSize="14sp" />
 
-            <TextView
+            <ImageView
                 android:id="@+id/text2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/text1"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                android:text="Destination:"/>
+                android:layout_alignBottom="@+id/edit2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/edit2"
+                android:src="@drawable/bar"
+                android:textSize="18sp" />
 
-            <EditText
+            <TextView
                 android:id="@+id/edit2"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@id/text2"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
+                android:layout_below="@id/edit1"
+                android:layout_marginTop="12dp"
+                android:layout_toRightOf="@id/text2"
+                android:background="@drawable/textboxborder"
                 android:hint="Choose Destination on MAP"
                 android:maxLines="1"
                 android:textColorHint="@color/colorWhite"
-                android:textSize="14sp"
-                android:background="@drawable/textboxborder" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:id="@+id/distance"
@@ -89,19 +96,19 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:padding="4dp"
-                    android:textSize="24sp"
-                    android:text="Distance:"/>
+                    android:text="Distance:"
+                    android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/distance1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="NA"
                     android:layout_alignBaseline="@id/distance"
                     android:layout_marginTop="10dp"
                     android:padding="4dp"
-                    android:textSize="24sp"
-                    android:textColor="@color/colorWhite"/>
+                    android:text="NA"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="24sp" />
             </LinearLayout>
 
 
@@ -111,84 +118,89 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/distance"
                 android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                android:text="For whom you want to book the ride?"/>
+                android:text="For whom you want to book the ride?"
+                android:textSize="18sp" />
 
             <RadioGroup
                 android:id="@+id/radio"
-                android:layout_below="@id/text3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/text3"
                 android:layout_marginLeft="30dp">
+
                 <RadioButton
                     android:id="@+id/radio1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:text="For Yourself"/>
+                    android:text="For Yourself"
+                    android:textSize="14sp" />
+
                 <RadioButton
                     android:id="@+id/radio2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:text="For Friend"/>
+                    android:text="For Friend"
+                    android:textSize="14sp" />
             </RadioGroup>
 
             <EditText
                 android:id="@+id/edit3"
-                android:layout_alignBottom="@id/radio"
                 android:layout_width="160dp"
-                android:textColorHint="@color/colorWhite"
-                android:hint="Friend's Mobile Number"
                 android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:textSize="14sp"
-                android:layout_margin="0dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignBottom="@id/radio"
                 android:layout_alignParentEnd="true"
-                android:background="@drawable/textboxborder"/>
+                android:layout_alignParentRight="true"
+                android:inputType="phone"
+                android:background="@drawable/textboxborder"
+                android:hint="Friend's Mobile Number"
+                android:padding="4dp"
+                android:textColorHint="@color/colorWhite"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/line2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/white"
+                android:layout_below="@id/radio"
                 android:layout_marginTop="20dp"
-                android:layout_below="@id/radio"/>
+                android:background="@android:color/white" />
 
             <LinearLayout
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
                 android:id="@+id/trip"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:layout_below="@id/line2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/line2"
+                android:gravity="center"
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <TextView
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="One Way"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textSize="20sp"/>
+                        android:text="One Way"
+                        android:textSize="20sp" />
+
                     <ImageButton
-                        android:layout_margin="5dp"
-                        android:layout_height="40dp"
+                        android:id="@+id/oneway"
                         android:layout_width="40dp"
-                        android:scaleType="fitCenter"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:adjustViewBounds="true"
                         android:background="@drawable/buttonshape"
-                        android:id="@+id/oneway"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/oneway"
-                        android:layout_gravity="center"
-                        android:text="One-Way"/>
+                        android:text="One-Way" />
                 </LinearLayout>
 
                 <TextView
@@ -202,23 +214,25 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <TextView
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
-                        android:text="Round Trip"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:textSize="20sp"/>
+                        android:text="Round Trip"
+                        android:textSize="20sp" />
+
                     <ImageButton
                         android:id="@+id/roundtrip"
-                        android:layout_margin="5dp"
-                        android:layout_height="40dp"
                         android:layout_width="40dp"
-                        android:scaleType="fitCenter"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:adjustViewBounds="true"
                         android:background="@drawable/buttonshape"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/twoway"
-                        android:layout_gravity="center"
-                        android:text="One-Way"/>
+                        android:text="One-Way" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -226,36 +240,39 @@
                 android:id="@+id/line4"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/white"
-                android:layout_below="@id/trip"/>
+                android:layout_below="@id/trip"
+                android:background="@android:color/white" />
 
             <LinearLayout
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
                 android:id="@+id/ac"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_below="@id/line4"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/line4"
+                android:gravity="center"
+                android:orientation="horizontal">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <Button
-                        android:layout_margin="5dp"
-                        android:layout_height="50dp"
+                        android:id="@+id/AC"
                         android:layout_width="50dp"
-                        android:scaleType="fitCenter"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:adjustViewBounds="true"
                         android:background="@drawable/buttonshape"
-                        android:id="@+id/AC"
-                        android:layout_gravity="center"
-                        android:text="AC"/>
+                        android:scaleType="fitCenter"
+                        android:text="AC" />
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/line5"
                     android:layout_width="1dp"
@@ -267,17 +284,18 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <Button
-                        android:layout_margin="5dp"
-                        android:layout_height="50dp"
+                        android:id="@+id/NonAC"
                         android:layout_width="50dp"
-                        android:scaleType="fitCenter"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="5dp"
                         android:adjustViewBounds="true"
                         android:background="@drawable/buttonshape"
-                        android:id="@+id/NonAC"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/twoway"
-                        android:layout_gravity="center"
-                        android:text="Non AC"/>
+                        android:text="Non AC" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -285,35 +303,154 @@
                 android:id="@+id/line6"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@android:color/white"
-                android:layout_below="@id/ac"/>
+                android:layout_below="@id/ac"
+                android:background="@android:color/white" />
+
+            <LinearLayout
+                android:id="@+id/pDateTime"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/line6">
+
+                <LinearLayout
+                    android:id="@+id/time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Leave At:"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/pTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/textboxborder"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/time"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Leave On:"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/pDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/textboxborder"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rDateTime"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pDateTime"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:id="@+id/time1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Return At:"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/rTime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/textboxborder"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/date1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/time"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Return On:"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/rDate"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/textboxborder"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp" />
+
+                </LinearLayout>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Estimate Fair"
-                android:layout_marginTop="10dp"
+                android:layout_below="@id/rDateTime"
+                android:layout_marginTop="20dp"
+                android:background="@color/colorLight"
                 android:padding="15dp"
-                android:layout_below="@id/line6"
-                android:background="@color/colorLight"/>
+                android:text="Estimate Fair" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="35sp"
                 android:layout_alignBottom="@+id/button"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:textSize="35sp" />
 
             <Button
                 android:id="@+id/button1"
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="BOOK RIANT"
+                android:layout_below="@id/button"
+                android:layout_marginTop="10dp"
                 android:background="@color/colorAccent"
-                android:layout_below="@id/button"/>
+                android:text="BOOK RIANT" />
 
         </RelativeLayout>
     </ScrollView>

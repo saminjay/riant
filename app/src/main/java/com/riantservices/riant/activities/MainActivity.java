@@ -288,17 +288,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     protected void bookMenu(LatLng pickup, List<LatLng> destination) {
-        int i;
-        //float d=0;
-        //float[] res =new float[3];
-        //Location.distanceBetween(pickup.latitude,pickup.longitude,destination.get(0).latitude,destination.get(0).longitude,res);
-        //d+=res[0];
-        //for(i=1;i<destination.size();i--){
-        //    Location.distanceBetween(destination.get(i-1).latitude,destination.get(i-1).longitude,destination.get(i).latitude,destination.get(i).longitude,res);
-        //    d+=res[0];
-        //}
-        //alertDialog(Float.toString(d));
-        i=0;
+        int i = 0;
         final Intent intent = new Intent(MainActivity.this, LocalBookActivity.class);
         Bundle bundle = new Bundle();
         double[] lat = new double[destination.size() + 1];

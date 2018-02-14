@@ -1,23 +1,26 @@
 package com.riantservices.riant.fragments;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.riantservices.riant.R;
@@ -36,33 +39,45 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.Locale;
 
-public class OutstateBook extends Fragment implements View.OnClickListener {
+public class OutstateBook extends android.app.Fragment implements View.OnClickListener {
     SessionManager session;
     ImageButton oneway, roundtrip;
     Button AC, NonAC;
-    private EditText Pickup, Destination, FriendContact;
+    private EditText FriendContact;
     private RadioButton radio2;
+    private TextView distance,Pickup, Destination,Date,Time,Date1,Time1;
     private String strEmail, strBookFor, strTrip, strAC, strPickup, strDestination, strNumber;
-    private LatLng pickup, destination;
+    private LinearLayout rDateTime;
+    private LatLng pickupLoc,destinationLoc;
+    private float distanceValue;
 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_outstate_book, container, false);
 
+        View rootView = inflater.inflate(R.layout.fragment_outstate, container, false);
         strBookFor = "";
         strTrip = "";
         strAC = "";
         strPickup = "";
         strDestination = "";
         strNumber = "";
-
+        final Calendar c = Calendar.getInstance();
+        rDateTime = rootView.findViewById(R.id.rDateTime);
+        rDateTime.setVisibility(View.GONE);
         Button button = rootView.findViewById(R.id.button);
         Button button1 = rootView.findViewById(R.id.button1);
+        distance = rootView.findViewById(R.id.distance1);
         oneway = rootView.findViewById(R.id.oneway);
         roundtrip = rootView.findViewById(R.id.roundtrip);
+        Date = rootView.findViewById(R.id.pDate);
+        Time = rootView.findViewById(R.id.pTime);
+        Date1 = rootView.findViewById(R.id.rDate);
+        Time1 = rootView.findViewById(R.id.rTime);
         AC = rootView.findViewById(R.id.AC);
         NonAC = rootView.findViewById(R.id.NonAC);
         button.setOnClickListener(this);
@@ -70,30 +85,74 @@ public class OutstateBook extends Fragment implements View.OnClickListener {
         oneway.setOnClickListener(this);
         roundtrip.setOnClickListener(this);
         AC.setOnClickListener(this);
-        NonAC.setOnClickListener(this);
-        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null)
-            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-        session = new SessionManager(getContext());
+        session = new SessionManager(getActivity());
         strEmail = session.getEmail();
         RadioGroup radio;
         Pickup = rootView.findViewById(R.id.edit1);
+        Pickup.setPadding(6,6,6,6);
         Destination = rootView.findViewById(R.id.edit2);
+        Destination.setPadding(6,6,6,6);
         FriendContact = rootView.findViewById(R.id.edit3);
         radio = rootView.findViewById(R.id.radio);
         radio2 = rootView.findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
-
-        Bundle Coordinates = getActivity().getIntent().getExtras();
-        if (Coordinates != null) {
-            double[] lat = Coordinates.getDoubleArray("lat");
-            double[] lng = Coordinates.getDoubleArray("lng");
-            if (lat != null && lng != null) {
-                pickup = new LatLng(lat[0], lng[0]);
-                destination = new LatLng(lat[1], lng[1]);
-            }
-        }
         radio.clearCheck();
+        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        Date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(getActivity(),new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
 
+                        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d", dayOfMonth, monthOfYear + 1, year));
+
+                    }
+                },c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        Time.setText(String.format(Locale.ENGLISH,"%d:%d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
+        Time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(getActivity(),new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        Time.setText(String.format(Locale.ENGLISH,"%d:%d", hourOfDay, minute));
+                    }
+                },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),false).show();
+            }
+        });
+        Date1.setText(String.format(Locale.ENGLISH,"%d-%d-%d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        Date1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(getActivity(),new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d", dayOfMonth, monthOfYear + 1, year));
+
+                    }
+                },c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        Time1.setText(String.format(Locale.ENGLISH,"%d:%d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
+        Time1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(getActivity(),new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        Time.setText(String.format(Locale.ENGLISH,"%d:%d", hourOfDay, minute));
+                    }
+                },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),false).show();
+            }
+        });
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -101,7 +160,7 @@ public class OutstateBook extends Fragment implements View.OnClickListener {
                     case R.id.radio1:
                         strBookFor = "";
                         strBookFor = "For Yourself";
-                        FriendContact.setVisibility(View.INVISIBLE);
+                        FriendContact.setVisibility(View.GONE);
                         break;
                     case R.id.radio2:
                         strBookFor = "";
@@ -119,11 +178,13 @@ public class OutstateBook extends Fragment implements View.OnClickListener {
                 if (hasFocus) {
                     TextView textView = (TextView) v;
                     textView.setBackground(getResources().getDrawable(R.drawable.textboxselected));
+                    textView.setPadding(6,6,6,6);
                     textView.setHintTextColor(getResources().getColor(R.color.colorBlack));
                     textView.setTextColor(getResources().getColor(R.color.colorBlack));
                 } else {
                     TextView textView = (TextView) v;
                     textView.setBackground(getResources().getDrawable(R.drawable.textboxborder));
+                    textView.setPadding(6,6,6,6);
                     textView.setHintTextColor(getResources().getColor(R.color.colorWhite));
                     textView.setTextColor(getResources().getColor(R.color.colorWhite));
                 }
@@ -143,12 +204,14 @@ public class OutstateBook extends Fragment implements View.OnClickListener {
             case R.id.oneway:
                 oneway.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                rDateTime.setVisibility(View.GONE);
                 strTrip = "";
                 strTrip = "Oneway";
                 break;
             case R.id.roundtrip:
                 roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 oneway.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                rDateTime.setVisibility(View.VISIBLE);
                 strTrip = "";
                 strTrip = "Roundtrip";
                 break;
@@ -169,22 +232,22 @@ public class OutstateBook extends Fragment implements View.OnClickListener {
                 strDestination = Destination.getText().toString();
                 strNumber = FriendContact.getText().toString();
                 if (strPickup.matches("")) {
-                    alertDialog("Please enter your Pickup Location", getContext());
+                    alertDialog("Please enter your Pickup Location", getActivity());
                 } else if (strDestination.matches("")) {
-                    alertDialog("Please enter your Destination", getContext());
+                    alertDialog("Please enter your Destination", getActivity());
                 } else if (strBookFor.matches("")) {
-                    alertDialog("Please choose who are you booking the ride for.", getContext());
+                    alertDialog("Please choose who are you booking the ride for.", getActivity());
                 } else if (radio2.isChecked() && strNumber.matches("")) {
-                    alertDialog("Please enter friend's contact number.", getContext());
+                    alertDialog("Please enter friend's contact number.", getActivity());
                 } else if (strTrip.matches("")) {
-                    alertDialog("Please choose between one way or round trip", getContext());
+                    alertDialog("Please choose between one way or round trip", getActivity());
                 } else if (strAC.matches("")) {
-                    alertDialog("Please choose between AC or Non-AC", getContext());
+                    alertDialog("Please choose between AC or Non-AC", getActivity());
                 } else {
                     try {
                         Book();
                     } catch (UnsupportedEncodingException e) {
-                        alertDialog("Unsupported Encoding", getContext());
+                        alertDialog("Unsupported Encoding", getActivity());
                     }
                 }
                 break;
@@ -217,9 +280,9 @@ public class OutstateBook extends Fragment implements View.OnClickListener {
                     HttpPost post = new HttpPost("url");
                     json.put("email", strEmail);
                     json.put("pickup", strPickup);
-                    json.put("pickupCoordinate", pickup);
+                    //json.put("pickupCoordinate", pickup);
                     json.put("destination", strDestination);
-                    json.put("destinationCoordinate", destination);
+                    //json.put("destinationCoordinate", destination);
                     json.put("bookFor", strBookFor);
                     json.put("number", strNumber);
                     json.put("ac", strAC);
@@ -238,7 +301,7 @@ public class OutstateBook extends Fragment implements View.OnClickListener {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                    alertDialog("Error: Cannot Estabilish Connection", getContext());
+                    alertDialog("Error: Cannot Establish Connection", getActivity());
                 }
 
                 Looper.loop(); //Loop in the message queue
@@ -252,10 +315,32 @@ public class OutstateBook extends Fragment implements View.OnClickListener {
         JSONObject result = new JSONObject(in.toString());
 
         if (result.getInt("status") == 1) {
-            alertDialog("Booking Successful", getContext());
+            alertDialog("Booking Successful", getActivity());
 
         } else {
-            alertDialog("System error, please contact with administrator", getContext());
+            alertDialog("System error, please contact with administrator", getActivity());
+        }
+    }
+
+    public void displayReceivedData(LatLng location, String message, int i)
+    {
+        if(i==0){
+            Pickup.setText(message);
+            pickupLoc = location;
+        }
+        else if(i==1){
+            Destination.setText(message);
+            destinationLoc = location;
+        }
+        else if(i==3){
+            String result;
+            float value = Float.parseFloat(message);
+            if(value>1000)
+                result = String.format(Locale.ENGLISH,"%.2f KM",value/1000);
+            else
+                result = String.format(Locale.ENGLISH,"%.0f metres",value);
+            distance.setText(result);
+            distanceValue = value;
         }
     }
 }

@@ -8,10 +8,24 @@ import android.os.ResultReceiver;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.MapFragment;
+import com.riantservices.riant.activities.OutstateActivity;
+import com.riantservices.riant.fragments.OutstateMap;
+
+import java.lang.ref.WeakReference;
+
 public class AddressResultReceiver extends ResultReceiver {
 
     private TextView TV;
     private Activity context;
+    private WeakReference<OutstateActivity> activityRef;
+
+    public AddressResultReceiver(Handler handler, TextView TV, OutstateActivity context) {
+        super(handler);
+        this.TV=TV;
+        this.context = context;
+        activityRef = new WeakReference<>(context);
+    }
 
     public AddressResultReceiver(Handler handler, TextView TV, Activity context) {
         super(handler);
@@ -27,6 +41,11 @@ public class AddressResultReceiver extends ResultReceiver {
                 @Override
                 public void run() {
                     if(address!=null){
+                        if(activityRef!=null){
+                            TV.setText(String.format("%s %s %s", address.getAddressLine(0), address.getAddressLine(1), address.getLocality()));
+                            activityRef.get().initState(address.getAdminArea());
+                        }
+                        else
                         TV.setText(String.format("%s %s %s", address.getAddressLine(0), address.getAddressLine(1), address.getLocality()));
                     }
                 }

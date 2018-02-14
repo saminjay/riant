@@ -1,12 +1,14 @@
 package com.riantservices.riant.fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -27,20 +29,21 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.riantservices.riant.helpers.AddressResultReceiver;
-import com.riantservices.riant.interfaces.AsyncResponse;
-import com.riantservices.riant.helpers.Constants;
-import com.riantservices.riant.helpers.GeocodeAddressIntentService;
 import com.riantservices.riant.R;
+import com.riantservices.riant.activities.OutstateActivity;
+import com.riantservices.riant.helpers.AddressResultReceiver;
+import com.riantservices.riant.helpers.Constants;
 import com.riantservices.riant.helpers.DownloadRouteTask;
-import com.riantservices.riant.interfaces.SendMessage;
+import com.riantservices.riant.helpers.GeocodeAddressIntentService;
 import com.riantservices.riant.helpers.SingleShotLocationProvider;
+import com.riantservices.riant.interfaces.AsyncResponse;
+import com.riantservices.riant.interfaces.SendMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OutstationMap extends android.app.Fragment implements OnMapReadyCallback {
+public class OutstateMap extends android.app.Fragment implements OnMapReadyCallback {
 
     private View mRootView;
     private LatLng pickup,destination;
@@ -52,7 +55,7 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_outstation_map, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_outstate_map, container, false);
         MapView mapView = rootView.findViewById(R.id.map);
         TV1 = rootView.findViewById(R.id.pickup_addr);
         TV2 = rootView.findViewById(R.id.destination_addr);
@@ -187,23 +190,17 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
             pickup = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(latLng).title("Pickup"));
             Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
-            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,TV1,getActivity()));
+            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,TV1,(OutstateActivity)getActivity()));
             intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
             intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
             intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
             getActivity().startService(intent);
         }
         else if (destination == null) {
-            float results[] = new float[1];
-            Location.distanceBetween(pickup.latitude,pickup.longitude,latLng.latitude,latLng.longitude,results);
-            if(results[0]<30000){
-                Toast.makeText(getActivity(),"Destination is too near. Please choose a destination which is atleast 30KM away from the pickup location.",Toast.LENGTH_LONG).show();
-                return;
-            }
             destination = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).position(latLng).title("Destination"));
             Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
-            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,TV2,getActivity()));
+            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,TV2,(OutstateActivity)getActivity()));
             intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
             intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
             intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
@@ -239,5 +236,19 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
         } catch (ClassCastException e) {
             throw new ClassCastException("Error in retrieving data. Please try again");
         }
+    }
+
+    public void alertSameState() {
+        new AlertDialog.Builder(getActivity()).setTitle("Riant Alert")
+                .setMessage("Pickup and Destination cannot be in the same state.")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).setIcon(android.R.drawable.ic_dialog_alert).show();
+        pickup = null;
+        destination = null;
+        TV1.setText("");
+        TV2.setText("");
+        googleMap.clear();
     }
 }

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.riantservices.riant.R;
+import com.riantservices.riant.fragments.OutstationMap;
 import com.riantservices.riant.helpers.SessionManager;
 
 public class SplashActivity extends AppCompatActivity {
@@ -29,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
 
     public void start(){
         if (!session.isLoggedIn()) {
-            Intent goMain = new Intent(this, OutstationActivity.class);
+            Intent goMain = new Intent(this, OutstateActivity.class);
             startActivity(goMain);
         }
         else {

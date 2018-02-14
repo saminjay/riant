@@ -1,5 +1,7 @@
 package com.riantservices.riant.fragments;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,11 +15,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.riantservices.riant.R;
@@ -36,16 +41,18 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
 import java.util.Locale;
 
 public class OutstationBook extends android.app.Fragment implements View.OnClickListener {
     SessionManager session;
     ImageButton oneway, roundtrip;
     Button AC, NonAC;
-    private EditText Pickup, Destination, FriendContact;
+    private EditText FriendContact;
     private RadioButton radio2;
-    private TextView distance;
+    private TextView distance,Pickup, Destination,Date,Time,Date1,Time1;
     private String strEmail, strBookFor, strTrip, strAC, strPickup, strDestination, strNumber;
+    private LinearLayout rDateTime;
     private LatLng pickupLoc,destinationLoc;
     private float distanceValue;
 
@@ -61,12 +68,18 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
         strPickup = "";
         strDestination = "";
         strNumber = "";
-
+        final Calendar c = Calendar.getInstance();
+        rDateTime = rootView.findViewById(R.id.rDateTime);
+        rDateTime.setVisibility(View.GONE);
         Button button = rootView.findViewById(R.id.button);
         Button button1 = rootView.findViewById(R.id.button1);
         distance = rootView.findViewById(R.id.distance1);
         oneway = rootView.findViewById(R.id.oneway);
         roundtrip = rootView.findViewById(R.id.roundtrip);
+        Date = rootView.findViewById(R.id.pDate);
+        Time = rootView.findViewById(R.id.pTime);
+        Date1 = rootView.findViewById(R.id.rDate);
+        Time1 = rootView.findViewById(R.id.rTime);
         AC = rootView.findViewById(R.id.AC);
         NonAC = rootView.findViewById(R.id.NonAC);
         button.setOnClickListener(this);
@@ -86,7 +99,62 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
         radio2 = rootView.findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
         radio.clearCheck();
+        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        Date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(getActivity(),new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
 
+                        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d", dayOfMonth, monthOfYear + 1, year));
+
+                    }
+                },c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        Time.setText(String.format(Locale.ENGLISH,"%d:%d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
+        Time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(getActivity(),new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        Time.setText(String.format(Locale.ENGLISH,"%d:%d", hourOfDay, minute));
+                    }
+                },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),false).show();
+            }
+        });
+        Date1.setText(String.format(Locale.ENGLISH,"%d-%d-%d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        Date1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(getActivity(),new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d", dayOfMonth, monthOfYear + 1, year));
+
+                    }
+                },c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        Time1.setText(String.format(Locale.ENGLISH,"%d:%d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
+        Time1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(getActivity(),new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        Time.setText(String.format(Locale.ENGLISH,"%d:%d", hourOfDay, minute));
+                    }
+                },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),false).show();
+            }
+        });
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -94,7 +162,7 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
                     case R.id.radio1:
                         strBookFor = "";
                         strBookFor = "For Yourself";
-                        FriendContact.setVisibility(View.INVISIBLE);
+                        FriendContact.setVisibility(View.GONE);
                         break;
                     case R.id.radio2:
                         strBookFor = "";
@@ -138,12 +206,14 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
             case R.id.oneway:
                 oneway.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                rDateTime.setVisibility(View.GONE);
                 strTrip = "";
                 strTrip = "Oneway";
                 break;
             case R.id.roundtrip:
                 roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 oneway.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                rDateTime.setVisibility(View.VISIBLE);
                 strTrip = "";
                 strTrip = "Roundtrip";
                 break;

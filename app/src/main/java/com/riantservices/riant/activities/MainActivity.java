@@ -87,8 +87,8 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
 
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         session = new SessionManager(getApplicationContext());
-        ImageButton[] icons = new ImageButton[5];
-        TextView[] iconText = new TextView[5];
+        ImageButton[] icons = new ImageButton[7];
+        TextView[] iconText = new TextView[7];
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         final SearchView searchView = findViewById(R.id.searchView);
@@ -138,6 +138,16 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.textHelp1:
                         alertDialog("Help is clicked");
                         break;
+                    case R.id.outstate1:
+                    case R.id.textOutstate1:
+                        Intent goOutstate = new Intent(MainActivity.this, OutstateActivity.class);
+                        startActivity(goOutstate);
+                        break;
+                    case R.id.outstation1:
+                    case R.id.textOutstation1:
+                        Intent goOutstation = new Intent(MainActivity.this, OutstationActivity.class);
+                        startActivity(goOutstation);
+                        break;
                 }
             }
         };
@@ -146,13 +156,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         icons[2] = findViewById(R.id.settings1);
         icons[3] = findViewById(R.id.notifictions1);
         icons[4] = findViewById(R.id.help1);
-        for (int i = 0; i < 5; i++) icons[i].setOnClickListener(iconClickListener);
+        icons[5] = findViewById(R.id.outstate1);
+        icons[6] = findViewById(R.id.outstation1);
+        for (int i = 0; i < 7; i++) icons[i].setOnClickListener(iconClickListener);
         iconText[0] = findViewById(R.id.textAccount1);
         iconText[1] = findViewById(R.id.textTrips1);
         iconText[2] = findViewById(R.id.textNotifications1);
         iconText[3] = findViewById(R.id.textSettings1);
         iconText[4] = findViewById(R.id.textHelp1);
-        for (int i = 0; i < 5; i++) iconText[i].setOnClickListener(iconClickListener);
+        iconText[5] = findViewById(R.id.textOutstate1);
+        iconText[6] = findViewById(R.id.textOutstation1);
+        for (int i = 0; i < 7; i++) iconText[i].setOnClickListener(iconClickListener);
     }
 
     @Override

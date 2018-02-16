@@ -104,9 +104,16 @@ public class OutstateActivity extends AppCompatActivity implements SendMessage{
         outstateBook.displayReceivedData(location,message,x);
     }
     public void clearMap(){
-        state1=state2=null;
+        state1=null;
+        state2=null;
         String tag = "android:switcher:" + R.id.container + ":" + 0;
         OutstateMap outstateMap = (OutstateMap) getFragmentManager().findFragmentByTag(tag);
         outstateMap.alertSameState();
+    }
+
+    public void fillTextViews(String value){
+        String tag = "android:switcher:" + R.id.container + ":" + 0;
+        OutstateMap outstateMap = (OutstateMap) getFragmentManager().findFragmentByTag(tag);
+        outstateMap.setTextViews(value);
     }
 }

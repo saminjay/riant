@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.riantservices.riant.R;
+import com.riantservices.riant.fragments.OutstateMap;
 import com.riantservices.riant.fragments.OutstationBook;
 import com.riantservices.riant.fragments.OutstationMap;
 import com.riantservices.riant.interfaces.SendMessage;
@@ -91,5 +92,11 @@ public class OutstationActivity extends AppCompatActivity implements SendMessage
         String tag = "android:switcher:" + R.id.container + ":" + 1;
         OutstationBook outstationBook = (OutstationBook) getFragmentManager().findFragmentByTag(tag);
         outstationBook.displayReceivedData(location,message,x);
+    }
+
+    public void fillTextViews(String value){
+        String tag = "android:switcher:" + R.id.container + ":" + 0;
+        OutstationMap outstationMap = (OutstationMap) getFragmentManager().findFragmentByTag(tag);
+        outstationMap.setTextViews(value);
     }
 }

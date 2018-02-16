@@ -47,6 +47,7 @@ public class GeocodeAddressIntentService extends IntentService {
             double longitude = intent.getDoubleExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA, 0);
 
             try {
+                Log.d("location", String.valueOf(latitude)+" "+String.valueOf(longitude));
                 addresses = geocoder.getFromLocation(latitude, longitude, 1);
             } catch (IOException ioException) {
                 errorMessage = "Service Not Available";

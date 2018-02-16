@@ -154,135 +154,192 @@
             <ImageButton
                 android:id="@+id/account1"
                 android:layout_below="@id/menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
+                android:layout_marginTop="20dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/app_name"
                 android:src="@drawable/account"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp" />
 
             <TextView
                 android:id="@+id/textAccount1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:text="@string/accounts"
-                android:textSize="28sp"
+                android:textSize="18sp"
                 android:layout_alignTop="@+id/account1"
                 android:layout_alignBottom="@+id/account1"
                 android:layout_toRightOf="@id/account1"
                 android:layout_toEndOf="@id/account1"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp" />
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp" />
 
             <ImageButton
                 android:id="@+id/trips1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
                 android:contentDescription="@string/app_name"
                 android:background="@android:color/transparent"
                 android:src="@drawable/trips"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_below="@+id/account1"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/trips"
                 android:id="@+id/textTrips1"
-                android:textSize="28sp"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:layout_alignTop="@+id/trips1"
                 android:layout_alignBottom="@+id/trips1"
                 android:layout_toRightOf="@id/account1"
                 android:layout_toEndOf="@id/account1"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp"/>
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"/>
 
             <ImageButton
                 android:id="@+id/settings1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
                 android:contentDescription="@string/app_name"
                 android:background="@android:color/transparent"
                 android:src="@drawable/settings"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_below="@+id/trips1"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/settings"
                 android:id="@+id/textSettings1"
-                android:textSize="28sp"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:layout_alignTop="@+id/settings1"
                 android:layout_alignBottom="@+id/settings1"
                 android:layout_toRightOf="@id/account1"
                 android:layout_toEndOf="@id/account1"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp"/>
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"/>
 
             <ImageButton
                 android:id="@+id/notifictions1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
                 android:contentDescription="@string/app_name"
                 android:background="@android:color/transparent"
                 android:src="@drawable/notification"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_below="@+id/settings1"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/notifications"
                 android:id="@+id/textNotifications1"
-                android:textSize="28sp"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:layout_alignTop="@+id/notifictions1"
                 android:layout_alignBottom="@+id/notifictions1"
                 android:layout_toRightOf="@id/account1"
                 android:layout_toEndOf="@id/account1"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp"/>
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp"/>
 
             <ImageButton
                 android:id="@+id/help1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
                 android:contentDescription="@string/app_name"
                 android:background="@android:color/transparent"
                 android:src="@drawable/help"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_below="@+id/notifictions1"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/help"
                 android:id="@+id/textHelp1"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:gravity="center"
                 android:layout_alignTop="@+id/help1"
                 android:layout_alignBottom="@+id/help1"
                 android:layout_toRightOf="@id/account1"
                 android:layout_toEndOf="@id/account1"
-                android:layout_marginLeft="12dp"
-                android:layout_marginStart="12dp" />
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp" />
+
+            <ImageButton
+                android:id="@+id/outstate1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/app_name"
+                android:background="@android:color/transparent"
+                android:src="@drawable/bar"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/help1"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Outstate"
+                android:id="@+id/textOutstate1"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_alignTop="@+id/outstate1"
+                android:layout_alignBottom="@+id/outstate1"
+                android:layout_toRightOf="@id/account1"
+                android:layout_toEndOf="@id/account1"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp" />
+
+            <ImageButton
+                android:id="@+id/outstation1"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/app_name"
+                android:background="@android:color/transparent"
+                android:src="@drawable/bar"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/outstate1"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Outstation"
+                android:id="@+id/textOutstation1"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_alignTop="@+id/outstation1"
+                android:layout_alignBottom="@+id/outstation1"
+                android:layout_toRightOf="@id/account1"
+                android:layout_toEndOf="@id/account1"
+                android:layout_marginLeft="24dp"
+                android:layout_marginStart="24dp" />
 
         </RelativeLayout>
-
     </FrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

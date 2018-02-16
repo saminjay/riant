@@ -27,6 +27,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.riantservices.riant.activities.OutstateActivity;
+import com.riantservices.riant.activities.OutstationActivity;
 import com.riantservices.riant.helpers.AddressResultReceiver;
 import com.riantservices.riant.interfaces.AsyncResponse;
 import com.riantservices.riant.helpers.Constants;
@@ -187,7 +189,7 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
             pickup = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(latLng).title("Pickup"));
             Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
-            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,TV1,getActivity()));
+            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null, (OutstationActivity)getActivity()));
             intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
             intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
             intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
@@ -203,7 +205,7 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
             destination = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).position(latLng).title("Destination"));
             Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
-            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,TV2,getActivity()));
+            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null, (OutstationActivity)getActivity()));
             intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
             intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
             intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
@@ -239,5 +241,12 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
         } catch (ClassCastException e) {
             throw new ClassCastException("Error in retrieving data. Please try again");
         }
+    }
+
+    public void setTextViews(String value) {
+        if(TV1.getText().toString().isEmpty())
+            TV1.setText(value);
+        else if(TV2.getText().toString().isEmpty())
+            TV2.setText(value);
     }
 }

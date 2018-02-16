@@ -7,7 +7,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.riantservices.riant.interfaces.AsyncResponse;
-import com.riantservices.riant.models.DistanceDirection;
+import com.riantservices.riant.models.DistanceDirectionTime;
 
 import org.json.JSONObject;
 
@@ -34,9 +34,9 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
         try {
             jObject = new JSONObject(jsonData[0]);
             DirectionsJSONParser parser = new DirectionsJSONParser();
-            DistanceDirection distanceDirection = parser.parse(jObject);
-            routes = distanceDirection.routes;
-            distance = distanceDirection.distance;
+            DistanceDirectionTime distanceDirectionTime = parser.parse(jObject);
+            routes = distanceDirectionTime.routes;
+            distance = distanceDirectionTime.distance;
         } catch (Exception e) {
             e.printStackTrace();
         }

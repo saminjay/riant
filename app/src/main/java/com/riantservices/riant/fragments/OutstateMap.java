@@ -12,6 +12,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,6 +52,7 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
     private Marker userMarker;
     private TextView TV1,TV2;
     private SendMessage SM;
+    private DownloadRouteTask downloadRouteTask;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -190,7 +192,7 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
             pickup = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(latLng).title("Pickup"));
             Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
-            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,TV1,(OutstateActivity)getActivity()));
+            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,(OutstateActivity)getActivity()));
             intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
             intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
             intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
@@ -200,13 +202,13 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
             destination = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).position(latLng).title("Destination"));
             Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
-            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,TV2,(OutstateActivity)getActivity()));
+            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,(OutstateActivity)getActivity()));
             intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
             intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
             intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
             getActivity().startService(intent);
             String url = getDirectionsUrl(pickup, destination);
-            DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap,new AsyncResponse() {
+            downloadRouteTask = new DownloadRouteTask(googleMap,new AsyncResponse() {
                 @Override
                 public void processFinish(float output) {
                     SM.sendData(null,String.valueOf(output),3);
@@ -245,10 +247,18 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 }).setIcon(android.R.drawable.ic_dialog_alert).show();
-        pickup = null;
         destination = null;
+        pickup = null;
+        downloadRouteTask.cancel(true);
         TV1.setText("");
         TV2.setText("");
         googleMap.clear();
+    }
+
+    public void setTextViews(String value) {
+        if(TV1.getText().toString().isEmpty())
+            TV1.setText(value);
+        else if(TV2.getText().toString().isEmpty())
+            TV2.setText(value);
     }
 }

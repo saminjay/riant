@@ -243,7 +243,10 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
                     }
                 }).setIcon(android.R.drawable.ic_dialog_alert).show();
         destination = null;
-        downloadRouteTask.cancel(true);
+        try {
+            downloadRouteTask.cancel(true);
+        }
+        catch (NullPointerException ignored){}
         TV2.setText("");
         destinationMarker.remove();
     }

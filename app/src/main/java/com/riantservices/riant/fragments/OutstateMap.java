@@ -5,21 +5,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -162,6 +159,7 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
                 TV1.setText("");
                 destination=null;
                 TV2.setText("");
+                ((OutstateActivity)getActivity()).clearState();
                 map.clear();
             }
         });
@@ -243,10 +241,7 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
                     }
                 }).setIcon(android.R.drawable.ic_dialog_alert).show();
         destination = null;
-        try {
-            downloadRouteTask.cancel(true);
-        }
-        catch (NullPointerException ignored){}
+        downloadRouteTask.cancel(true);
         TV2.setText("");
         destinationMarker.remove();
     }

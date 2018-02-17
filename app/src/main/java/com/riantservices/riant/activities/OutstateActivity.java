@@ -40,6 +40,10 @@ public class OutstateActivity extends AppCompatActivity implements SendMessage{
         }
     }
 
+    public void clearState(){
+        state1 = state2 = null;
+    }
+
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         SectionsPagerAdapter(FragmentManager fm) {

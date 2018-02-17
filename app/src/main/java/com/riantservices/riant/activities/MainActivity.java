@@ -237,9 +237,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         map.setTrafficEnabled(true);
         map.setBuildingsEnabled(true);
         googleMap = map;
-        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapLongClick(LatLng latLng) {
+            public void onMapClick(LatLng latLng) {
                 mark(latLng);
             }
         });

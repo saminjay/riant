@@ -210,7 +210,9 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
 
     private void fillDistance() {
         String result;
-        if(distanceValue>1000)
+        if(distanceValue == 0)
+            result = "NA";
+        else if(distanceValue>1000)
             result = String.format(Locale.ENGLISH,"%.2f KM",distanceValue/1000);
         else
             result = String.format(Locale.ENGLISH,"%.0f metres",distanceValue);

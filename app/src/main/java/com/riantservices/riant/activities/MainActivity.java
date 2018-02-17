@@ -89,6 +89,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         };
         TV1 = findViewById(R.id.pickup_addr);
         TV2 = findViewById(R.id.destination_addr);
+        distance = 0;
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         ImageButton[] icons = new ImageButton[7];
         TextView[] iconText = new TextView[7];
@@ -195,6 +196,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 destination.clear();
                 TV2.setText("");
                 map.clear();
+                distance = 0;
             }
         });
         ImageButton locate = findViewById(R.id.locate);
@@ -243,7 +245,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 mark(latLng);
             }
         });
-
         MarkerOptions options=new MarkerOptions().position(new LatLng(20.2961,85.8245)).title("Current Location");
         userMarker = googleMap.addMarker(options);
         userMarker.setVisible(false);
@@ -290,7 +291,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap, new AsyncResponse() {
                     @Override
                     public void processFinish(float output) {
-                        distance=output;
+                        distance+=output;
                     }
                 });
                 downloadRouteTask.execute(url);
@@ -299,7 +300,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap, new AsyncResponse() {
                     @Override
                     public void processFinish(float output) {
-                        distance=output;
+                        distance+=output;
                     }
                 });
                 downloadRouteTask.execute(url);

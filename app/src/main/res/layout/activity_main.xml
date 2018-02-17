@@ -62,12 +62,55 @@
                 android:id="@+id/searchView"
                 android:layout_width="match_parent"
                 android:layout_height="24dp"
-                android:layout_marginLeft="50dp"
-                android:layout_marginRight="50dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
                 android:layout_centerHorizontal="true"
                 android:background="@color/colorTransparentBlack"
                 android:layout_below="@+id/head"
                 android:layout_marginTop="27dp"/>
+
+            <LinearLayout
+                android:id="@+id/pickup"
+                android:orientation="vertical"
+                android:layout_margin="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_below="@id/searchView"
+                android:background="@color/colorWhite">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorGreen"
+                    android:text="Pickup:"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@id/pickup_addr"
+                    android:textColor="@color/colorBlack"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/destination"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:layout_below="@id/pickup"
+                android:background="@color/colorWhite"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorLight"
+                    android:text="Destination:"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@id/destination_addr"
+                    android:textColor="@color/colorBlack"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/expand"

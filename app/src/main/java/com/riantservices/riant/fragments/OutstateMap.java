@@ -53,6 +53,7 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
     private TextView TV1,TV2;
     private SendMessage SM;
     private DownloadRouteTask downloadRouteTask;
+    private Marker destinationMarker;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -191,22 +192,10 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
         if(pickup == null){
             pickup = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(latLng).title("Pickup"));
-            Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
-            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,(OutstateActivity)getActivity()));
-            intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
-            intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
-            intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
-            getActivity().startService(intent);
         }
         else if (destination == null) {
             destination = latLng;
-            googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).position(latLng).title("Destination"));
-            Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
-            intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,(OutstateActivity)getActivity()));
-            intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
-            intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
-            intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
-            getActivity().startService(intent);
+            destinationMarker = googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).position(latLng).title("Destination"));
             String url = getDirectionsUrl(pickup, destination);
             downloadRouteTask = new DownloadRouteTask(googleMap,new AsyncResponse() {
                 @Override
@@ -216,6 +205,12 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
             });
             downloadRouteTask.execute(url);
         }
+        Intent intent = new Intent(getActivity(), GeocodeAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,(OutstateActivity)getActivity()));
+        intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
+        intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
+        intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
+        getActivity().startService(intent);
 
     }
 
@@ -248,11 +243,9 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
                     }
                 }).setIcon(android.R.drawable.ic_dialog_alert).show();
         destination = null;
-        pickup = null;
         downloadRouteTask.cancel(true);
-        TV1.setText("");
         TV2.setText("");
-        googleMap.clear();
+        destinationMarker.remove();
     }
 
     public void setTextViews(String value) {

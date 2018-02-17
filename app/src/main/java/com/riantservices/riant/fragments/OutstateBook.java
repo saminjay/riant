@@ -322,8 +322,7 @@ public class OutstateBook extends android.app.Fragment implements View.OnClickLi
         }
     }
 
-    public void displayReceivedData(LatLng location, String message, int i)
-    {
+    public void displayReceivedData(LatLng location, String message, int i) {
         if(i==0){
             Pickup.setText(message);
             pickupLoc = location;

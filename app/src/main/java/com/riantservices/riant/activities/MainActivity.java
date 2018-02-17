@@ -30,10 +30,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.riantservices.riant.R;
+import com.riantservices.riant.helpers.AddressResultReceiver;
+import com.riantservices.riant.helpers.Constants;
 import com.riantservices.riant.helpers.DownloadRouteTask;
 import com.riantservices.riant.helpers.GPSTracker;
-import com.riantservices.riant.helpers.SessionManager;
+import com.riantservices.riant.helpers.GeocodeAddressIntentService;
 import com.riantservices.riant.helpers.SingleShotLocationProvider;
+import com.riantservices.riant.interfaces.AsyncResponse;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -56,14 +59,14 @@ import java.util.List;
 
 public class MainActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    static GoogleMap googleMap;
-    SessionManager session;
-    boolean pickupMarked = false;
+    private GoogleMap googleMap;
     private Marker userMarker;
     private LatLng pickup;
     private List<LatLng> destination;
     private DrawerLayout mDrawerLayout;
+    private TextView TV1,TV2;
     private ActionBarDrawerToggle mDrawerToggle;
+    private float distance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +87,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 invalidateOptionsMenu();
             }
         };
-
+        TV1 = findViewById(R.id.pickup_addr);
+        TV2 = findViewById(R.id.destination_addr);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        session = new SessionManager(getApplicationContext());
         ImageButton[] icons = new ImageButton[7];
         TextView[] iconText = new TextView[7];
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -178,7 +181,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 if (destination.size() != 0)
-                    bookMenu(pickup, destination);
+                    proceed(pickup, destination);
                 else
                     alertDialog("Choose a Destination");
             }
@@ -188,8 +191,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 pickup=null;
-                pickupMarked=false;
+                TV1.setText("");
                 destination.clear();
+                TV2.setText("");
                 map.clear();
             }
         });
@@ -278,30 +282,41 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     protected void mark(LatLng latLng) {
-        if (pickupMarked) {
+        if (pickup!=null) {
             destination.add(latLng);
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).position(latLng).title("destination".concat(String.valueOf(destination.size()))));
             if (destination.size() == 1) {
-                LatLng origin = pickup;
-                LatLng dest = destination.get(0);
-                String url = getDirectionsUrl(origin, dest);
-                DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap,null);
+                String url = getDirectionsUrl(pickup, destination.get(destination.size()-1));
+                DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap, new AsyncResponse() {
+                    @Override
+                    public void processFinish(float output) {
+                        distance=output;
+                    }
+                });
                 downloadRouteTask.execute(url);
             } else {
-                LatLng origin = destination.get(destination.size() - 2);
-                LatLng dest = destination.get(destination.size() - 1);
-                String url = getDirectionsUrl(origin, dest);
-                DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap,null);
+                String url = getDirectionsUrl(destination.get(destination.size()-2), destination.get(destination.size()-1));
+                DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap, new AsyncResponse() {
+                    @Override
+                    public void processFinish(float output) {
+                        distance=output;
+                    }
+                });
                 downloadRouteTask.execute(url);
             }
         } else {
             pickup = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(latLng).title("pickup"));
-            pickupMarked = true;
         }
+        Intent intent = new Intent(this, GeocodeAddressIntentService.class);
+        intent.putExtra(Constants.RECEIVER, new AddressResultReceiver(null,this));
+        intent.putExtra(Constants.FETCH_TYPE_EXTRA, Constants.USE_ADDRESS_LOCATION);
+        intent.putExtra(Constants.LOCATION_LATITUDE_DATA_EXTRA,latLng.latitude);
+        intent.putExtra(Constants.LOCATION_LONGITUDE_DATA_EXTRA,latLng.longitude);
+        this.startService(intent);
     }
 
-    protected void bookMenu(LatLng pickup, List<LatLng> destination) {
+    protected void proceed(LatLng pickup, List<LatLng> destination) {
         int i = 0;
         final Intent intent = new Intent(MainActivity.this, LocalBookActivity.class);
         Bundle bundle = new Bundle();
@@ -316,7 +331,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         }
         bundle.putDoubleArray("lat", lat);
         bundle.putDoubleArray("lng", lng);
-        intent.putExtra("Coordinates", bundle);
+        bundle.putString("pickupAddr",TV1.getText().toString());
+        bundle.putString("destinationAddr",TV2.getText().toString());
+        bundle.putFloat("distance",distance);
+        intent.putExtra("Data", bundle);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         startActivity(intent);
     }
@@ -415,5 +433,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;
         String output = "json";
         return  "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters;
+    }
+
+    public void setTextViews(String value) {
+        if(TV1.getText().toString().isEmpty())
+            TV1.setText(value);
+        else
+            TV2.setText(value);
     }
 }

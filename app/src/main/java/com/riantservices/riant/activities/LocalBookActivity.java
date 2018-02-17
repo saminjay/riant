@@ -1,18 +1,24 @@
 package com.riantservices.riant.activities;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.riantservices.riant.R;
@@ -32,15 +38,20 @@ import org.json.JSONObject;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class LocalBookActivity extends AppCompatActivity implements View.OnClickListener {
     SessionManager session;
     ImageButton oneway, roundtrip;
     Button AC, NonAC;
-    private EditText Pickup, Destination, FriendContact;
+    private EditText  FriendContact;
+    private TextView distance,Pickup, Destination,Date,Time,Date1,Time1;
     private RadioButton radio2;
     private String strEmail, strBookFor, strTrip, strAC, strPickup, strDestination, strNumber;
+    private LinearLayout rDateTime;
+    private double distanceValue;
     private LatLng pickup;
     private List<LatLng> destination;
 
@@ -55,10 +66,18 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         strDestination = "";
         strNumber = "";
         setContentView(R.layout.activity_local_book);
+        final Calendar c = Calendar.getInstance();
+        rDateTime = findViewById(R.id.rDateTime);
+        rDateTime.setVisibility(View.GONE);
+        distance = findViewById(R.id.distance1);
         Button button = findViewById(R.id.button);
         Button button1 = findViewById(R.id.button1);
         oneway = findViewById(R.id.oneway);
         roundtrip = findViewById(R.id.roundtrip);
+        Date = findViewById(R.id.pDate);
+        Time = findViewById(R.id.pTime);
+        Date1 = findViewById(R.id.rDate);
+        Time1 = findViewById(R.id.rTime);
         AC = findViewById(R.id.AC);
         NonAC = findViewById(R.id.NonAC);
         button.setOnClickListener(this);
@@ -73,24 +92,84 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         strEmail = session.getEmail();
         RadioGroup radio;
         Pickup = findViewById(R.id.edit1);
+        Pickup.setPadding(6,6,6,6);
         Destination = findViewById(R.id.edit2);
+        Destination.setPadding(6,6,6,6);
         FriendContact = findViewById(R.id.edit3);
         radio = findViewById(R.id.radio);
         radio2 = findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
-
-        Bundle Coordinates = getIntent().getExtras();
-        if (Coordinates != null) {
-            double[] lat = Coordinates.getDoubleArray("lat");
-            double[] lng = Coordinates.getDoubleArray("lng");
+        Bundle Data = getIntent().getBundleExtra("Data");
+        if (Data != null) {
+            double[] lat = Data.getDoubleArray("lat");
+            double[] lng = Data.getDoubleArray("lng");
             if (lat != null && lng != null) {
                 pickup = new LatLng(lat[0], lng[0]);
                 for (int i = 1; i < lat.length; i++)
                     destination.add(new LatLng(lat[i], lng[i]));
             }
+            Pickup.setText(Data.getString("pickupAddr"));
+            Destination.setText(Data.getString("destinationAddr"));
+            distanceValue = Data.getFloat("distance");
+            fillDistance();
         }
         radio.clearCheck();
+        Date.setText(String.format(Locale.ENGLISH,"%02d-%02d-%02d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        Date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(LocalBookActivity.this,new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
 
+                        Date.setText(String.format(Locale.ENGLISH,"%02d-%02d-%02d", dayOfMonth, monthOfYear + 1, year));
+
+                    }
+                },c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        Time.setText(String.format(Locale.ENGLISH,"%02d:%02d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
+        Time.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(LocalBookActivity.this,new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        Time.setText(String.format(Locale.ENGLISH,"%02d:%02d", hourOfDay, minute));
+                    }
+                },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),false).show();
+            }
+        });
+        Date1.setText(String.format(Locale.ENGLISH,"%02d-%02d-%02d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        Date1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(LocalBookActivity.this,new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
+
+                        Date.setText(String.format(Locale.ENGLISH,"%02d-%02d-%02d", dayOfMonth, monthOfYear + 1, year));
+
+                    }
+                },c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        Time1.setText(String.format(Locale.ENGLISH,"%02d:%02d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
+        Time1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new TimePickerDialog(LocalBookActivity.this,new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay,
+                                          int minute) {
+                        Time.setText(String.format(Locale.ENGLISH,"%02d:%02d", hourOfDay, minute));
+                    }
+                },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),false).show();
+            }
+        });
         radio.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -126,11 +205,16 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         };
-
-        Pickup.setOnFocusChangeListener(onFocusChangeListener);
-        Destination.setOnFocusChangeListener(onFocusChangeListener);
         FriendContact.setOnFocusChangeListener(onFocusChangeListener);
+    }
 
+    private void fillDistance() {
+        String result;
+        if(distanceValue>1000)
+            result = String.format(Locale.ENGLISH,"%.2f KM",distanceValue/1000);
+        else
+            result = String.format(Locale.ENGLISH,"%.0f metres",distanceValue);
+        distance.setText(result);
     }
 
     @Override
@@ -139,12 +223,14 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
             case R.id.oneway:
                 oneway.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                rDateTime.setVisibility(View.GONE);
                 strTrip = "";
                 strTrip = "Oneway";
                 break;
             case R.id.roundtrip:
                 roundtrip.setBackground(getResources().getDrawable(R.drawable.buttonselected));
                 oneway.setBackground(getResources().getDrawable(R.drawable.buttonshape));
+                rDateTime.setVisibility(View.VISIBLE);
                 strTrip = "";
                 strTrip = "Roundtrip";
                 break;
@@ -254,4 +340,6 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
             alertDialog("System error, please contact with administrator");
         }
     }
+
+
 }

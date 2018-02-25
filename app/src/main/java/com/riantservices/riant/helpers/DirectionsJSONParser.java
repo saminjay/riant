@@ -1,9 +1,7 @@
 package com.riantservices.riant.helpers;
 
-import android.util.Log;
-
 import com.google.android.gms.maps.model.LatLng;
-import com.riantservices.riant.models.DistanceDirection;
+import com.riantservices.riant.models.DistanceDirectionTime;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,15 +11,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class DirectionsJSONParser {
+class DirectionsJSONParser {
 
-    public DistanceDirection parse(JSONObject jObject){
+    DistanceDirectionTime parse(JSONObject jObject){
 
         List<List<HashMap<String, String>>> routes = new ArrayList<>() ;
         JSONArray jRoutes;
         JSONArray jLegs;
         JSONArray jSteps;
         float distance = 0;
+        float time = 0;
 
         try {
 
@@ -38,6 +37,7 @@ public class DirectionsJSONParser {
                         String polyline;
                         polyline = (String)((JSONObject)((JSONObject)jSteps.get(k)).get("polyline")).get("points");
                         distance += (((JSONObject)((JSONObject)jSteps.get(k)).get("distance")).getInt("value"));
+                        time += (((JSONObject)((JSONObject)jSteps.get(k)).get("duration")).getInt("value"));
                         List<LatLng> list = decodePoly(polyline);
 
                         for(int l=0;l <list.size();l++){
@@ -55,7 +55,7 @@ public class DirectionsJSONParser {
             e.printStackTrace();
         }catch (Exception ignored){
         }
-        return new DistanceDirection(distance,routes);
+        return new DistanceDirectionTime(distance,routes,time);
     }
 
     private List<LatLng> decodePoly(String encoded) {

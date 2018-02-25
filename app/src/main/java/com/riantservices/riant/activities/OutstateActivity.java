@@ -18,27 +18,11 @@ import com.riantservices.riant.interfaces.SendMessage;
 public class OutstateActivity extends AppCompatActivity implements SendMessage{
 
     String state1,state2;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_outstate);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        /*
-      The {@link android.support.v4.view.PagerAdapter} that will provide
-      fragments for each of the sections. We use a
-      {@link FragmentPagerAdapter} derivative, which will keep every
-      loaded fragment in memory. If this becomes too memory intensive, it
-      may be best to switch to a
-      {@link android.support.v13.app.FragmentStatePagerAdapter}.
-     */
         SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
-        /*
-      The {@link ViewPager} that will host the section contents.
-     */
         ViewPager mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -48,17 +32,16 @@ public class OutstateActivity extends AppCompatActivity implements SendMessage{
         if(getSupportActionBar()!=null) getSupportActionBar().hide();
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-
     public void initState(String s){
         if(state1 == null) state1 = s;
         else state2 = s;
         if(state1.equalsIgnoreCase(state2)){
             clearMap();
         }
+    }
+
+    public void clearState(){
+        state1 = state2 = null;
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
@@ -104,9 +87,16 @@ public class OutstateActivity extends AppCompatActivity implements SendMessage{
         outstateBook.displayReceivedData(location,message,x);
     }
     public void clearMap(){
-        state1=state2=null;
+        state1=null;
+        state2=null;
         String tag = "android:switcher:" + R.id.container + ":" + 0;
         OutstateMap outstateMap = (OutstateMap) getFragmentManager().findFragmentByTag(tag);
         outstateMap.alertSameState();
+    }
+
+    public void fillTextViews(String value){
+        String tag = "android:switcher:" + R.id.container + ":" + 0;
+        OutstateMap outstateMap = (OutstateMap) getFragmentManager().findFragmentByTag(tag);
+        outstateMap.setTextViews(value);
     }
 }

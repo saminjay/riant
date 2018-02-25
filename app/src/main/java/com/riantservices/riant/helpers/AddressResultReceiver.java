@@ -9,55 +9,74 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.MapFragment;
+import com.riantservices.riant.activities.MainActivity;
 import com.riantservices.riant.activities.OutstateActivity;
+import com.riantservices.riant.activities.OutstationActivity;
 import com.riantservices.riant.fragments.OutstateMap;
 
 import java.lang.ref.WeakReference;
 
 public class AddressResultReceiver extends ResultReceiver {
 
-    private TextView TV;
-    private Activity context;
-    private WeakReference<OutstateActivity> activityRef;
+    private WeakReference<OutstateActivity> outstateActivityWeakReference = null;
+    private WeakReference<OutstationActivity> outstationActivityWeakReference = null;
+    private WeakReference<MainActivity> mainActivityWeakReference = null;
+    private String strAddress;
 
-    public AddressResultReceiver(Handler handler, TextView TV, OutstateActivity context) {
+    public AddressResultReceiver(Handler handler, OutstateActivity context) {
         super(handler);
-        this.TV=TV;
-        this.context = context;
-        activityRef = new WeakReference<>(context);
+        outstateActivityWeakReference = new WeakReference<>(context);
     }
 
-    public AddressResultReceiver(Handler handler, TextView TV, Activity context) {
+    public AddressResultReceiver(Handler handler, OutstationActivity context) {
         super(handler);
-        this.TV=TV;
-        this.context = context;
+        outstationActivityWeakReference = new WeakReference<>(context);
+    }
+
+    public AddressResultReceiver(Handler handler, MainActivity context) {
+        super(handler);
+        mainActivityWeakReference = new WeakReference<>(context);
     }
 
     @Override
     protected void onReceiveResult(int resultCode, final Bundle resultData) {
         if (resultCode == Constants.SUCCESS_RESULT) {
             final Address address = resultData.getParcelable(Constants.RESULT_ADDRESS);
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if(address!=null){
-                        if(activityRef!=null){
-                            TV.setText(String.format("%s %s %s", address.getAddressLine(0), address.getAddressLine(1), address.getLocality()));
-                            activityRef.get().initState(address.getAdminArea());
+            strAddress = "";
+            if(outstateActivityWeakReference!=null){
+                outstateActivityWeakReference.get().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(address!=null){
+                            strAddress = String.format("%s,%s %s",address.getAddressLine(1),address.getLocality(),address.getAdminArea());
+                            outstateActivityWeakReference.get().fillTextViews(strAddress);
+                            outstateActivityWeakReference.get().initState(address.getAdminArea());
                         }
-                        else
-                        TV.setText(String.format("%s %s %s", address.getAddressLine(0), address.getAddressLine(1), address.getLocality()));
                     }
-                }
-            });
-        }
-        else {
-            context.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    TV.setText("");
-                }
-            });
+                });
+            }
+            else if(outstationActivityWeakReference!=null){
+                outstationActivityWeakReference.get().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(address!=null){
+                            strAddress = String.format("%s,%s %s",address.getAddressLine(0),address.getAddressLine(1),address.getLocality());
+                            outstationActivityWeakReference.get().fillTextViews(strAddress);
+                        }
+                    }
+                });
+            }
+            else if(mainActivityWeakReference!=null){
+                mainActivityWeakReference.get().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(address!=null){
+                            strAddress = String.format("%s,%s %s",address.getAddressLine(0),address.getAddressLine(1),address.getLocality());
+                            mainActivityWeakReference.get().setTextViews(strAddress);
+                        }
+                    }
+                });
+            }
         }
     }
 }

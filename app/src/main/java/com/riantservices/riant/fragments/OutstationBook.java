@@ -99,7 +99,7 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
         radio2 = rootView.findViewById(R.id.radio2);
         FriendContact.setVisibility(View.INVISIBLE);
         radio.clearCheck();
-        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        Date.setText(String.format(Locale.ENGLISH,"%02d-%02d-%02d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
         Date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,13 +108,13 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d", dayOfMonth, monthOfYear + 1, year));
+                        Date.setText(String.format(Locale.ENGLISH,"%02d-%02d-%02d", dayOfMonth, monthOfYear + 1, year));
 
                     }
                 },c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        Time.setText(String.format(Locale.ENGLISH,"%d:%d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
+        Time.setText(String.format(Locale.ENGLISH,"%02d:%02d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
         Time.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,12 +122,12 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        Time.setText(String.format(Locale.ENGLISH,"%d:%d", hourOfDay, minute));
+                        Time.setText(String.format(Locale.ENGLISH,"%02d:%02d", hourOfDay, minute));
                     }
                 },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),false).show();
             }
         });
-        Date1.setText(String.format(Locale.ENGLISH,"%d-%d-%d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
+        Date1.setText(String.format(Locale.ENGLISH,"%02d-%02d-%02d",c.get(Calendar.DAY_OF_MONTH),c.get(Calendar.MONTH), c.get(Calendar.YEAR)));
         Date1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,13 +136,13 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
                     public void onDateSet(DatePicker view, int year,
                                           int monthOfYear, int dayOfMonth) {
 
-                        Date.setText(String.format(Locale.ENGLISH,"%d-%d-%d", dayOfMonth, monthOfYear + 1, year));
+                        Date.setText(String.format(Locale.ENGLISH,"%02d-%02d-%02d", dayOfMonth, monthOfYear + 1, year));
 
                     }
                 },c.get(Calendar.YEAR),c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        Time1.setText(String.format(Locale.ENGLISH,"%d:%d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
+        Time1.setText(String.format(Locale.ENGLISH,"%02d:%02d",c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE)));
         Time1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,7 +150,7 @@ public class OutstationBook extends android.app.Fragment implements View.OnClick
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
                                           int minute) {
-                        Time.setText(String.format(Locale.ENGLISH,"%d:%d", hourOfDay, minute));
+                        Time.setText(String.format(Locale.ENGLISH,"%02d:%02d", hourOfDay, minute));
                     }
                 },c.get(Calendar.HOUR_OF_DAY),c.get(Calendar.MINUTE),false).show();
             }

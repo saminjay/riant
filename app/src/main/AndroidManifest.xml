@@ -50,12 +50,13 @@
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.TripsActivity" />
         <activity android:name=".activities.LocalBookActivity" />
-        <service android:name=".helpers.GPSTracker" />
-        <service android:name=".helpers.GeocodeAddressIntentService"/>
-        <activity android:name=".activities.AccountActivity" />
-        <activity android:name=".activities.OutstationActivity"/>
-        <activity android:name=".activities.OutstateActivity" />
 
+        <service android:name=".helpers.GPSTracker" />
+        <service android:name=".helpers.GeocodeAddressIntentService" />
+
+        <activity android:name=".activities.AccountActivity" />
+        <activity android:name=".activities.OutstationActivity" />
+        <activity android:name=".activities.OutstateActivity" />
     </application>
 
 </manifest>

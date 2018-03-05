@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.riantservices.riant.R;
+import com.riantservices.riant.fragments.CorporateBook;
 import com.riantservices.riant.helpers.AddressResultReceiver;
 import com.riantservices.riant.helpers.Constants;
 import com.riantservices.riant.helpers.DownloadRouteTask;
@@ -109,6 +110,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 mDrawerLayout.openDrawer(Gravity.START,true);
             }
         });
+        /*  for removing the expand button
         Button expandButton = findViewById(R.id.expand);
         expandButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -116,6 +118,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 mDrawerLayout.openDrawer(Gravity.START,true);
             }
         });
+        */
         OnClickListener iconClickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,6 +154,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.textOutstation1:
                         Intent goOutstation = new Intent(MainActivity.this, OutstationActivity.class);
                         startActivity(goOutstation);
+                        break;
+                    case R.id.textCorporate1:
+                        Intent goCorporate = new Intent(MainActivity.this, CorporateBookActivity.class);
+                        startActivity(goCorporate);
                         break;
                 }
             }

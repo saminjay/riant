@@ -275,8 +275,6 @@
                 android:layout_below="@id/line4"
                 android:layout_marginTop="10dp"
                 android:background="#44ffffff">
-            <!--    Let the company decide the car for the employee as different car will
-                    have different rate.
                         <RadioGroup
                             android:id="@+id/radioA"
                             android:layout_width="wrap_content"
@@ -302,15 +300,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="MPV/SUV"/>
-                            <RadioButton
-                                android:id="@+id/radio6"
-                                android:textSize="20sp"
-                                android:padding="4dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Luxury"/>
-                    I think we can remove it coz people don't wanna go to their office in
-                    a limousine and even if they do the company won't pay for it.
                         <RadioButton
                                 android:id="@+id/radio7"
                                 android:textSize="20sp"
@@ -320,7 +309,6 @@
                                 android:text="Limousine"/>
                         </RadioGroup>
 
-                    Same thing for AC and Non-AC Cars.
                         <RadioGroup
                             android:id="@+id/radioB"
                             android:layout_width="wrap_content"
@@ -345,18 +333,11 @@
                                 android:textSize="25sp"
                                 android:text="Non AC"/>
                         </RadioGroup>
-            -->
-            <!--    We can even set this as visible or gone according to the
-                    company whether it will allow pooling or not -->
                 <TextView
                     android:id="@+id/choose_partners"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Choose Partners" />
-
-            <!--    Maximum 3 contacts can be selected and if the no. of
-                    contacts is more than 1 then random people won't be
-                    selected for the ride -->
 
                 <GridView
                     android:id="@+id/chosen_partners"

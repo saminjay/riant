@@ -57,7 +57,7 @@
         <activity android:name=".activities.AccountActivity" />
         <activity android:name=".activities.OutstationActivity" />
         <activity android:name=".activities.OutstateActivity" />
-        <activity android:name=".activities.CorporateBookActivity"></activity>
+        <activity android:name=".activities.CorporateBookActivity" />
     </application>
 
 </manifest>

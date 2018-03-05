@@ -111,7 +111,8 @@
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"/>
             </LinearLayout>
-
+<!--    I think it is not a good design as it covers space for no reason
+        because user can just open the nav drawer by sliding left to right.
             <Button
                 android:id="@+id/expand"
                 android:layout_width="24dp"
@@ -121,7 +122,7 @@
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp"
                 android:background="@drawable/expandbutton"/>
-
+-->
             <Button
                 android:id="@+id/clear"
                 android:layout_width="45dp"
@@ -381,6 +382,16 @@
                 android:layout_toEndOf="@id/account1"
                 android:layout_marginLeft="24dp"
                 android:layout_marginStart="24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Corporate"
+                android:id="@+id/textCorporate1"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginStart="24dp"
+                android:layout_marginLeft="24dp"/>
 
         </RelativeLayout>
     </FrameLayout>

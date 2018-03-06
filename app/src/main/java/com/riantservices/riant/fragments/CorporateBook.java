@@ -103,7 +103,6 @@ public class CorporateBook extends Fragment implements View.OnClickListener {
         radio3 = rootView.findViewById(R.id.radio3);
         radio4 = rootView.findViewById(R.id.radio4);
         radio5 = rootView.findViewById(R.id.radio5);
-        radio6 = rootView.findViewById(R.id.radio6);
         radio7 = rootView.findViewById(R.id.radio7);
         radio8 = rootView.findViewById(R.id.radio8);
         radio9 = rootView.findViewById(R.id.radio9);
@@ -175,15 +174,6 @@ public class CorporateBook extends Fragment implements View.OnClickListener {
                         radio4.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         radio3.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         radio6.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-                        radio7.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-                        break;
-                    case R.id.radio6:
-                        strCar = "";
-                        strCar = "Luxury";
-                        radio6.setBackgroundColor(getResources().getColor(R.color.colorLight));
-                        radio4.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-                        radio5.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
-                        radio3.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         radio7.setBackgroundColor(getResources().getColor(R.color.colorTransparent));
                         break;
                     case R.id.radio7:

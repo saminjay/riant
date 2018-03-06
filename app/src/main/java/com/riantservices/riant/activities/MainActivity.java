@@ -110,15 +110,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 mDrawerLayout.openDrawer(Gravity.START,true);
             }
         });
-        /*  for removing the expand button
-        Button expandButton = findViewById(R.id.expand);
-        expandButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDrawerLayout.openDrawer(Gravity.START,true);
-            }
-        });
-        */
+
         OnClickListener iconClickListener = new OnClickListener() {
             @Override
             public void onClick(View v) {

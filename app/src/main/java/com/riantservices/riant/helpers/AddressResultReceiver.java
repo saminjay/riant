@@ -1,18 +1,13 @@
 package com.riantservices.riant.helpers;
 
-import android.app.Activity;
 import android.location.Address;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.util.Log;
-import android.widget.TextView;
 
-import com.google.android.gms.maps.MapFragment;
 import com.riantservices.riant.activities.MainActivity;
 import com.riantservices.riant.activities.OutstateActivity;
 import com.riantservices.riant.activities.OutstationActivity;
-import com.riantservices.riant.fragments.OutstateMap;
 
 import java.lang.ref.WeakReference;
 

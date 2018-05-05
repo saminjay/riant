@@ -30,7 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.riantservices.riant.R;
-import com.riantservices.riant.fragments.CorporateBook;
 import com.riantservices.riant.helpers.AddressResultReceiver;
 import com.riantservices.riant.helpers.Constants;
 import com.riantservices.riant.helpers.DownloadRouteTask;

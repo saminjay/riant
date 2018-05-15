@@ -2,14 +2,12 @@ package com.riantservices.riant.fragments;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,7 +29,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.riantservices.riant.activities.OutstateActivity;
 import com.riantservices.riant.activities.OutstationActivity;
 import com.riantservices.riant.helpers.AddressResultReceiver;
 import com.riantservices.riant.interfaces.AsyncResponse;
@@ -37,10 +38,6 @@ import com.riantservices.riant.R;
 import com.riantservices.riant.helpers.DownloadRouteTask;
 import com.riantservices.riant.interfaces.SendMessage;
 import com.riantservices.riant.helpers.SingleShotLocationProvider;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OutstationMap extends android.app.Fragment implements OnMapReadyCallback {
 
@@ -89,13 +86,6 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
-        final SearchView searchView = rootView.findViewById(R.id.searchView);
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchView.setIconified(false);
-            }
-        });
         mRootView = rootView;
         return rootView;
     }
@@ -103,34 +93,16 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
     @Override
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
-        SearchView searchView = (mRootView.findViewById(R.id.searchView));
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                List<Address> addressList = new ArrayList<>();
-
-                if (query != null && !query.equals("")) {
-                    Geocoder geocoder = new Geocoder(getActivity());
-                    try {
-                        addressList = geocoder.getFromLocationName(query, 1);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Address address;
-                    if (!addressList.isEmpty()) {
-                        address = addressList.get(0);
-                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                        map.addMarker(new MarkerOptions().position(latLng).title(query));
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
-                    }
-                }
-                return true;
+            public void onPlaceSelected(Place place) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),15));
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
+            public void onError(Status status) {
+                Log.d("Error", "An error occurred: " + status);
             }
         });
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);

@@ -20,6 +20,10 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -100,13 +104,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         TextView[] iconText = new TextView[7];
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        final SearchView searchView = findViewById(R.id.searchView);
-        searchView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchView.setIconified(false);
-            }
-        });
         ImageButton bar = findViewById(R.id.bar);
         bar.setOnClickListener(new OnClickListener() {
             @Override
@@ -158,28 +155,37 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             }
         };
-        icons[0] = findViewById(R.id.account1);
-        icons[1] = findViewById(R.id.trips1);
-        icons[2] = findViewById(R.id.settings1);
-        icons[3] = findViewById(R.id.notifictions1);
-        icons[4] = findViewById(R.id.help1);
-        icons[5] = findViewById(R.id.outstate1);
-        icons[6] = findViewById(R.id.outstation1);
-        for (int i = 0; i < 7; i++) icons[i].setOnClickListener(iconClickListener);
-        iconText[0] = findViewById(R.id.textAccount1);
-        iconText[1] = findViewById(R.id.textTrips1);
-        iconText[2] = findViewById(R.id.textNotifications1);
-        iconText[3] = findViewById(R.id.textSettings1);
-        iconText[4] = findViewById(R.id.textHelp1);
-        iconText[5] = findViewById(R.id.textOutstate1);
-        iconText[6] = findViewById(R.id.textOutstation1);
-        for (int i = 0; i < 7; i++) iconText[i].setOnClickListener(iconClickListener);
+        findViewById(R.id.account1).setOnClickListener(iconClickListener);
+        findViewById(R.id.trips1).setOnClickListener(iconClickListener);
+        findViewById(R.id.settings1).setOnClickListener(iconClickListener);
+        findViewById(R.id.notifictions1).setOnClickListener(iconClickListener);
+        findViewById(R.id.help1).setOnClickListener(iconClickListener);
+        findViewById(R.id.outstate1).setOnClickListener(iconClickListener);
+        findViewById(R.id.outstation1).setOnClickListener(iconClickListener);
+        findViewById(R.id.textAccount1).setOnClickListener(iconClickListener);
+        findViewById(R.id.textTrips1).setOnClickListener(iconClickListener);
+        findViewById(R.id.textNotifications1).setOnClickListener(iconClickListener);
+        findViewById(R.id.textSettings1).setOnClickListener(iconClickListener);
+        findViewById(R.id.textHelp1).setOnClickListener(iconClickListener);
+        findViewById(R.id.textOutstate1).setOnClickListener(iconClickListener);
+        findViewById(R.id.textOutstation1).setOnClickListener(iconClickListener);
     }
 
     @Override
     public void onMapReady(final GoogleMap map) {
         destination = new ArrayList<>();
-        SearchView searchView = (findViewById(R.id.searchView));
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),15));
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("Error", "An error occurred: " + status);
+            }
+        });
         Button button = findViewById(R.id.proceed);
         button.setOnClickListener(new OnClickListener() {
             @Override
@@ -202,40 +208,12 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 distance = 0;
             }
         });
+
         ImageButton locate = findViewById(R.id.locate);
         locate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 requestLocation();
-            }
-        });
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                List<Address> addressList = new ArrayList<>();
-
-                if (query != null && !query.equals("")) {
-                    Geocoder geocoder = new Geocoder(MainActivity.this);
-                    try {
-                        addressList = geocoder.getFromLocationName(query, 1);
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Address address;
-                    if (!addressList.isEmpty()) {
-                        address = addressList.get(0);
-                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                        map.addMarker(new MarkerOptions().position(latLng).title(query));
-                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
-                    }
-                }
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
             }
         });
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);

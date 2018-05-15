@@ -9,15 +9,15 @@
         android:layout_height="match_parent"
         android:id="@+id/map"/>
 
-    <android.support.v7.widget.SearchView
-        android:id="@+id/searchView"
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
         android:layout_width="match_parent"
-        android:layout_height="24dp"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_centerHorizontal="true"
-        android:background="@color/colorTransparentBlack"
-        android:layout_marginTop="27dp"/>
+        android:layout_marginTop="27dp"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment" />
 
     <LinearLayout
         android:id="@+id/pickup"
@@ -25,7 +25,7 @@
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_below="@id/searchView"
+        android:layout_below="@id/place_autocomplete_fragment"
         android:background="@color/colorWhite">
         <TextView
             android:layout_width="wrap_content"

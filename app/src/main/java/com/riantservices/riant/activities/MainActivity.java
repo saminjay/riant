@@ -67,12 +67,17 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView TV1,TV2;
     private ActionBarDrawerToggle mDrawerToggle;
     private float distance;
+    private Bundle location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        location = getIntent().getExtras();
+        if (location != null) {
+            Log.d("loc","My cordinates:"+ location.getDouble("lat")+","+ location.getDouble("lng"));
+        }
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.drawer_open, R.string.drawer_close) {
@@ -237,13 +242,19 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         map.setTrafficEnabled(true);
         map.setBuildingsEnabled(true);
         googleMap = map;
+        if(location!=null){
+            LatLng CURRENT_LOCATION = new LatLng(location.getDouble("lat"), location.getDouble("lng"));
+            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION,15);
+            googleMap.animateCamera(update);
+            MarkerOptions options=new MarkerOptions().position(CURRENT_LOCATION).title("Current Location").visible(true);
+            userMarker = googleMap.addMarker(options);
+        }
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
                 mark(latLng);
             }
         });
-        requestLocation();
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
     }

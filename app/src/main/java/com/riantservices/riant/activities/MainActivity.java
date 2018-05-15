@@ -243,11 +243,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 mark(latLng);
             }
         });
-        MarkerOptions options=new MarkerOptions().position(new LatLng(20.2961,85.8245));
-        userMarker = googleMap.addMarker(options);
-        userMarker.setVisible(false);
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(userMarker.getPosition(),15);
-        googleMap.animateCamera(update);
         requestLocation();
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setZoomControlsEnabled(false);
@@ -271,12 +266,10 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     @Override public void onNewLocationAvailable(SingleShotLocationProvider.GPSCoordinates location) {
                         Log.d("loc","My cordinates:"+ location.getLatitude()+","+ location.getLongitude());
                         LatLng CURRENT_LOCATION = new LatLng(location.getLatitude(), location.getLongitude());
-                        userMarker.setPosition(CURRENT_LOCATION);
-                        userMarker.setTitle("Current Location");
-                        userMarker.setVisible(true);
-                        userMarker.showInfoWindow();
                         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(CURRENT_LOCATION,15);
                         googleMap.animateCamera(update);
+                        MarkerOptions options=new MarkerOptions().position(CURRENT_LOCATION).title("Current Location").visible(true);
+                        userMarker = googleMap.addMarker(options);
                     }
                 });
     }

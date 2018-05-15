@@ -3,12 +3,14 @@ package com.riantservices.riant.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +18,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -38,6 +36,10 @@ import com.riantservices.riant.helpers.GeocodeAddressIntentService;
 import com.riantservices.riant.helpers.SingleShotLocationProvider;
 import com.riantservices.riant.interfaces.AsyncResponse;
 import com.riantservices.riant.interfaces.SendMessage;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OutstateMap extends android.app.Fragment implements OnMapReadyCallback {
 
@@ -88,6 +90,13 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
         mapView.getMapAsync(this);
+        final SearchView searchView = rootView.findViewById(R.id.searchView);
+        searchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchView.setIconified(false);
+            }
+        });
         mRootView = rootView;
         return rootView;
     }
@@ -95,16 +104,34 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
     @Override
     public void onMapReady(final GoogleMap map) {
         googleMap = map;
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+        SearchView searchView = (mRootView.findViewById(R.id.searchView));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void onPlaceSelected(Place place) {
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(),15));
+            public boolean onQueryTextSubmit(String query) {
+                List<Address> addressList = new ArrayList<>();
+
+                if (query != null && !query.equals("")) {
+                    Geocoder geocoder = new Geocoder(getActivity());
+                    try {
+                        addressList = geocoder.getFromLocationName(query, 1);
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Address address;
+                    if (!addressList.isEmpty()) {
+                        address = addressList.get(0);
+                        LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                        map.addMarker(new MarkerOptions().position(latLng).title(query));
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+                    }
+                }
+                return true;
             }
 
             @Override
-            public void onError(Status status) {
-                Log.d("Error", "An error occurred: " + status);
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);

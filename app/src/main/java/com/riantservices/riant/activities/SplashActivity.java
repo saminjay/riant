@@ -1,7 +1,18 @@
 package com.riantservices.riant.activities;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +28,7 @@ import com.riantservices.riant.helpers.SingleShotLocationProvider;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
     SessionManager session;
     private Handler mHandler = new Handler();
     private Bundle bundle = new Bundle();
@@ -26,14 +38,26 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         session = new SessionManager(getApplicationContext());
-        requestLocation();
-        mHandler.postDelayed(new Runnable() {
-            public void run() {
-                start();
-            }
-        }, 2000);
         if(getSupportActionBar()!=null)
             getSupportActionBar().hide();
+        final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
+         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M ) || (ContextCompat.checkSelfPermission(SplashActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(SplashActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED)){
+             if (manager != null) {
+                 if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                     buildAlertMessageNoGps();
+                 }
+                 else {
+                     requestLocation();
+                     mHandler.postDelayed(new Runnable() {
+                         public void run() {
+                             start();
+                         }
+                     }, 2000);
+                 }
+             }
+         }
+        else
+            ActivityCompat.requestPermissions(SplashActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
     }
 
     public void start(){
@@ -56,5 +80,44 @@ public class SplashActivity extends AppCompatActivity {
                         bundle.putDouble("lng",location.getLongitude());
                     }
                 });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[]grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    requestLocation();
+                    mHandler.postDelayed(new Runnable() {
+                        public void run() {
+                            start();
+                        }
+                    }, 2000);
+                } else {
+                    SplashActivity.this.finish();
+                    System.exit(0);
+                }
+            }
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                        SplashActivity.this.finish();
+                        System.exit(0);
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 }

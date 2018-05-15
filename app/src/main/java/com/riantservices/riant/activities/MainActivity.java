@@ -245,7 +245,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         });
         MarkerOptions options=new MarkerOptions().position(new LatLng(20.2961,85.8245)).title("Current Location");
         userMarker = googleMap.addMarker(options);
-        userMarker.setVisible(true);
+        userMarker.setVisible(false);
         CameraUpdate update = CameraUpdateFactory.newLatLngZoom(userMarker.getPosition(),15);
         googleMap.animateCamera(update);
         requestLocation();

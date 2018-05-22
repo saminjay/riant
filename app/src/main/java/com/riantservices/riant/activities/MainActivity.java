@@ -31,6 +31,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.riantservices.riant.R;
@@ -72,6 +73,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private ActionBarDrawerToggle mDrawerToggle;
     private float distance;
     private Bundle location;
+    private LatLngBounds.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +101,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         TV1 = findViewById(R.id.pickup_addr);
         TV2 = findViewById(R.id.destination_addr);
         distance = 0;
+        builder = new LatLngBounds.Builder();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         ImageButton[] icons = new ImageButton[7];
         TextView[] iconText = new TextView[7];
@@ -147,10 +150,6 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     case R.id.textOutstation1:
                         Intent goOutstation = new Intent(MainActivity.this, OutstationActivity.class);
                         startActivity(goOutstation);
-                        break;
-                    case R.id.textCorporate1:
-                        Intent goCorporate = new Intent(MainActivity.this, CorporateBookActivity.class);
-                        startActivity(goCorporate);
                         break;
                 }
             }
@@ -264,6 +263,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     protected void mark(LatLng latLng) {
+        builder.include(latLng);
         if (pickup!=null) {
             destination.add(latLng);
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)).position(latLng).title("destination".concat(String.valueOf(destination.size()))));
@@ -286,6 +286,14 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 });
                 downloadRouteTask.execute(url);
             }
+
+            LatLngBounds bounds = builder.build();
+            int width = getResources().getDisplayMetrics().widthPixels;
+            int height = getResources().getDisplayMetrics().heightPixels;
+            int padding = (int) (width * 0.10);
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
+            googleMap.animateCamera(cu);
+
         } else {
             pickup = latLng;
             googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)).position(latLng).title("pickup"));

@@ -1,10 +1,15 @@
 package com.riantservices.riant.helpers;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.view.animation.LinearInterpolator;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.JointType;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.riantservices.riant.interfaces.AsyncResponse;
 import com.riantservices.riant.models.DistanceDirectionTime;
@@ -19,6 +24,9 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
     private GoogleMap googleMap;
     private AsyncResponse delegate;
     private float distance = 0;
+    private Polyline greenPolyLine;
+    private Polyline orangePolyLine;
+    private ArrayList<LatLng> listLatLng = new ArrayList<>();
 
     RouteParserTask(GoogleMap map, AsyncResponse delegate){
         googleMap = map;
@@ -64,16 +72,85 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
                 points.add(position);
             }
 
+            this.listLatLng.addAll(points);
+
             lineOptions.addAll(points);
-            lineOptions.width(12);
-            lineOptions.color(Color.argb(255,255,50,0));
+            lineOptions.width(10);
+            lineOptions.color(Color.argb(255,0,255,0));
+            lineOptions.jointType(JointType.ROUND);
             lineOptions.geodesic(true);
         }
         try {
-            googleMap.addPolyline(lineOptions);
+            greenPolyLine = googleMap.addPolyline(lineOptions);
+            assert lineOptions != null;
+            lineOptions.color(Color.argb(255,255,50,0));
+            orangePolyLine = googleMap.addPolyline(lineOptions);
+            animatePolyLine();
             delegate.processFinish(distance);
         }
         catch (Exception ignored){
         }
     }
+
+    private void animatePolyLine() {
+
+        ValueAnimator animator = ValueAnimator.ofInt(0, 100);
+        animator.setDuration(1000);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+
+                List<LatLng> latLngList = greenPolyLine.getPoints();
+                int initialPointSize = latLngList.size();
+                int animatedValue = (int) animator.getAnimatedValue();
+                int newPoints = (animatedValue * listLatLng.size()) / 100;
+
+                if (initialPointSize < newPoints ) {
+                    latLngList.addAll(listLatLng.subList(initialPointSize, newPoints));
+                    greenPolyLine.setPoints(latLngList);
+                }
+
+
+            }
+        });
+
+        animator.addListener(polyLineAnimationListener);
+        animator.start();
+    }
+
+    private Animator.AnimatorListener polyLineAnimationListener = new Animator.AnimatorListener() {
+        @Override
+        public void onAnimationStart(Animator animator) {
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animator) {
+
+            List<LatLng> greenLatLng = greenPolyLine.getPoints();
+            List<LatLng> orangeLatLng = orangePolyLine.getPoints();
+
+            orangeLatLng.clear();
+            orangeLatLng.addAll(greenLatLng);
+            greenLatLng.clear();
+
+            greenPolyLine.setPoints(greenLatLng);
+            orangePolyLine.setPoints(orangeLatLng);
+
+            greenPolyLine.setZIndex(2);
+
+            animator.start();
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animator) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animator) {
+
+
+        }
+    };
 }

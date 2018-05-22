@@ -25,7 +25,7 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
     private AsyncResponse delegate;
     private float distance = 0;
     private Polyline greenPolyLine;
-    private Polyline orangePolyLine;
+    private Polyline blackPolyLine;
     private ArrayList<LatLng> listLatLng = new ArrayList<>();
 
     RouteParserTask(GoogleMap map, AsyncResponse delegate){
@@ -83,8 +83,8 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
         try {
             greenPolyLine = googleMap.addPolyline(lineOptions);
             assert lineOptions != null;
-            lineOptions.color(Color.argb(255,255,50,0));
-            orangePolyLine = googleMap.addPolyline(lineOptions);
+            lineOptions.color(Color.argb(255,0,0,0));
+            blackPolyLine = googleMap.addPolyline(lineOptions);
             animatePolyLine();
             delegate.processFinish(distance);
         }
@@ -128,14 +128,14 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
         public void onAnimationEnd(Animator animator) {
 
             List<LatLng> greenLatLng = greenPolyLine.getPoints();
-            List<LatLng> orangeLatLng = orangePolyLine.getPoints();
+            List<LatLng> blackLatLng = blackPolyLine.getPoints();
 
-            orangeLatLng.clear();
-            orangeLatLng.addAll(greenLatLng);
+            blackLatLng.clear();
+            blackLatLng.addAll(greenLatLng);
             greenLatLng.clear();
 
             greenPolyLine.setPoints(greenLatLng);
-            orangePolyLine.setPoints(orangeLatLng);
+            blackPolyLine.setPoints(blackLatLng);
 
             greenPolyLine.setZIndex(2);
 

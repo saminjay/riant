@@ -3,15 +3,12 @@ package com.riantservices.riant.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -74,6 +71,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
     private float distance;
     private Bundle location;
     private LatLngBounds.Builder builder;
+    private float time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -271,8 +269,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 String url = getDirectionsUrl(pickup, destination.get(destination.size()-1));
                 DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap, new AsyncResponse() {
                     @Override
-                    public void processFinish(float output) {
+                    public void processFinish(float output,float output1) {
                         distance+=output;
+                        time+=output1;
                     }
                 });
                 downloadRouteTask.execute(url);
@@ -280,8 +279,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                 String url = getDirectionsUrl(destination.get(destination.size()-2), destination.get(destination.size()-1));
                 DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap, new AsyncResponse() {
                     @Override
-                    public void processFinish(float output) {
+                    public void processFinish(float output,float output1) {
                         distance+=output;
+                        time+=output1;
                     }
                 });
                 downloadRouteTask.execute(url);
@@ -324,6 +324,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         bundle.putString("pickupAddr",TV1.getText().toString());
         bundle.putString("destinationAddr",TV2.getText().toString());
         bundle.putFloat("distance",distance);
+        bundle.putFloat("time",time);
         intent.putExtra("Data", bundle);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
         startActivity(intent);

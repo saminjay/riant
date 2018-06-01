@@ -197,7 +197,7 @@ public class OutstateMap extends android.app.Fragment implements OnMapReadyCallb
             String url = getDirectionsUrl(pickup, destination);
             downloadRouteTask = new DownloadRouteTask(googleMap,new AsyncResponse() {
                 @Override
-                public void processFinish(float output) {
+                public void processFinish(float output,float output1) {
                     SM.sendData(null,String.valueOf(output),3);
                 }
             });

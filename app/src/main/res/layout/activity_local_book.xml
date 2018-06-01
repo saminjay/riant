@@ -425,7 +425,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/estimator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Estimate Fair"
@@ -435,10 +435,12 @@
                 android:background="@color/colorLight"/>
 
             <TextView
+                android:id="@+id/estimate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="35sp"
-                android:layout_alignBottom="@+id/button"
+                android:text="NA"
+                android:layout_alignBottom="@+id/estimator"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
@@ -449,7 +451,7 @@
                 android:layout_height="wrap_content"
                 android:text="BOOK RIANT"
                 android:background="@color/colorAccent"
-                android:layout_below="@id/button"/>
+                android:layout_below="@id/estimator"/>
 
         </RelativeLayout>
     </ScrollView>

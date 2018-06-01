@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 public class LoginActivity extends Activity implements OnClickListener  {
 
     private EditText EtLogEmail, EtLogPass;
+    static int rslt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,63 +121,32 @@ public class LoginActivity extends Activity implements OnClickListener  {
     }
 
     protected void Login(final String email, final String pwd) {
-        Thread t = new Thread() {
+        try {
+            rslt=0;
+            CallerchkUser c= new CallerchkUser();
+            c.a=email;
+            c.b=pwd;
+            c.join();
+            c.start();
+            //while(rslt==0){
+                try{
+                    Thread.sleep(1000);
+                }catch(Exception ignored) {}
+            //}
 
-            public void run() {
-                Looper.prepare(); //For Preparing Message Pool for the child Thread
-                HttpClient client = new DefaultHttpClient();
-                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
-                HttpResponse response;
-                JSONObject json = new JSONObject();
-
-                try {
-                    HttpPost post = new HttpPost("url");
-                    json.put("email", email);
-                    json.put("password", pwd);
-                    StringEntity se = new StringEntity( json.toString());
-                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                    post.setEntity(se);
-                    response = client.execute(post);
-
-                /*Checking response */
-                    if(response!=null){
-                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
-                        respond(in);
-
-                    }
-
-                } catch(Exception e) {
-                    e.printStackTrace();
-                    alertDialog("Error: Cannot Estabilish Connection");
-                }
-
-                Looper.loop(); //Loop in the message queue
+            if(rslt == 1){
+                alertDialog("Login Succcessful");
+                Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                startActivity(intent);
             }
-        };
+            else
+            {
+                alertDialog("Invalid Username or Password, Try again!!");
+            }
 
-        t.start();
-    }
-
-    public void respond(InputStream in)throws JSONException {
-        JSONObject result = new JSONObject(in.toString());
-        int Status = result.getInt("status");
-        String User_name = result.getString("user_name");
-        String User_email = result.getString("user_email");
-        String Role = result.getString("role");
-        if(Status == 1){
-
-            SessionManager session = new SessionManager(getApplicationContext());
-            session.createLoginSession(User_name, User_email,Role);
-            Intent mainActivity = new Intent(this, MainActivity.class);
-            startActivity(mainActivity);
-            overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_left);
-
-        }else if(Status == 0){
-
-            alertDialog("Wrong email and password");
-
-        }else{
-            alertDialog("System error, please contact with administrator");
+        } catch(Exception e) {
+            e.printStackTrace();
+            alertDialog("Error: Cannot Estabilish Connection");
         }
     }
 }

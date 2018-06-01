@@ -213,7 +213,7 @@ public class OutstationMap extends android.app.Fragment implements OnMapReadyCal
             String url = getDirectionsUrl(pickup, destination);
             DownloadRouteTask downloadRouteTask = new DownloadRouteTask(googleMap,new AsyncResponse() {
                 @Override
-                public void processFinish(float output) {
+                public void processFinish(float output,float output1) {
                     SM.sendData(null,String.valueOf(output),3);
                 }
             });

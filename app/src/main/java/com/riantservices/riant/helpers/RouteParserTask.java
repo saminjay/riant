@@ -24,6 +24,7 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
     private GoogleMap googleMap;
     private AsyncResponse delegate;
     private float distance = 0;
+    private float time = 0;
     private Polyline greenPolyLine;
     private Polyline blackPolyLine;
     private ArrayList<LatLng> listLatLng = new ArrayList<>();
@@ -45,6 +46,7 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
             DistanceDirectionTime distanceDirectionTime = parser.parse(jObject);
             routes = distanceDirectionTime.routes;
             distance = distanceDirectionTime.distance;
+            time = distanceDirectionTime.time;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,7 +88,7 @@ public class RouteParserTask extends AsyncTask<String, Integer, List<List<HashMa
             lineOptions.color(Color.argb(255,0,0,0));
             blackPolyLine = googleMap.addPolyline(lineOptions);
             animatePolyLine();
-            delegate.processFinish(distance);
+            delegate.processFinish(distance,time);
         }
         catch (Exception ignored){
         }

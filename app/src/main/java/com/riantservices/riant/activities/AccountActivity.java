@@ -47,7 +47,8 @@ public class AccountActivity extends AppCompatActivity{
         save.setOnClickListener(iconClickListener);
         logout = findViewById(R.id.logout);
         logout.setOnClickListener(iconClickListener);
-        loadData();
+        //loadData();
+        fetchOffline();
     }
 
     View.OnClickListener iconClickListener = new View.OnClickListener() {

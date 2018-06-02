@@ -15,7 +15,6 @@ public class SessionManager {
     private Context _context;
     private static final String PREF_NAME = "AndroidHivePref";
     private static final String IS_LOGIN = "IsLoggedIn";
-    private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_NUMBER = "number";
     public SessionManager(Context context){
@@ -23,10 +22,9 @@ public class SessionManager {
         pref = _context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
      
-    public void createLoginSession(String name, String email, String number){
+    public void createLoginSession(String email, String number){
         editor = pref.edit();
         editor.putBoolean(IS_LOGIN, true);
-        editor.putString(KEY_NAME, name);
         editor.putString(KEY_EMAIL, email);
         editor.putString(KEY_NUMBER, number);
         editor.apply();
@@ -34,7 +32,6 @@ public class SessionManager {
 
     HashMap<String, String> getUserDetails(){
         HashMap<String, String> user = new HashMap<>();
-        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
         user.put(KEY_EMAIL, pref.getString(KEY_EMAIL, null));
         user.put(KEY_NUMBER, pref.getString(KEY_NUMBER, null));
         return user;
@@ -52,10 +49,6 @@ public class SessionManager {
 
     public String getEmail(){
         return pref.getString(KEY_EMAIL,null);
-    }
-
-    public String getName(){
-        return pref.getString(KEY_NAME,null);
     }
 
     public String getNumber(){

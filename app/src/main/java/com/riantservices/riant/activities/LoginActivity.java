@@ -35,11 +35,13 @@ public class LoginActivity extends Activity implements OnClickListener  {
 
     private EditText EtLogEmail, EtLogPass;
     static int rslt;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Button btnSignin, btnRegister;
         super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager(this);
         setContentView(R.layout.activity_login);
         Intent intent = getIntent();
         EtLogEmail = findViewById(R.id.LogEmail);
@@ -50,6 +52,7 @@ public class LoginActivity extends Activity implements OnClickListener  {
             EtLogEmail.setText(Email_User_From_register);
             EtLogPass.setText(PassUser_From_register);
         }
+
         View.OnFocusChangeListener onFocusChangeListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -135,7 +138,7 @@ public class LoginActivity extends Activity implements OnClickListener  {
             //}
 
             if(rslt == 1){
-                alertDialog("Login Succcessful");
+                sessionManager.createLoginSession(email,pwd);
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
             }

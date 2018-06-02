@@ -41,21 +41,21 @@ public class SplashActivity extends AppCompatActivity {
         if(getSupportActionBar()!=null)
             getSupportActionBar().hide();
         final LocationManager manager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
-         if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M ) || (ContextCompat.checkSelfPermission(SplashActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(SplashActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED)){
-             if (manager != null) {
-                 if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
-                     buildAlertMessageNoGps();
-                 }
-                 else {
-                     requestLocation();
-                     mHandler.postDelayed(new Runnable() {
+        if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.M ) || (ContextCompat.checkSelfPermission(SplashActivity.this,Manifest.permission.ACCESS_FINE_LOCATION)== PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(SplashActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED)){
+            if (manager != null) {
+                if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                    buildAlertMessageNoGps();
+                }
+                else {
+                    requestLocation();
+                    mHandler.postDelayed(new Runnable() {
                          public void run() {
                              start();
                          }
                      }, 2000);
-                 }
-             }
-         }
+                }
+            }
+        }
         else
             ActivityCompat.requestPermissions(SplashActivity.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
     }

@@ -82,6 +82,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         if (location != null) {
             Log.d("loc","My cordinates:"+ location.getDouble("lat")+","+ location.getDouble("lng"));
         }
+        else{
+            requestLocation();
+        }
         mDrawerLayout = findViewById(R.id.drawer_layout);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
                 R.string.drawer_open, R.string.drawer_close) {

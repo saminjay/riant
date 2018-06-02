@@ -103,10 +103,6 @@ public class AccountActivity extends AppCompatActivity{
 
     public void fetchOffline(){
         sessionManager = new SessionManager(getApplicationContext());
-        Tname.setText(sessionManager.getName());
-        Tnumber.setText(sessionManager.getNumber());
         Temail.setText(sessionManager.getEmail());
-        ETname.setText(sessionManager.getName());
-        ETnumber.setText(sessionManager.getNumber());
     }
 }

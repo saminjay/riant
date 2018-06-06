@@ -99,7 +99,7 @@ public class CallSoap
     }
 
     //Local Price Estimation
-    public float Call(String a,int ac, float b, float c)
+    public float Call(String a,int b, float c, float d)
     {
         SoapObject request = new SoapObject(WSDL_TARGET_NAMESPACE,"price_estimate");
         PropertyInfo pi=new PropertyInfo();
@@ -110,14 +110,14 @@ public class CallSoap
 
         pi=new PropertyInfo();
         pi.setName("distance");
-        pi.setValue(b);
-        pi.setType(String.class);
+        pi.setValue(c);
+        pi.setType(Float.class);
         request.addProperty(pi);
 
         pi=new PropertyInfo();
         pi.setName("travel_time");
-        pi.setValue(c);
-        pi.setType(String.class);
+        pi.setValue(d);
+        pi.setType(Float.class);
         request.addProperty(pi);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(

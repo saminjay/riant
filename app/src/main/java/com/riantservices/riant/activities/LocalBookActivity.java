@@ -250,9 +250,9 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.estimator:
                 if(strAC.equals("AC"))
-                    fareEstimator("standard",1,(float)distanceValue%1000,(float)timeValue%60);
+                    fareEstimator("STANDARD",1,(float)distanceValue%1000,(float)timeValue%60);
                 else
-                    fareEstimator("standard",0,(float)distanceValue%1000,(float)timeValue%60);
+                    fareEstimator("STANDARD",0,(float)distanceValue%1000,(float)timeValue%60);
                 break;
             case R.id.button1:
                 strPickup = Pickup.getText().toString();

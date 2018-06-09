@@ -103,7 +103,7 @@ public class CallSoap
     {
         SoapObject request = new SoapObject(WSDL_TARGET_NAMESPACE,"price_estimate");
         PropertyInfo pi=new PropertyInfo();
-        pi.setName("v_type");
+        pi.setName("type");
         pi.setValue(a);
         pi.setType(String.class);
         request.addProperty(pi);

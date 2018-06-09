@@ -139,6 +139,7 @@ public class CallSoap
             Log.d("DEVIL",exception.toString());
             return 0;
         }
+        Log.d("DEVIL",response);
         return  Float.parseFloat(response);
     }
 }

@@ -79,7 +79,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         location = getIntent().getExtras();
-        if (location != null) {
+        if (location != null || (location.getDouble("lat")!=0 && location.getDouble("lng")!=0)) {
             Log.d("loc","My cordinates:"+ location.getDouble("lat")+","+ location.getDouble("lng"));
         }
         else{

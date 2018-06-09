@@ -6,7 +6,7 @@ public class CallerLocalEstimate extends Thread
 {
     public String a;
     int b;
-    float c,d;
+    String c,d;
 
     public void run(){
         try{

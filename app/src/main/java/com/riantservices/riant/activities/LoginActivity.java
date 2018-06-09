@@ -1,6 +1,7 @@
 package com.riantservices.riant.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Looper;
@@ -130,13 +131,15 @@ public class LoginActivity extends Activity implements OnClickListener  {
             c.a=email;
             c.b=pwd;
             c.join();
+            ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setTitle("Connecting");
+            progressDialog.setIndeterminate(true);
+            progressDialog.show();
             c.start();
-            //while(rslt==0){
-                try{
-                    Thread.sleep(1000);
-                }catch(Exception ignored) {}
-            //}
-
+            try{
+                Thread.sleep(1000);
+            }catch(Exception ignored) {}
+            progressDialog.dismiss();
             if(rslt == 1){
                 sessionManager.createLoginSession(email,pwd);
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);

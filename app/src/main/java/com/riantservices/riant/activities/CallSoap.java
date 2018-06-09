@@ -99,7 +99,7 @@ public class CallSoap
     }
 
     //Local Price Estimation
-    public float Call(String a,int b, float c, float d)
+    public float Call(String a,int b, String c, String d)
     {
         SoapObject request = new SoapObject(WSDL_TARGET_NAMESPACE,"price_estimate");
         PropertyInfo pi=new PropertyInfo();
@@ -111,13 +111,13 @@ public class CallSoap
         pi=new PropertyInfo();
         pi.setName("distance");
         pi.setValue(c);
-        pi.setType(Float.class);
+        pi.setType(String.class);
         request.addProperty(pi);
 
         pi=new PropertyInfo();
         pi.setName("travel_time");
         pi.setValue(d);
-        pi.setType(Float.class);
+        pi.setType(String.class);
         request.addProperty(pi);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(
@@ -127,17 +127,17 @@ public class CallSoap
         envelope.setOutputSoapObject(request);
 
         HttpTransportSE httpTransport = new HttpTransportSE(SOAP_ADDRESS);
-        Object response;
+        String response;
         try
         {
             httpTransport.call("http://tempuri.org/price_estimate", envelope);
-            response = envelope.getResponse();
+            response = envelope.getResponse().toString();
         }
         catch (Exception exception)
         {
             Log.d("DEVIL",exception.toString());
             return 0;
         }
-        return (float) response;
+        return  Float.parseFloat(response);
     }
 }

@@ -287,8 +287,8 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
             CallerLocalEstimate c = new CallerLocalEstimate();
             c.a=type;
             c.b=ac;
-            c.c=distanceValue;
-            c.d=timeValue;
+            c.c=String.valueOf(distanceValue);
+            c.d=String.valueOf(timeValue);
             c.join();
             c.start();
             try{

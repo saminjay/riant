@@ -2,6 +2,7 @@ package com.riantservices.riant.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -109,12 +110,17 @@ public class RegisterActivity extends Activity{
                 c.c=Email;
                 c.d= Password;
                 c.join();
+                ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setTitle("Connecting");
+                progressDialog.setIndeterminate(true);
+                progressDialog.show();
                 c.start();
                 while(rslt.equals("start")){
                     try{
                         Thread.sleep(1000);
                     }catch(Exception ignored) {}
                 }
+                progressDialog.dismiss();
                 alertDialog("User Succcessfully Registered");
                 Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
                 intent.putExtra("Email",Email);

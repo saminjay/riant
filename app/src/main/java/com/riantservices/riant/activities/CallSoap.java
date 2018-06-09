@@ -116,6 +116,7 @@ public class CallSoap
 
         pi=new PropertyInfo();
         pi.setName("travel_time");
+        Log.d("TIME",d);
         pi.setValue(d);
         pi.setType(String.class);
         request.addProperty(pi);

@@ -193,7 +193,7 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
                     alertDialog("Choose a Destination");
             }
         });
-        Button button1 = findViewById(R.id.clear);
+        ImageButton button1 = findViewById(R.id.clear);
         button1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {

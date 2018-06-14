@@ -119,26 +119,29 @@
                     android:layout_width="wrap_content"/>
             </LinearLayout>
 
-            <Button
+            <ImageButton
                 android:id="@+id/clear"
+                android:src="@drawable/trash"
+                android:padding="8dp"
+                android:scaleType="fitXY"
                 android:layout_width="45dp"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:background="@drawable/buttonselected"
-                android:text="X"
-                android:textSize="30sp" />
+                android:layout_margin="8dp"
+                android:textSize="24sp"
+                android:contentDescription="@string/clear" />
 
             <Button
                 android:id="@+id/proceed"
-                android:layout_width="45dp"
+                android:layout_width="24dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:background="@drawable/buttonselected"
-                android:text=">>"
-                android:textSize="30sp" />
+                android:background="@drawable/buttoncompact"
+                android:text=">>"/>
 
             <ImageButton
                 android:layout_width="45dp"

@@ -70,7 +70,7 @@ public class AccountActivity extends AppCompatActivity{
                     }
                     break;
                 case R.id.logout:
-                    //sessionManager.logoutUser();
+                    sessionManager.logoutUser();
                     Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

@@ -52,7 +52,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -101,10 +100,9 @@ public class MainActivity extends FragmentActivity implements OnMapReadyCallback
         distance = 0;
         builder = new LatLngBounds.Builder();
         mDrawerLayout.addDrawerListener(mDrawerToggle);
-        ImageButton[] icons = new ImageButton[7];
-        TextView[] iconText = new TextView[7];
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        if (mapFragment != null) mapFragment.getMapAsync(this);
+        else Log.d("ERR","Map fragment null");
         ImageButton bar = findViewById(R.id.bar);
         bar.setOnClickListener(new OnClickListener() {
             @Override

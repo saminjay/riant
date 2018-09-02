@@ -62,7 +62,7 @@ public class CallSoap
     }
 
     //Check User
-    public int Call(String a,String b)
+    public Object Call(String a, String b)
     {
         SoapObject request = new SoapObject(WSDL_TARGET_NAMESPACE,"chkUser");
         PropertyInfo pi=new PropertyInfo();
@@ -95,7 +95,7 @@ public class CallSoap
         {
             response=exception.toString();
         }
-        return (int) response;
+        return response;
     }
 
     //Local Price Estimation

@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class LocalBookActivity extends AppCompatActivity implements View.OnClickListener {
+    public static float rslt;
     SessionManager session;
     ImageButton oneway, roundtrip;
     Button AC, NonAC;
@@ -51,7 +52,7 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
     private RadioButton radio2;
     private String strEmail, strBookFor, strTrip, strAC, strPickup, strDestination, strNumber;
     private LinearLayout rDateTime;
-    private double distanceValue;
+    private double distanceValue,timeValue;
     private LatLng pickup;
     private List<LatLng> destination;
 
@@ -70,8 +71,6 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         rDateTime = findViewById(R.id.rDateTime);
         rDateTime.setVisibility(View.GONE);
         distance = findViewById(R.id.distance1);
-        Button button = findViewById(R.id.button);
-        Button button1 = findViewById(R.id.button1);
         oneway = findViewById(R.id.oneway);
         roundtrip = findViewById(R.id.roundtrip);
         Date = findViewById(R.id.pDate);
@@ -80,8 +79,8 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
         Time1 = findViewById(R.id.rTime);
         AC = findViewById(R.id.AC);
         NonAC = findViewById(R.id.NonAC);
-        button.setOnClickListener(this);
-        button1.setOnClickListener(this);
+        findViewById(R.id.estimator).setOnClickListener(this);
+        findViewById(R.id.button1).setOnClickListener(this);
         oneway.setOnClickListener(this);
         roundtrip.setOnClickListener(this);
         AC.setOnClickListener(this);
@@ -111,6 +110,7 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
             Pickup.setText(Data.getString("pickupAddr"));
             Destination.setText(Data.getString("destinationAddr"));
             distanceValue = Data.getFloat("distance");
+            timeValue = Data.getFloat("time");
             fillDistance();
         }
         radio.clearCheck();
@@ -248,6 +248,12 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
                 strAC = "";
                 strAC = "NonAC";
                 break;
+            case R.id.estimator:
+                if(strAC.equals("AC"))
+                    fareEstimator("STANDARD",1,distanceValue/1000,timeValue/60);
+                else
+                    fareEstimator("STANDARD",0,distanceValue/1000,timeValue/60);
+                break;
             case R.id.button1:
                 strPickup = Pickup.getText().toString();
                 strDestination = Destination.getText().toString();
@@ -272,9 +278,29 @@ public class LocalBookActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
                 break;
-            case R.id.button:
-                //estimate fare function
-                break;
+        }
+    }
+
+    private void fareEstimator(String type,int ac, double distanceValue, double timeValue) {
+        try {
+            rslt=0;
+            CallerLocalEstimate c = new CallerLocalEstimate();
+            c.a=type;
+            c.b=ac;
+            c.c=String.valueOf(distanceValue);
+            c.d=String.valueOf(timeValue);
+            c.join();
+            c.start();
+            try{
+                Thread.sleep(1000);
+            }catch(Exception ignored) {}
+
+            if(rslt!=0)
+                ((TextView)findViewById(R.id.estimate)).setText(String.valueOf(rslt));
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            alertDialog("Error: Cannot Estabilish Connection");
         }
     }
 

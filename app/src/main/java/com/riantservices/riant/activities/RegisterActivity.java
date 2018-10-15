@@ -2,10 +2,10 @@ package com.riantservices.riant.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,24 +14,12 @@ import android.widget.TextView;
 
 import com.riantservices.riant.R;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.protocol.HTTP;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-
 public class RegisterActivity extends Activity{
     EditText UserName, Email, Phone, Pass1, Pass2;
     Button BtnRegister;
     String strName, strEmail, strPhone,strPass, strPass2;
+    public static String rslt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,11 +54,7 @@ public class RegisterActivity extends Activity{
                     alertDialog("Password not match");
                 }
                 else{
-                    try{
-                        Register(strName, strEmail, strPhone, strPass);
-                    }
-                    catch (UnsupportedEncodingException e) {
-                        alertDialog("Unsupported encoding");}
+                    Register(strName, strEmail, strPhone, strPass);
                 }
             }
         });
@@ -117,63 +101,35 @@ public class RegisterActivity extends Activity{
         return m.matches();
     }
 
-    protected void Register(final String Name, final String Email,final String Phone,final String Password)throws UnsupportedEncodingException {
-        Thread t = new Thread() {
-
-            public void run() {
-                Looper.prepare(); //For Preparing Message Pool for the child Thread
-                HttpClient client = new DefaultHttpClient();
-                HttpConnectionParams.setConnectionTimeout(client.getParams(), 10000); //Timeout Limit
-                HttpResponse response;
-                JSONObject json = new JSONObject();
-
-                try {
-                    HttpPost post = new HttpPost("url");
-                    json.put("name", Name);
-                    json.put("email", Email);
-                    json.put("phone", Phone);
-                    json.put("password", Password);
-                    StringEntity se = new StringEntity( json.toString());
-                    se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-                    post.setEntity(se);
-                    response = client.execute(post);
-
-                /*Checking response */
-                    if(response!=null){
-                        InputStream in = response.getEntity().getContent(); //Get the data in the entity
-                        respond(in);
-
-                    }
-
-                } catch(Exception e) {
-                    e.printStackTrace();
-                    alertDialog("Error: Cannot Estabilish Connection");
+    protected void Register(final String Name, final String Email,final String Phone,final String Password) {
+        try {
+                rslt="start";
+                CallerregisterUser c= new CallerregisterUser();
+                c.a=Name;
+                c.b=Phone;
+                c.c=Email;
+                c.d= Password;
+                c.join();
+                ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setTitle("Connecting");
+                progressDialog.setIndeterminate(true);
+                progressDialog.show();
+                c.start();
+                while(rslt.equals("start")){
+                    try{
+                        Thread.sleep(1000);
+                    }catch(Exception ignored) {}
                 }
+                progressDialog.dismiss();
+                alertDialog("User Succcessfully Registered");
+                Intent intent = new Intent(RegisterActivity.this,LoginActivity.class);
+                intent.putExtra("Email",Email);
+                intent.putExtra("Pass",Password);
+                startActivity(intent);
 
-                Looper.loop(); //Loop in the message queue
-            }
-        };
-
-        t.start();
-    }
-
-    public void respond(InputStream in)throws JSONException {
-        JSONObject result = new JSONObject(in.toString());
-        int Status = result.getInt("status");
-        if(Status == 1){
-            alertDialog("Registration Successful. Welcome to Riant Family.");
-            Intent loginActivity = new Intent(this, LoginActivity.class);
-            loginActivity.putExtra("Email",strEmail);
-            loginActivity.putExtra("Pass",strPass);
-            startActivity(loginActivity);
-            overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_left);
-
-        }else if(Status == 0){
-
-            alertDialog("Email is already being used by another user.");
-
-        }else{
-            alertDialog("System error, please contact with administrator");
+        } catch(Exception e) {
+            e.printStackTrace();
+            alertDialog("Error: Cannot Estabilish Connection");
         }
     }
 }

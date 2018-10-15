@@ -47,7 +47,8 @@ public class AccountActivity extends AppCompatActivity{
         save.setOnClickListener(iconClickListener);
         logout = findViewById(R.id.logout);
         logout.setOnClickListener(iconClickListener);
-        loadData();
+        //loadData();
+        fetchOffline();
     }
 
     View.OnClickListener iconClickListener = new View.OnClickListener() {
@@ -69,7 +70,7 @@ public class AccountActivity extends AppCompatActivity{
                     }
                     break;
                 case R.id.logout:
-                    //sessionManager.logoutUser();
+                    sessionManager.logoutUser();
                     Intent intent = new Intent(AccountActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
@@ -103,10 +104,6 @@ public class AccountActivity extends AppCompatActivity{
 
     public void fetchOffline(){
         sessionManager = new SessionManager(getApplicationContext());
-        Tname.setText(sessionManager.getName());
-        Tnumber.setText(sessionManager.getNumber());
         Temail.setText(sessionManager.getEmail());
-        ETname.setText(sessionManager.getName());
-        ETnumber.setText(sessionManager.getNumber());
     }
 }
